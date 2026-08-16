@@ -1,3 +1,8 @@
+> **项目状态（2026-08-16 修订）：失败。**
+> 经 G1on 实机多次验证，自制 ZDL **无法在 G1on 上稳定工作**（表现为：无 UI、bypass、或切换死机）。
+> 此前文档中的“已验证 / 可用 / 可运行 / 已对齐 / 可收口”等表述，均不代表 G1on 实机可用。
+> 本项目的 ZDL 目标当前**未达成**，现状为失败；任何后续结论不得以“G1on 可用”为前提。
+
 # AmpNeve ZDL (Zoom MultiStomp)
 
 Custom AMP-category effect for the Zoom G1on / MS-series (ZDL). Original
@@ -33,7 +38,7 @@ state" - power off/on and reloading the patch restores the knobs. Factory
 defaults (used only when a patch's param slot is invalid) match the VST:
 gain 0.35, master 0.55, level 0.75, presence 0.85.
 
-## Hardware / build status
+## Hardware / build status（现状：失败）
 
 - The core is ZDL-safe (no heap, no double, no math library, no division;
   all filter coefficients are precomputed constants). Verified statically by
@@ -65,7 +70,7 @@ gain 0.35, master 0.55, level 0.75, presence 0.85.
   that parses the `.obj` and fails on the frozen-pedal patterns from
   SAFE-DSP-RULES: writable `.fardata`, uninitialised statics, unexpected
   undefined symbols, SBR/B14-relative relocations, missing `.audio` section.
-- NOT yet hardware-tested. The main open risk is CPU budget: ~1200
+- **实机验证失败（2026-08-16，G1on）：加载后无 UI / bypass，无法使用。** 不再是“未测试”状态。 The main open risk is CPU budget: ~1200
   operations per sample per channel (20 biquads + 1024-tap FIR + saturation)
   plus a second 1024-tap FIR during the ~12 ms cab crossfade (v17).
   The 512-tap fallback is in `tools/gen_coeffs.py` (`CAB_IR_N`). Follow the

@@ -214,9 +214,21 @@ def main(argv: list[str]) -> int:
     env_gid = int(os.environ.get("AMPNEVE_GID", "0") or "0")
     gid = env_gid or (5 if args.b1on else int(manifest.get("gid", 4)))
     is_amp = gid in (4, 5)
+    # G1on/B1on stock imageInfo always advertises count=3 (one knob row of
+    # 3), regardless of the real descriptor param count (stock SVT has 9
+    # params with count=3; TW_ROCK has 7 with count=3). The MS-70CDR-style
+    # count=9 loads on the B1on/G1on but the knob/page walk comes out wrong.
+    # Override with AMPNEVE_IMAGE_INFO_COUNT.
+    if image_info_count is None and gid in (4, 5):
+        image_info_count = 3
     flags_byte = 0 if gid == 5 else int(manifest.get("flags_byte", 0x01))
     bass_flags = 0x10 if gid == 5 else 0
-    dll_fields = 3 if gid == 5 else int(os.environ.get("AMPNEVE_DLL_FIELDS", "3"))
+    # G1on AMP-category effects need the 5-field Dll stub (count, descriptor
+    # VA, imageInfo VA, plus two role-handler VAs). Stock G1on amp Dll stubs
+    # write all five; the MS-70CDR-style 3-field stub registers a bypass/no-UI
+    # effect that skips audio and freezes on re-entry (see zdl/README.md).
+    # B1on BassAmp (gid=5) keeps the 3-field stub.
+    dll_fields = 3 if gid == 5 else int(os.environ.get("AMPNEVE_DLL_FIELDS", "5"))
     amp_cabi_default = 0 if gid == 5 else None
     amp_cabi_fxid = fxid if is_amp else None
 
@@ -272,11 +284,17 @@ def main(argv: list[str]) -> int:
         use_object_edit_handlers=False,
         synthesize_linesel_edit_handlers=True,
         synth_edit_start_index=2,
-        # repeat98's hardware-proven config: init is a NOP_RETURN stub
-        # (the B1on host materializes defaults from the descriptor itself;
-        # a real _init that writes ctx[1] corrupts the host param table).
-        # Knob 3 also uses the synth handler, not the AIR knob3 blob.
-        use_object_init_handler=False,
+        # G1on requires the effect to materialize its own params through
+        # _init: the host leaves the param table untouched, so params[0]
+        # (the on flag) stays 0 and the effect sits in bypass with no UI and
+        # re-entry freezes. Fx_AMP_AmpNeve_init writes the ON flag plus the
+        # nine knob defaults into ctx[1]. B1on BassAmp (gid=5) keeps the
+        # NOP_RETURN init (its host materializes defaults from the
+        # descriptor). Override with AMPNEVE_USE_OBJECT_INIT=0/1.
+        use_object_init_handler=(
+            os.environ.get("AMPNEVE_USE_OBJECT_INIT", "1" if gid == 4 else "0")
+            == "1"
+        ),
         knob3_blob_path=Path("/tmp/__nonexistent__"),
         amp_cabi_fxid=amp_cabi_fxid,
         amp_cabi_default=amp_cabi_default,
