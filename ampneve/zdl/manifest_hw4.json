@@ -1,0 +1,58 @@
+{
+  "effect_name": "AmpNeve",
+  "comment": "AmpNeve hardware build exposing 4 knobs (Gain/Master/Level/Treble). The B1on host only fully drives 2-4 knobs on custom ZDLs (GAIN/OTT work; 9-knob ToTape9/TEcho4 load but sit bypass). Hidden DSP params keep their reference defaults (Bass/Mid 0.5, Neve 0.85, Cabtype 2x12, Input 1.0). Same full amp DSP + IR as the VST.",
+  "audio_func_name": "Fx_DYN_AmpNeve",
+  "gid": 1,
+  "gid_comment": "0x01 = Dynamics, matching the proven 4-knob OTT build on the B1on.",
+  "fxid": 420,
+  "fxid_comment": "0x01A4 in the custom effect range.",
+  "fxid_version": "1.00",
+  "flags_byte": 1,
+  "params": [
+    {
+      "name": "Gain",
+      "type": "knob",
+      "max": 100,
+      "default": 35,
+      "scale": "linear",
+      "audio_min": 0.0,
+      "audio_max": 1.0,
+      "audio_default": 0.35,
+      "comment": "V2 cold-clipper drive + touch-dynamics base."
+    },
+    {
+      "name": "Master",
+      "type": "knob",
+      "max": 100,
+      "default": 55,
+      "scale": "linear",
+      "audio_min": 0.0,
+      "audio_max": 1.0,
+      "audio_default": 0.55,
+      "comment": "PI + push-pull power drive + sag amount."
+    },
+    {
+      "name": "Level",
+      "type": "knob",
+      "max": 100,
+      "default": 75,
+      "scale": "gain",
+      "audio_min": 0.0,
+      "audio_max": 1.0,
+      "audio_default": 0.75,
+      "comment": "Output level (0.20..0.90 gain)."
+    },
+    {
+      "name": "Treble",
+      "type": "knob",
+      "max": 100,
+      "default": 50,
+      "scale": "linear",
+      "audio_min": 0.0,
+      "audio_max": 1.0,
+      "audio_default": 0.5,
+      "comment": "Tone-network high control at 5 kHz (0.5 = flat)."
+    }
+  ],
+  "audio_nop": false
+}

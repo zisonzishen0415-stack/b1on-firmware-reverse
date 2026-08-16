@@ -1,0 +1,138 @@
+# AmpNeve ZDL (Zoom MultiStomp)
+
+Custom AMP-category effect for the Zoom G1on / MS-series (ZDL). Original
+boutique-amp DSP, strict real-amp structure (v17): V1 (fixed ~4x gain, soft
+asymmetric clip, Miller LP @ 9 kHz) -> V2 cold clipper (Gain knob + touch
+dynamics, asymmetric clip, Miller LP @ 5 kHz) -> Klon-style clean/dirty mix
+(V1 clean tap + V2 driven path, both through the tone stack and power amp)
+-> tone network -> phase inverter + push-pull power amp with sag -> Neve
+transformer + 1073-style EQ -> speaker resonance + cabinet voicing +
+1024-tap cabinet IR convolution (miked-cab kernel, per cab type) -> level.
+Nine knobs across the LineSel pages, mirroring the VST. Presence is fixed
+at 0.85; Cabtype selects the cabinet (1x12 / 2x12 / 4x12 multi-speaker
+synthesized IRs, crossfaded on switch):
+
+| Page | Knob | Param | Range | Maps to |
+|---|---|---|---|---|
+| P1 | 1 | Bass | 0..1 | tone low (0.5 flat) |
+| P1 | 2 | Mid | 0..1 | tone mid (0.5 flat) |
+| P1 | 3 | Treble | 0..1 | tone high (0.5 flat) |
+| P2 | 1 | Gain | 0..1 | V2 cold-clipper drive (touch dynamics, ~17x max) |
+| P2 | 2 | Master | 0..1 | PI + push-pull power drive + sag amount |
+| P2 | 3 | Level | 0..1 | output (0.20..0.90 gain) |
+| P3 | 1 | Neve | 0..1 | coloration wet/dry (0 = bypass) |
+| P3 | 2 | Cabtype | 0..1 | cabinet: 0 = 2x12 (G12H30+Blue), 1 = 4x12 (Greenback family) - real Tubes&Tone IRs |
+| P3 | 3 | Input | 0..1 | input trim 0.125x..1.25x (1.0 = calibrated ref) |
+
+## State memory
+
+The ZDL needs no preset system: the pedal stores every effect parameter
+inside the saved patch, and the DSP reads `params[]` from the host every
+block. Saving the patch on the pedal is exactly "remembering the last
+state" - power off/on and reloading the patch restores the knobs. Factory
+defaults (used only when a patch's param slot is invalid) match the VST:
+gain 0.35, master 0.55, level 0.75, presence 0.85.
+
+## Hardware / build status
+
+- The core is ZDL-safe (no heap, no double, no math library, no division;
+  all filter coefficients are precomputed constants). Verified statically by
+  `tools/check_zdl_safe.py`.
+- G1on AMP-category loading expects the wrapper CABI block: 22/22 stock G1on
+  amp models ship a 312-byte header (CABI payload) while non-amp effects use
+  the plain 56-byte header. `build.py` injects a CABI block automatically
+  (2x12 label, fxid/gid word, model name patched; `--no-cabi` to skip).
+  The CABI floats are inert loader metadata - AmpNeve renders its cabinets
+  from the two embedded IR kernels (2x12 default / 4x12), selected by the
+  Cabtype knob, never from CABI coefficients.
+- G1on registration also needs the 5-field Dll stub. Stock G1on amp Dll
+  stubs write ctx[0..2] (count, descriptor VA, imageInfo VA) plus two
+  per-effect role handler VAs (preFilter_edit, tapmute_mute); the MS-70CDR
+  NoiseGate-derived stub only wrote ctx[0..2], which on G1on registers the
+  effect as a bypass/no-UI stub that skips audio and freezes on re-entry.
+  The linker now writes the two role fields pointing at a NOP_RETURN stub so
+  any firmware call returns safely (verified by disassembly of both files).
+- G1on requires the effect to materialize its own params through `_init`.
+  MS-70CDR tolerates a NOP init, but G1on leaves the host param table
+  untouched: `params[0]` (the on flag the audio keys off) stays 0, so the
+  effect sits in bypass with no UI and re-entry freezes. `Fx_AMP_AmpNeve_init`
+  now writes the ON flag plus all nine knob defaults into `ctx[1]`; the
+  ctx[3] state arena is still initialized lazily by the audio path.
+- State lives in the host-managed `ctx[3]` arena (one Ampsim instance per
+  channel; dual 2048-tap IR delay buffers for the click-free cab
+  crossfade = 16976 B; 4352 floats reserved each).
+- Every build runs a post-compile safety audit (`tools/check_zdl_obj.py`)
+  that parses the `.obj` and fails on the frozen-pedal patterns from
+  SAFE-DSP-RULES: writable `.fardata`, uninitialised statics, unexpected
+  undefined symbols, SBR/B14-relative relocations, missing `.audio` section.
+- NOT yet hardware-tested. The main open risk is CPU budget: ~1200
+  operations per sample per channel (20 biquads + 1024-tap FIR + saturation)
+  plus a second 1024-tap FIR during the ~12 ms cab crossfade (v17).
+  The 512-tap fallback is in `tools/gen_coeffs.py` (`CAB_IR_N`). Follow the
+  hardware test sequence below.
+
+## Build requirements
+
+- TI C6000 Code Generation Tools (cl6x, e.g. ti-cgt-c6000 8.5.0 LTS) - free
+  download from ti.com (requires a free TI account). Install anywhere and
+  point `AMPNEVE_TI_ROOT` at it.
+- Python 3 (the build and the .obj audit need no other Python packages).
+- The ZoomMultistompZDL toolchain (linker.py). `build.py` looks for it at
+  `../zoomreverse/ZoomMultistompZDL` or `AMPNEVE_ZDL_ROOT`.
+
+## Build
+
+```sh
+export AMPNEVE_TI_ROOT=/path/to/ti-cgt-c6000_8.5.0.LTS
+
+# 1. SMOKE build (audio NOPed - pass-through). Always flash this first.
+python3 build.py --smoke
+# -> ../dist_smoke/AmpNeve.ZDL
+
+# 2. Real DSP build (post-compile .obj audit runs automatically).
+python3 build.py
+# -> ../dist/AmpNeve.ZDL
+```
+
+Load with Zoom Effect Manager (point it at the `dist/` folder), per
+reverson/research_docs/docs_INSTALLING-ZDLS.md.
+
+Compiler flags follow the reverson hardware-proven release pattern:
+`-O2`, no `--opt_for_space` (high `--opt_for_space` emits
+`__c6xabi_push_rts/pop_rts` helper calls whose stubs are not hardware-tested
+here). Set `AMPNEVE_OPT_FOR_SPACE=n` only to experiment.
+
+## Hardware test sequence (G1on)
+
+1. **Smoke**: build with `--smoke`, flash `dist_smoke/AmpNeve.ZDL`, verify
+   the effect appears in the AMP category, the three pages render, and knob
+   turns do not freeze the pedal. A freeze here is a
+   loader/edit-handler problem, not DSP.
+2. **Real DSP**: build normally, flash `dist/AmpNeve.ZDL`, play. Listen for
+   dropouts, zipper noise, or freezes - these mean the per-effect CPU budget
+   is exceeded (most likely suspect: the 1024-tap cabinet FIR).
+3. **Stress**: put AmpNeve in a patch with delay + reverb and play at max
+   Gain. If it survives, record the firmware version and fxid behaviour
+   (whether 0x01A4 collides with anything in that firmware).
+4. **Fallback**: if step 2/3 fails, rebuild with a shorter IR (halve
+   `AMP_CAB_IR_N` in `tools/gen_coeffs.py`, regenerate `ampsim_coeffs.h`,
+   rebuild). CPU drops ~50%.
+5. Only after the pedal loads and plays cleanly should the ZDL be called
+   hardware-verified.
+
+### B1on/G1on 大状态变体(2026-08-16)
+
+静态逆向已确认:B1on/G1on 给自定义 FLT/DYN 效果固定 1KB/槽状态区,而
+延迟/混响类效果使用启动时清零的 5×640KB 外部缓冲(0xC01A5800+slot*0xAC440,
+表在 0xc00df948,详见 docs/DEEP_RE_B1ON_G1ON.md 第 10 节)。
+
+因此大状态 DSP 的可选路径是"按 DLY 身份打包"。已构建好现成变体:
+
+```powershell
+AMPNEVE_MANIFEST=manifest_hw4.json AMPNEVE_GID=8 `
+AMPNEVE_AUDIO_FUNC=Fx_DLY_AmpNeve AMPNEVE_FXID=422 python build.py
+```
+
+产物 `dist/AmpNeve_DLY.ZDL`(real_type=8、SONAME ZDL_DLY_AmpNeve、
+4 旋钮 Gain/Master/Level/Treble)。**刷机前先刷 B1sweepDLY 探针**确认
+DLY 身份确实拿到大区,再刷本文件。

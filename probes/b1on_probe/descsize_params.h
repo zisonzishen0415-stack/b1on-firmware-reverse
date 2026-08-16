@@ -1,0 +1,17 @@
+/* Generated from manifest.json. Do not edit by hand. */
+#ifndef DESCSIZE_PARAMS_H
+#define DESCSIZE_PARAMS_H
+
+#define DESCSIZE_PARAM_COUNT 1
+
+#define DESCSIZE_ARM_INDEX 0
+#define DESCSIZE_ARM_SLOT 5
+#define DESCSIZE_ARM_TYPE_SWITCH 1
+#define DESCSIZE_ARM_UI_MIN 0
+#define DESCSIZE_ARM_UI_MAX 1
+#define DESCSIZE_ARM_UI_DEFAULT 0
+#define DESCSIZE_ARM_AUDIO_MIN 0.0f
+#define DESCSIZE_ARM_AUDIO_MAX 1.0f
+#define DESCSIZE_ARM_DEFAULT_NORM 0.0f
+
+#endif /* DESCSIZE_PARAMS_H */

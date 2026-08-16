@@ -1,0 +1,134 @@
+﻿B1on wrappers: 138 unique: 105
+G1on wrappers: 151 unique: 107
+
+shared: 43
+
+B1on only (62):
+  rt= 1 fxid=0x0018 D_Comp
+  rt= 1 fxid=0x0020 M_Comp
+  rt= 1 fxid=0x003A Limiter
+  rt= 1 fxid=0x00A0 DualComp
+  rt= 2 fxid=0x0018 Ba_GEQ
+  rt= 2 fxid=0x0024 Ba_PEQ
+  rt= 2 fxid=0x0028 Splitter
+  rt= 2 fxid=0x002C Bottom_B
+  rt= 2 fxid=0x0058 BaAutoWah
+  rt= 2 fxid=0x0088 Z_Tron
+  rt= 2 fxid=0x0095 A_Filter
+  rt= 2 fxid=0x009A Ba_Cry
+  rt= 5 fxid=0x0010 SVT
+  rt= 5 fxid=0x0020 B_MAN
+  rt= 5 fxid=0x0030 HRT3500
+  rt= 5 fxid=0x0040 SMR
+  rt= 5 fxid=0x0050 FlipTop
+  rt= 5 fxid=0x0060 acoustic
+  rt= 5 fxid=0x0070 Ag_Amp
+  rt= 5 fxid=0x0080 Monotone
+  rt= 5 fxid=0x0090 SuperB
+  rt= 5 fxid=0x00A0 GKrueger
+  rt= 5 fxid=0x00B0 Heaven
+  rt= 5 fxid=0x00C0 Mark_B
+  rt= 6 fxid=0x003A WarpPhase
+  rt= 6 fxid=0x0078 Ba_Chorus
+  rt= 6 fxid=0x0088 Ba_Detune
+  rt= 6 fxid=0x00B8 Ba_Ensmbl
+  rt= 6 fxid=0x00E8 BaFlanger
+  rt= 6 fxid=0x0100 
+  rt= 6 fxid=0x0118 Ba_Octave
+  rt= 6 fxid=0x0138 Ba_Pitch
+  rt= 6 fxid=0x0160 MojoRolle
+  rt= 7 fxid=0x0038 Ba_Synth
+  rt= 7 fxid=0x0050 AutoPan
+  rt= 7 fxid=0x0070 StdSyn
+  rt= 7 fxid=0x0080 SynTlk
+  rt= 7 fxid=0x0090 Z_Syn
+  rt= 7 fxid=0x00A0 Defret
+  rt= 7 fxid=0x00C0 V
+  rt= 7 fxid=0x00D0 4VoiceSyn
+  rt= 8 fxid=0x0028 ModDelay2
+  rt= 8 fxid=0x00B0 TrgHldDly
+  rt= 9 fxid=0x00B0 SLAPBACK
+  rt=11 fxid=0x0060 PEDALWAH
+  rt=11 fxid=0x0070 PDL_RESO
+  rt=11 fxid=0x0080 B_PDLPIT
+  rt=11 fxid=0x0090 B_PDLMNP
+  rt=20 fxid=0x0010 Ba_Boost
+  rt=20 fxid=0x0020 Bass_OD
+  rt=20 fxid=0x0030 Bass_Muff
+  rt=20 fxid=0x0050 Ba_Dist_1
+  rt=20 fxid=0x0090 Ba_Metal
+  rt=20 fxid=0x00A0 Ba_T_Scream
+  rt=20 fxid=0x00B0 Ba_squeak
+  rt=20 fxid=0x00C0 B_FzSmile
+  rt=22 fxid=0x0010 BassDrive
+  rt=22 fxid=0x0020 DI_Plus
+  rt=22 fxid=0x0030 Bass_BB
+  rt=22 fxid=0x0040 DI5
+  rt=22 fxid=0x0050 Bass_Pre
+  rt=22 fxid=0x0060 AC_Bs_Pre
+
+G1on only (64):
+  rt= 1 fxid=0x0008 Comp
+  rt= 1 fxid=0x0050 
+  rt= 1 fxid=0x0060 NoiseGate
+  rt= 2 fxid=0x0010 GraphicEQ
+  rt= 2 fxid=0x0020 ParaEQ
+  rt= 2 fxid=0x0050 AutoWah
+  rt= 2 fxid=0x0070 Cry
+  rt= 2 fxid=0x00D0 fCycle
+  rt= 3 fxid=0x0008 Booster
+  rt= 3 fxid=0x0010 OverDrive
+  rt= 3 fxid=0x0020 T_Scream
+  rt= 3 fxid=0x0030 Governor
+  rt= 3 fxid=0x0040 DistPlus
+  rt= 3 fxid=0x0050 DistOne
+  rt= 3 fxid=0x0060 Squeak
+  rt= 3 fxid=0x0070 FuzzSmile
+  rt= 3 fxid=0x0080 GreatMuff
+  rt= 3 fxid=0x0090 MetalWRLD
+  rt= 3 fxid=0x00A0 HotBox
+  rt= 3 fxid=0x00B0 Z_Clean
+  rt= 3 fxid=0x00C0 Z_MP1
+  rt= 3 fxid=0x00F0 Z_Scream
+  rt= 3 fxid=0x0110 Z_Wild
+  rt= 3 fxid=0x0120 Lead
+  rt= 3 fxid=0x0130 ExtremeDS
+  rt= 3 fxid=0x0140 AcoSim
+  rt= 4 fxid=0x0008 FdCombo
+  rt= 4 fxid=0x0010 DELUXE_R
+  rt= 4 fxid=0x0020 FD_VIBRO
+  rt= 4 fxid=0x0030 US_BLUES
+  rt= 4 fxid=0x0040 VX_COMBO
+  rt= 4 fxid=0x0050 VX_JMI
+  rt= 4 fxid=0x0060 BG_CRUNCH
+  rt= 4 fxid=0x0070 MATCH_30
+  rt= 4 fxid=0x0080 CAR_DRIVE
+  rt= 4 fxid=0x0090 TW_ROCK
+  rt= 4 fxid=0x00A0 TONE_CITY
+  rt= 4 fxid=0x00B0 HW_STACK
+  rt= 4 fxid=0x00C0 TANGERINE
+  rt= 4 fxid=0x00D0 B_BREAKER
+  rt= 4 fxid=0x00E0 MS_CRUNCH
+  rt= 4 fxid=0x00F0 MS_1959
+  rt= 4 fxid=0x0100 MS_DRIVE
+  rt= 4 fxid=0x0110 BGN_DRIVE
+  rt= 4 fxid=0x0120 BG_DRIVE
+  rt= 4 fxid=0x0130 DZ_DRIVE
+  rt= 4 fxid=0x0140 ALIEN
+  rt= 4 fxid=0x0150 REVO_1
+  rt= 6 fxid=0x0070 Chorus
+  rt= 6 fxid=0x0080 Detune
+  rt= 6 fxid=0x00B0 Ensemble
+  rt= 6 fxid=0x00D0 SuperCho
+  rt= 6 fxid=0x00E0 Flanger
+  rt= 6 fxid=0x0100 Vibrato
+  rt= 6 fxid=0x0110 Octave
+  rt= 6 fxid=0x0130 MonoPitch
+  rt= 7 fxid=0x0060 Rt_Closet
+  rt= 8 fxid=0x00F0 CarbonDelay
+  rt= 9 fxid=0x00C0 Spring63
+  rt=11 fxid=0x0010 PEDALCRY
+  rt=11 fxid=0x0030 WH100
+  rt=11 fxid=0x0040 PEDALPIT
+  rt=11 fxid=0x0050 PEDALMNP
+  rt=15 fxid=0x0000 ZDL_COMïÿÿ³	MON_DRV.out

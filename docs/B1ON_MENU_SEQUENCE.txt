@@ -1,0 +1,106 @@
+﻿===== B1on130_FLST_SEQ.ZDT: 96 effects =====
+  -- category 01 --
+    OPTCOMP.ZDL
+    D_COMP.ZDL
+    M_COMP.ZDL
+    DUAL_CMP.ZDL
+    160_COMP.ZDL
+    LIMITER.ZDL
+    SLWATK.ZDL
+    ZNR.ZDL
+  -- category 02 --
+    B_GEQ.ZDL
+    B_PEQ.ZDL
+    SPLITTER.ZDL
+    BOTTOM_B.ZDL
+    EXCITER.ZDL
+    B_ATWAH.ZDL
+    Z_TRON.ZDL
+    M_FILTER.ZDL
+    A_FILTER.ZDL
+    B_CRY.ZDL
+    STEP.ZDL
+    SEQFLTR.ZDL
+    RNDMFLTR.ZDL
+  -- category 14 --
+    _B_BOOST.ZDL
+    _B_OD.ZDL
+    _BASSMUF.ZDL
+    _BASS_TS.ZDL
+    _B_DST_1.ZDL
+    _B_SQUEK.ZDL
+    _B_FZSML.ZDL
+    _B_METAL.ZDL
+  -- category 16 --
+    _BASSDRV.ZDL
+    _DI_PLUS.ZDL
+    _BASS_BB.ZDL
+    _DI5.ZDL
+    _BAS_PRE.ZDL
+    _AC_BPRE.ZDL
+  -- category 05 --
+    _SVT.ZDL
+    _B_MAN.ZDL
+    _HRT3500.ZDL
+    _SMR.ZDL
+    _ACOSTIC.ZDL
+    _AG_AMP.ZDL
+    B.ZDL
+    _MARK_B.ZDL
+  -- category 06 --
+    TREMOLO.ZDL
+    SLICER.ZDL
+    PHASER.ZDL
+    DUOPHASE.ZDL
+    WRPPHASE.ZDL
+    VIBRATO.ZDL
+    THEVIBE.ZDL
+    B_CHORUS.ZDL
+    B_DETUNE.ZDL
+    STCHO.ZDL
+    B_ENSMBL.ZDL
+    CRN_TRI.ZDL
+    B_FLNGR.ZDL
+    VINFLNGR.ZDL
+    B_OCTAVE.ZDL
+    PTCHSHFT.ZDL
+    B_PITCH.ZDL
+    HPS.ZDL
+    BENDCHO.ZDL
+    MJROLLE.ZDL
+    RINGMOD.ZDL
+  -- category 07 --
+    BITCRUSH.ZDL
+    BOMBER.ZDL
+    AUTOPAN.ZDL
+    B_SYNTH.ZDL
+    STDSYN.ZDL
+    SYNTLK.ZDL
+    V_SYN.ZDL
+    4V_SYN.ZDL
+    Z_SYN.ZDL
+    Z_ORGAN.ZDL
+    DEFRET.ZDL
+  -- category 08 --
+    DELAY.ZDL
+    TAPEECHO.ZDL
+    STOMPDLY.ZDL
+    MODDLY2.ZDL
+    RVRSDLY.ZDL
+    MLTTPDLY.ZDL
+    FLTRDLY.ZDL
+    PITCHDLY.ZDL
+    TGHLDDLY.ZDL
+    STDELAY.ZDL
+  -- category 09 --
+    HDHALL.ZDL
+    HALL.ZDL
+    ROOM.ZDL
+    TLDROOM.ZDL
+    ARENA.ZDL
+    PLATE.ZDL
+    AIR.ZDL
+    EARLYREF.ZDL
+    MODREV.ZDL
+    SLAPBACK.ZDL
+    PARTICLE.ZDL

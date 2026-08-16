@@ -1,0 +1,22 @@
+# build outputs
+/build*/
+/dist/
+/dist_smoke/
+*.obj
+*.o
+*.exp
+*.lib
+
+# diagnostic probe dir (not part of the project)
+/cmake_probe/
+
+# generated files
+/zdl/ampsim_zdl_params.h
+
+# demo assets / renders (regenerate)
+/assets/
+/out/
+
+# python
+__pycache__/
+*.pyc

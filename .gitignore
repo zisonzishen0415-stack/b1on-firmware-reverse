@@ -1,0 +1,30 @@
+# build artifacts
+__pycache__/
+*.pyc
+compiler.opt
+linker.cmd
+ampneve/zdl/*.obj
+ampneve/zdl/*.pp
+ampneve/build/
+
+# local scratch
+.DS_Store
+Thumbs.db
+
+# 厂商固件与二进制(不分发)
+firmware/
+dist/
+stock_zdl/
+third_party/
+work/
+ghidra-c6000/.git/
+analysis/**/*.bin
+analysis/**/*.out
+analysis/**/*.elf
+*.lock
+*.lock~
+*.bak
+ghidra-proj/
+*.class
+ampneve/ir/*.wav
+probes/b1on_probe/repeat98_tmp/
