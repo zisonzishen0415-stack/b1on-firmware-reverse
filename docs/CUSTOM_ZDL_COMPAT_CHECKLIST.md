@@ -90,7 +90,11 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 `.audio`@0x7800 段的处理(决定是否给自制 ZDL 扩 linker 输出二段式
 ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。
 
-**DLY 变体已重建就绪(2026-10-13 晚)**:`ampneve/dist/AmpNeve.ZDL`
-(**原厂分段形态** `.audio@0x7800`,gid=8、真 DSP;烟测版在 `dist_smoke/`;
-旧合并形态保底在 `*_merged.ZDL`;SHA256 与构建命令见
-`patches/README.md`)。刷它之前,**必须先刷 B1sweepDLY 探针确认大区**。
+**DLY 变体已重建就绪(2026-10-13 晚)**:四形态矩阵 ×{真 DSP,烟测}全留档
+(见 `patches/README.md` 哈希表);首选上机候选 = `ampneve/dist/AmpNeve.ZDL`
+(**原厂分段 `.audio@0x7800` + 5 字段 Dll**)。刷机顺序:
+1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);
+2. `dist_smoke/AmpNeve.ZDL`(烟测,UI/加载);
+3. `dist/AmpNeve.ZDL`(真 DSP);
+4. 若 3 失败 → 依次试 `AmpNeve_stock3` / `AmpNeve_merged5` /
+   `AmpNeve_merged`,每次一个变量。

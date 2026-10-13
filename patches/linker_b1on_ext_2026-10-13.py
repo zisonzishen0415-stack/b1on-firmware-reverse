@@ -357,11 +357,6 @@ class LinkerConfig:
                 "into this linker build yet")
         if self.dll_fields not in (3, 5):
             raise ValueError(f"dll_fields must be 3 or 5, got {self.dll_fields}")
-        if self.dll_fields == 5:
-            raise NotImplementedError(
-                "5-field Dll stub (G1on AMP, gid=4/5 requirement) is not "
-                "ported into this linker build yet; non-AMP builds must use "
-                "dll_fields=3 (ampneve: set AMPNEVE_DLL_FIELDS=3)")
         if self.audio_va not in (0, 0x7800):
             raise ValueError(f"audio_va must be 0 or 0x7800, got {self.audio_va:#x}")
 
@@ -856,6 +851,45 @@ _DLL_RELA_OFFSETS = [
     (0x14, RT_ABS_H16, 'info'),
 ]
 
+# ---------------------------------------------------------------------------
+# 5-field Dll stub (dll_fields=5) — transcribed verbatim from stock
+# DELUXE_R.ZDL's Dll_ function (G1on AMP category), inner-ELF offset 0xB40,
+# 64 bytes. Writes ctx[0..4]: {count, desc VA, imageInfo VA, role1 VA,
+# role2 VA}. Stock's role VAs (preFilter_edit/tapmute_mute) are replaced by
+# the NOP_RETURN stub VA so any firmware call into them returns safely
+# (same convention the lost 2026-08 fork linker used).
+# Word +0x04 high half carries the compact MVK.L1 <count>,A0 (patched like
+# the 3-field blob's word[0]).
+# ---------------------------------------------------------------------------
+_DLL_WORDS5 = [
+    0x00031C2A,  # +0x00: MVK.S2  lo(desc), B0   ← ABS_L16 reloc
+    0x6C2601EF,  # +0x04: BNOP.S2 B3 + MVK.L1 count,A0 (high half patched)
+    0x00842429,  # +0x08: MVK.S1  lo(info), A1   ← ABS_L16 reloc
+    0x0040006B,  # +0x0C: MVKH.S2 hi(desc), B0   ← ABS_H16 reloc
+    0x30040204,  # +0x10: STB count→ctx[0] | STW B0→ctx[4]
+    0x00C00069,  # +0x14: MVKH.S1 hi(info), A1   ← ABS_H16 reloc
+    0x0081822A,  # +0x18: MVK.S2  lo(role1), B1  (patched: NOP_RET VA)
+    0xE2400204,  # +0x1C: fphead
+    0x00904275,  # +0x20: STW A1→ctx[8]
+    0x0080006B,  # +0x24: MVKH.S2 0, B1         (role1 hi — patch 0 always)
+    0x01012628,  # +0x28: MVK.S1  lo(role2), A2  (patched: NOP_RET VA)
+    0x00906277,  # +0x2C: STW B1→ctx[12]
+    0x01000068,  # +0x30: MVKH.S1 0, A2         (role2 hi — patch 0 always)
+    0x01108274,  # +0x34: STW A2→ctx[16]
+    0x00000000,
+    0x00000000,
+]
+_DLL_RELA_OFFSETS5 = [
+    (0x00, RT_ABS_L16, 'desc'),
+    (0x08, RT_ABS_L16, 'info'),
+    (0x0C, RT_ABS_H16, 'desc'),
+    (0x14, RT_ABS_H16, 'info'),
+]
+# Offsets of the role-VA low-half immediates inside the 5-field blob; the
+# patcher writes (role_va & 0xFFFF) with the matching hi word fixed at 0
+# (role VAs live in .text < 0x10000, same as stock).
+_DLL5_ROLE_LOWS = (0x18, 0x28)
+
 
 def _encode_compact_mvk_l1_a0(value: int) -> int:
     """Return compact `MVK.L1 value,A0` encoding for small non-negative ints."""
@@ -869,7 +903,20 @@ def _encode_compact_mvk_l1_a0(value: int) -> int:
     return (hi << 8) | 0x26
 
 
-def _build_dll(desc_entry_count: int) -> bytes:
+def _build_dll(desc_entry_count: int, five: bool = False, role_va: int = 0) -> bytes:
+    if five:
+        if role_va <= 0 or role_va > 0xFFFF:
+            raise ValueError(f"5-field Dll role VA {role_va:#x} out of range")
+        code = bytearray()
+        words = list(_DLL_WORDS5)
+        words[1] = ((words[1] & 0x0000FFFF)
+                    | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16))
+        for off in _DLL5_ROLE_LOWS:
+            words[off // 4] = (words[off // 4] & 0xFFFF0000) | (role_va & 0xFFFF)
+        for w in words:
+            code.extend(struct.pack('<I', w))
+        assert len(code) == 64
+        return bytes(code)
     code = bytearray()
     words = list(_DLL_WORDS)
     words[0] = (words[0] & 0x0000FFFF) | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16)
@@ -1036,7 +1083,7 @@ def link(cfg: LinkerConfig) -> None:
     NOP_RET_STUB_SIZE = 32
     NOP_RET_SIZE      = NOP_RET_STUB_SIZE * NOP_RETURN_COUNT
     DLL_OFF           = NOP_RET_OFF + NOP_RET_SIZE
-    DLL_SIZE          = 200
+    DLL_SIZE          = 64 if cfg.dll_fields == 5 else 200
     TEXT_TOTAL        = _align_up(DLL_OFF + DLL_SIZE, 32)
     # Canonical audio-function VA (legacy merged: head of .text = 0;
     # separate segment: its own PT_LOAD base).
@@ -1078,7 +1125,11 @@ def link(cfg: LinkerConfig) -> None:
     for k in range(NOP_RETURN_COUNT):
         stub_off = NOP_RET_OFF + k * NOP_RET_STUB_SIZE
         out_text[stub_off:stub_off + NOP_RET_STUB_SIZE] = _NOP_RETURN
-    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(2 + len(cfg.params))
+    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(
+        2 + len(cfg.params),
+        five=cfg.dll_fields == 5,
+        role_va=TEXT_VA + NOP_RET_OFF,
+    )
 
     # Resolve handler VAs (one per logical name)
     if use_real_handlers:
@@ -1400,7 +1451,8 @@ def link(cfg: LinkerConfig) -> None:
         coe_relocs.append((TEXT_VA + coe_reloc_off + 0x0C, RT_ABS_H16, COE_VA))
 
     DESC_TABLE_VA = DESC_VA
-    for off_in_dll, rtype, purpose in _DLL_RELA_OFFSETS:
+    _rela_list = _DLL_RELA_OFFSETS5 if cfg.dll_fields == 5 else _DLL_RELA_OFFSETS
+    for off_in_dll, rtype, purpose in _rela_list:
         file_off = DLL_OFF + off_in_dll
         target = DESC_TABLE_VA if purpose == 'desc' else INFO_VA
         if rtype == RT_ABS_L16:

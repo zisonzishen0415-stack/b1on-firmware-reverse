@@ -28,8 +28,8 @@
 |---|---|
 | `bass_flags` | 接受;`!=0` 大声 `NotImplementedError`(B1on BCAB 路径未移植) |
 | `self_row_w28` / `cost_w28` | **已实现**:覆盖描述符自行的 w28 浮点(默认 20.0) |
-| `dll_fields` | 接受 3(**与现有全部产物一致**);5 = G1on AMP 专用 → 大声 `NotImplementedError`(原厂形状已从 DELUXE_R.ZDL 反汇编取得:ctx[3]/ctx[4] 两条 STW + 角色 VA,见第五轮文档) |
-| `amp_cabi_fxid` / `amp_cabi_default` | `None` = 通过;非 None → 大声 `NotImplementedError`(G1on AMP CABI 描述符路径未移植) |
+| `dll_fields` | **已实现**:3 = NoiseGate 200B 段(全部既有产物同款);**5 = 原厂 G1on AMP 形状**(从原厂 DELUXE_R.ZDL 反汇编逐字抄录的 64B 段,ctx[3]/ctx[4] 指向 NOP_RETURN stub VA)。G1on AMP(gid=4)必须 5;其余类别两种均可试 |
+| `amp_cabi_fxid` / `amp_cabi_default` | `None` = 通过;非 None → 大声 `NotImplementedError`(G1on AMP CABI 描述符路径未移植;CABI 包装块由 ampneve `add_cabi()` 后处理完成) |
 | `audio_va` | **已实现(0x7800)**:音频函数独立可执行段(原厂形态);0 = 旧合并形态。附加:该模式下 text 对象码从 0x20 起,**任何函数不会落在 VA 0**(描述符 h/a 的 0 可能被 loader 视为"缺省") |
 
 **设计原则**:凡未移植的功能一律**大声报错**,绝不静默产出错误成品。
@@ -49,19 +49,28 @@
 
 ## 现有重建产物(硬件就绪,未刷机)
 
-| 产物 | SHA256 | 形态/备注 |
-|---|---|---|
-| `ampneve/dist/AmpNeve.ZDL` | `76ED18ED46C7761AEE9B14E677AD6BCABE2E67A4F61D0D12F68749CCD0D34459` | **原厂分段形态**;gid=8(DLY)、fxid=422、manifest_hw4、真 DSP |
-| `ampneve/dist_smoke/AmpNeve.ZDL` | `9B87BB7EE07F8AEE7922C1C936542293ED3DD58B06BDCFCA7652752DF404FA81` | 同上,音频 NOP(先刷它) |
-| `ampneve/dist/AmpNeve_merged.ZDL` | `3C1D765CEFE0C67DA16A59A9E9C6AD3EFDEA858641185C45E6D970D0DD707542` | 旧合并形态(保底对照) |
-| `ampneve/dist_smoke/AmpNeve_merged.ZDL` | `E51304061AE6F4BCA758063A7EEC3C4B72287E5DF45578BBF3A0EEE34D244779` | 同上,音频 NOP |
+**四形态矩阵 × {真 DSP, 烟测}**,全部留档(linker 确定性已验证:
+同配置重建逐字节复现):
 
+| 文件(dist/ 与 dist_smoke/ 同名两份) | 形态 | 真 DSP SHA256 | 烟测 SHA256 |
+|---|---|---|---|
+| **`AmpNeve.ZDL`(首选上机候选)** | **原厂分段 + 5 字段 Dll** | `AE9AEED15F9C9A6882977F746EE07933AA2F49009A13B8BF29C979C84762AFF3` | `44597621BC9E93EDAC00D2E1E6CEB261C7D3810C022C94ECE765E8813FC8EC69` |
+| `AmpNeve_stock3.ZDL` | 原厂分段 + 3 字段 Dll | `76ED18ED46C7761AEE9B14E677AD6BCABE2E67A4F61D0D12F68749CCD0D34459` | `9B87BB7EE07F8AEE7922C1C936542293ED3DD58B06BDCFCA7652752DF404FA81` |
+| `AmpNeve_merged5.ZDL` | 旧合并 + 5 字段 Dll | `14155A8B3A13F2C8736B399A8D73B24B518775E66A313D1620A7A17A82028663` | `75F5F298E64640380B0E5038959A4D249E9738672D10C3DB5946F6A034EDB4CD` |
+| `AmpNeve_merged.ZDL` | 旧合并 + 3 字段 Dll(8 月世系形态) | `3C1D765CEFE0C67DA16A59A9E9C6AD3EFDEA858641185C45E6D970D0DD707542` | `E51304061AE6F4BCA758063A7EEC3C4B72287E5DF45578BBF3A0EEE34D244779` |
+
+配置:gid=8(DLY)、fxid=422、manifest_hw4(4 旋钮 Gain/Master/Level/Treble)。
 构建环境:`AMPNEVE_TI_ROOT=D:\ti\ti-cgt-c6000_8.3.15\ti-cgt-c6000_8.3.15`,
 `AMPNEVE_ZDL_ROOT=...\zoomreverse\ZoomMultistompZDL`,env:
 `AMPNEVE_MANIFEST=manifest_hw4.json AMPNEVE_GID=8
 AMPNEVE_AUDIO_FUNC=Fx_DLY_AmpNeve AMPNEVE_FXID=422
-AMPNEVE_DLL_FIELDS=3 AMPNEVE_USE_OBJECT_INIT=1 AMPNEVE_AUDIO_VA=0x7800`
-(去掉最后一个 = 合并形态)。
+AMPNEVE_USE_OBJECT_INIT=1` + `AMPNEVE_DLL_FIELDS={3|5}` +
+`AMPNEVE_AUDIO_VA={0x7800|未设}`。
+
+**5 字段 Dll 验证(反汇编)**:ctx[0]=行数、ctx[1]=描述符 VA、ctx[2]=imageInfo VA、
+**ctx[3]=ctx[4]=NOP_RETURN stub VA(0x1B60,安全返回)** — 与 8 月 fork 的
+约定一致,形状逐字对齐原厂 DELUXE_R。3 字段回归:与 8 月探针产物
+仍差 1 字节(已知 imageInfo h6 精化差,无行为影响)。
 
 ## 注意
 

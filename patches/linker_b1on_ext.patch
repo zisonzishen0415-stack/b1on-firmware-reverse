@@ -1,5 +1,5 @@
 ﻿diff --git a/build/linker.py b/build/linker.py
-index dda9ce7..7041823 100644
+index dda9ce7..3d78013 100644
 --- a/build/linker.py
 +++ b/build/linker.py
 @@ -216,6 +216,25 @@ class LinkerConfig:
@@ -28,7 +28,7 @@ index dda9ce7..7041823 100644
      # Optional pre-rendered 128×64 RLE screen image. None → auto-generate
      # a text-only screen showing the effect name.
      screen_image: Optional[bytes] = None
-@@ -325,6 +344,27 @@ class LinkerConfig:
+@@ -325,6 +344,22 @@ class LinkerConfig:
          if self.gid not in GID_PREFIX:
              raise ValueError(f"unknown gid {self.gid:#x}; add to GID_PREFIX table")
  
@@ -45,18 +45,13 @@ index dda9ce7..7041823 100644
 +                "into this linker build yet")
 +        if self.dll_fields not in (3, 5):
 +            raise ValueError(f"dll_fields must be 3 or 5, got {self.dll_fields}")
-+        if self.dll_fields == 5:
-+            raise NotImplementedError(
-+                "5-field Dll stub (G1on AMP, gid=4/5 requirement) is not "
-+                "ported into this linker build yet; non-AMP builds must use "
-+                "dll_fields=3 (ampneve: set AMPNEVE_DLL_FIELDS=3)")
 +        if self.audio_va not in (0, 0x7800):
 +            raise ValueError(f"audio_va must be 0 or 0x7800, got {self.audio_va:#x}")
 +
          # Hardware-confirmed ceiling for the MS-series UI path: 9 user
          # params, displayed as three pages of three edit-mode controls.
          # The preview image still only has coordinates for the first three
-@@ -539,6 +579,7 @@ def _build_descriptor(
+@@ -539,6 +574,7 @@ def _build_descriptor(
      onf_func_va: int,
      knob_edit_vas: list[int],
      params: list[Param],
@@ -64,7 +59,7 @@ index dda9ce7..7041823 100644
  ) -> tuple[bytes, list[tuple[int, int]]]:
      """Returns (descriptor_bytes, [(offset_in_desc, target_va), ...])."""
      assert len(knob_edit_vas) == len(params), (
-@@ -571,7 +612,8 @@ def _build_descriptor(
+@@ -571,7 +607,8 @@ def _build_descriptor(
      # imageInfo declare them. See docs/3-PARAM-LINKER-BUG.md.
      # 20.0f (0x41a00000) is in the typical range for simple effects
      # (Exciter=19.51, OptComp=30.76, BitCrush=14.88, AutoPan=13.89).
@@ -74,7 +69,75 @@ index dda9ce7..7041823 100644
      relocs.append((len(desc) + 0x1C, init_func_va))
      relocs.append((len(desc) + 0x20, audio_func_va))
      desc.extend(entry)
-@@ -937,8 +979,12 @@ def link(cfg: LinkerConfig) -> None:
+@@ -814,6 +851,45 @@ _DLL_RELA_OFFSETS = [
+     (0x14, RT_ABS_H16, 'info'),
+ ]
+ 
++# ---------------------------------------------------------------------------
++# 5-field Dll stub (dll_fields=5) — transcribed verbatim from stock
++# DELUXE_R.ZDL's Dll_ function (G1on AMP category), inner-ELF offset 0xB40,
++# 64 bytes. Writes ctx[0..4]: {count, desc VA, imageInfo VA, role1 VA,
++# role2 VA}. Stock's role VAs (preFilter_edit/tapmute_mute) are replaced by
++# the NOP_RETURN stub VA so any firmware call into them returns safely
++# (same convention the lost 2026-08 fork linker used).
++# Word +0x04 high half carries the compact MVK.L1 <count>,A0 (patched like
++# the 3-field blob's word[0]).
++# ---------------------------------------------------------------------------
++_DLL_WORDS5 = [
++    0x00031C2A,  # +0x00: MVK.S2  lo(desc), B0   ← ABS_L16 reloc
++    0x6C2601EF,  # +0x04: BNOP.S2 B3 + MVK.L1 count,A0 (high half patched)
++    0x00842429,  # +0x08: MVK.S1  lo(info), A1   ← ABS_L16 reloc
++    0x0040006B,  # +0x0C: MVKH.S2 hi(desc), B0   ← ABS_H16 reloc
++    0x30040204,  # +0x10: STB count→ctx[0] | STW B0→ctx[4]
++    0x00C00069,  # +0x14: MVKH.S1 hi(info), A1   ← ABS_H16 reloc
++    0x0081822A,  # +0x18: MVK.S2  lo(role1), B1  (patched: NOP_RET VA)
++    0xE2400204,  # +0x1C: fphead
++    0x00904275,  # +0x20: STW A1→ctx[8]
++    0x0080006B,  # +0x24: MVKH.S2 0, B1         (role1 hi — patch 0 always)
++    0x01012628,  # +0x28: MVK.S1  lo(role2), A2  (patched: NOP_RET VA)
++    0x00906277,  # +0x2C: STW B1→ctx[12]
++    0x01000068,  # +0x30: MVKH.S1 0, A2         (role2 hi — patch 0 always)
++    0x01108274,  # +0x34: STW A2→ctx[16]
++    0x00000000,
++    0x00000000,
++]
++_DLL_RELA_OFFSETS5 = [
++    (0x00, RT_ABS_L16, 'desc'),
++    (0x08, RT_ABS_L16, 'info'),
++    (0x0C, RT_ABS_H16, 'desc'),
++    (0x14, RT_ABS_H16, 'info'),
++]
++# Offsets of the role-VA low-half immediates inside the 5-field blob; the
++# patcher writes (role_va & 0xFFFF) with the matching hi word fixed at 0
++# (role VAs live in .text < 0x10000, same as stock).
++_DLL5_ROLE_LOWS = (0x18, 0x28)
++
+ 
+ def _encode_compact_mvk_l1_a0(value: int) -> int:
+     """Return compact `MVK.L1 value,A0` encoding for small non-negative ints."""
+@@ -827,7 +903,20 @@ def _encode_compact_mvk_l1_a0(value: int) -> int:
+     return (hi << 8) | 0x26
+ 
+ 
+-def _build_dll(desc_entry_count: int) -> bytes:
++def _build_dll(desc_entry_count: int, five: bool = False, role_va: int = 0) -> bytes:
++    if five:
++        if role_va <= 0 or role_va > 0xFFFF:
++            raise ValueError(f"5-field Dll role VA {role_va:#x} out of range")
++        code = bytearray()
++        words = list(_DLL_WORDS5)
++        words[1] = ((words[1] & 0x0000FFFF)
++                    | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16))
++        for off in _DLL5_ROLE_LOWS:
++            words[off // 4] = (words[off // 4] & 0xFFFF0000) | (role_va & 0xFFFF)
++        for w in words:
++            code.extend(struct.pack('<I', w))
++        assert len(code) == 64
++        return bytes(code)
+     code = bytearray()
+     words = list(_DLL_WORDS)
+     words[0] = (words[0] & 0x0000FFFF) | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16)
+@@ -937,8 +1026,12 @@ def link(cfg: LinkerConfig) -> None:
      CONST_VA = 0x80000000
  
      AUDIO_OFF       = 0x0000
@@ -89,9 +152,12 @@ index dda9ce7..7041823 100644
      TEXT_ORIG_SIZE  = text_sec['size'] if text_sec else 0
      HANDLER_OFF     = _align_up(TEXT_ORIG_OFF + TEXT_ORIG_SIZE, 32)
      HANDLER_SIZE    = len(handler_blob)
-@@ -992,6 +1038,9 @@ def link(cfg: LinkerConfig) -> None:
+@@ -990,8 +1083,11 @@ def link(cfg: LinkerConfig) -> None:
+     NOP_RET_STUB_SIZE = 32
+     NOP_RET_SIZE      = NOP_RET_STUB_SIZE * NOP_RETURN_COUNT
      DLL_OFF           = NOP_RET_OFF + NOP_RET_SIZE
-     DLL_SIZE          = 200
+-    DLL_SIZE          = 200
++    DLL_SIZE          = 64 if cfg.dll_fields == 5 else 200
      TEXT_TOTAL        = _align_up(DLL_OFF + DLL_SIZE, 32)
 +    # Canonical audio-function VA (legacy merged: head of .text = 0;
 +    # separate segment: its own PT_LOAD base).
@@ -99,7 +165,7 @@ index dda9ce7..7041823 100644
  
      print(f"\n  .text layout:")
      print(f"    audio    @ 0x{AUDIO_OFF:04X}  ({audio_sec['size']} → padded {AUDIO_PAD})")
-@@ -1009,7 +1058,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1009,7 +1105,11 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Build .text -----
      out_text = bytearray(TEXT_TOTAL)
@@ -112,7 +178,20 @@ index dda9ce7..7041823 100644
      if text_sec and TEXT_ORIG_SIZE:
          out_text[TEXT_ORIG_OFF:TEXT_ORIG_OFF + TEXT_ORIG_SIZE] = text_sec['data']
      if HANDLER_SIZE:
-@@ -1041,7 +1094,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1025,7 +1125,11 @@ def link(cfg: LinkerConfig) -> None:
+     for k in range(NOP_RETURN_COUNT):
+         stub_off = NOP_RET_OFF + k * NOP_RET_STUB_SIZE
+         out_text[stub_off:stub_off + NOP_RET_STUB_SIZE] = _NOP_RETURN
+-    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(2 + len(cfg.params))
++    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(
++        2 + len(cfg.params),
++        five=cfg.dll_fields == 5,
++        role_va=TEXT_VA + NOP_RET_OFF,
++    )
+ 
+     # Resolve handler VAs (one per logical name)
+     if use_real_handlers:
+@@ -1041,7 +1145,7 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Map .obj sections to VAs -----
      section_va: dict[int, int] = {
@@ -121,7 +200,7 @@ index dda9ce7..7041823 100644
      }
      if text_sec:
          section_va[text_sec['idx']] = TEXT_VA + TEXT_ORIG_OFF
-@@ -1120,11 +1173,13 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1120,11 +1224,13 @@ def link(cfg: LinkerConfig) -> None:
  
      desc_bytes, desc_relocs = _build_descriptor(
          effect_name=cfg.effect_name,
@@ -136,7 +215,7 @@ index dda9ce7..7041823 100644
      )
      expected = 0x30 * (2 + len(cfg.params))
      assert len(desc_bytes) == expected, \
-@@ -1282,7 +1337,9 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1282,7 +1388,9 @@ def link(cfg: LinkerConfig) -> None:
      # =====================================================================
      dyn_relocs: list[tuple[int, int, int]] = []   # (va, type, target_va)
  
@@ -147,7 +226,7 @@ index dda9ce7..7041823 100644
          n_ok = 0
          for rel in obj.relocs.get(sec['idx'], []):
              sym = obj.symbols[rel['sym_idx']]
-@@ -1309,18 +1366,19 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1309,18 +1417,19 @@ def link(cfg: LinkerConfig) -> None:
              target = sym_addr[rel['sym_idx']] + addend
              file_off = base_off + offset
              if rtype == RT_ABS_L16:
@@ -171,7 +250,17 @@ index dda9ce7..7041823 100644
      if text_sec and text_sec.get('size'):
          n_relocs += _apply_relocs(text_sec, TEXT_ORIG_OFF)
      print(f"\n  Applied {n_relocs} .obj relocations")
-@@ -1398,7 +1456,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1342,7 +1451,8 @@ def link(cfg: LinkerConfig) -> None:
+         coe_relocs.append((TEXT_VA + coe_reloc_off + 0x0C, RT_ABS_H16, COE_VA))
+ 
+     DESC_TABLE_VA = DESC_VA
+-    for off_in_dll, rtype, purpose in _DLL_RELA_OFFSETS:
++    _rela_list = _DLL_RELA_OFFSETS5 if cfg.dll_fields == 5 else _DLL_RELA_OFFSETS
++    for off_in_dll, rtype, purpose in _rela_list:
+         file_off = DLL_OFF + off_in_dll
+         target = DESC_TABLE_VA if purpose == 'desc' else INFO_VA
+         if rtype == RT_ABS_L16:
+@@ -1398,7 +1508,7 @@ def link(cfg: LinkerConfig) -> None:
          return idx
  
      # 1. Start with relocation targets (unnamed locals)
@@ -180,7 +269,7 @@ index dda9ce7..7041823 100644
      abi_vas.update(knob_edit_vas)
  
      for tgt in sorted(dynsym_targets.keys()):
-@@ -1417,7 +1475,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1417,7 +1527,7 @@ def link(cfg: LinkerConfig) -> None:
      for i in reversed(range(len(knob_edit_vas))):
          p_name = cfg.params[i].name.replace(' ', '')
          _add_sym(f"{cfg.audio_func_name}_{p_name}_edit", knob_edit_vas[i], 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
@@ -189,7 +278,7 @@ index dda9ce7..7041823 100644
      _add_sym(f"{cfg.audio_func_name}_init", init_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
      _add_sym(f"{cfg.audio_func_name}_onf", onf_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
      _add_sym('effectTypeImageInfo', INFO_VA, len(info_bytes), STT_OBJECT, STB_LOCAL, STV_HIDDEN)
-@@ -1483,7 +1541,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1483,7 +1593,7 @@ def link(cfg: LinkerConfig) -> None:
      # =====================================================================
      ELF_HDR_SIZE = 0x34
      PHDR_SIZE    = 0x20
@@ -198,7 +287,7 @@ index dda9ce7..7041823 100644
      PHDR_TABLE   = NUM_PHDRS * PHDR_SIZE
  
      # .c6xabi.attributes — required per SPRAB89B Ch.17. Stock effects
-@@ -1501,6 +1559,9 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1501,6 +1611,9 @@ def link(cfg: LinkerConfig) -> None:
      # assumptions.
      cur = ELF_HDR_SIZE
      text_file_off = _align_up(cur, 32);                cur = text_file_off + TEXT_TOTAL
@@ -208,7 +297,7 @@ index dda9ce7..7041823 100644
      const_file_off = _align_up(cur, 8);                cur = const_file_off + CONST_SIZE
      # .fardata includes the common 24-byte knob bitmap followed by any
      # plugin .fardata/.far state. Keep filesz == memsz: stock effects store
-@@ -1598,6 +1659,13 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1598,6 +1711,13 @@ def link(cfg: LinkerConfig) -> None:
      _p32(elf, p+0x10, TEXT_TOTAL); _p32(elf, p+0x14, TEXT_TOTAL)
      _p32(elf, p+0x18, 5); _p32(elf, p+0x1C, 32)
      p += PHDR_SIZE
@@ -222,7 +311,7 @@ index dda9ce7..7041823 100644
      # PT_LOAD .const r--
      _p32(elf, p+0x00, PT_LOAD); _p32(elf, p+0x04, const_file_off)
      _p32(elf, p+0x08, CONST_VA); _p32(elf, p+0x0C, CONST_VA)
-@@ -1618,6 +1686,8 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1618,6 +1738,8 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Section data -----
      elf[text_file_off:text_file_off + TEXT_TOTAL]              = out_text
@@ -231,7 +320,7 @@ index dda9ce7..7041823 100644
      elf[const_file_off:const_file_off + CONST_SIZE]            = const_data
      elf[fardata_file_off:fardata_file_off + len(fardata_data)] = fardata_data
      elf[rela_dyn_file_off:rela_dyn_file_off + len(rela_dyn_data)] = rela_dyn_data
-@@ -1648,7 +1718,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1648,7 +1770,11 @@ def link(cfg: LinkerConfig) -> None:
          link=8, info=0, entsize=12)
      _sh(2, '.rela.plt', SHT_RELA, 0, 0, rela_plt_file_off, 0,
          link=8, info=0, entsize=12)
@@ -244,7 +333,7 @@ index dda9ce7..7041823 100644
      _sh(4, '.text',  SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR,
          TEXT_VA, text_file_off, TEXT_TOTAL, align=32)
      _sh(5, '.const', SHT_PROGBITS, SHF_ALLOC,
-@@ -1678,8 +1752,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1678,8 +1804,11 @@ def link(cfg: LinkerConfig) -> None:
      output = bytearray(zdl_hdr) + elf
  
      if cfg.audio_nop:
