@@ -1,0 +1,79 @@
+﻿diff --git a/build/linker.py b/build/linker.py
+index dda9ce7..3cb47c2 100644
+--- a/build/linker.py
++++ b/build/linker.py
+@@ -216,6 +216,21 @@ class LinkerConfig:
+     fxid_version: bytes = b"1.00"         # 4 bytes
+     flags_byte: int = 0x01                # ZDL header byte 0x3D; 0x01 matches majority
+ 
++    # ---- B1on/G1on extension shim (2026-10-13, LOCAL PATCH) --------------
++    # These parameters existed in the repeat98 working-tree linker used in
++    # 2026-08 (that tree is lost). Semantics were reconstructed from
++    # fork-built artifacts (verified byte-identical to this linker's output
++    # where implemented) and stock G1on ZDL disassembly. Patch file:
++    # b1on-firmware-reverse/patches/linker_b1on_ext.patch
++    bass_flags: int = 0                   # ZDL INFO[38]; all stock values are 0
++    self_row_w28: float | None = None     # self-row cost float; None = 20.0
++    cost_w28: float | None = None         # legacy alias of self_row_w28
++    dll_fields: int = 3                   # 3 = stock-proven stub (all categories
++                                          # we can build); 5 = G1on AMP-only
++                                          # variant — NOT PORTED YET (raises)
++    amp_cabi_fxid: int | None = None      # G1on AMP CABI descriptor patch —
++    amp_cabi_default: int | None = None   # NOT PORTED YET (non-None raises)
++
+     # Optional pre-rendered 128×64 RLE screen image. None → auto-generate
+     # a text-only screen showing the effect name.
+     screen_image: Optional[bytes] = None
+@@ -325,6 +340,25 @@ class LinkerConfig:
+         if self.gid not in GID_PREFIX:
+             raise ValueError(f"unknown gid {self.gid:#x}; add to GID_PREFIX table")
+ 
++        # B1on/G1on extension shim — loud NotImplemented instead of silent
++        # wrong artifacts (every unimplemented knob would change loader
++        # behavior on G1on hardware).
++        if self.bass_flags != 0:
++            raise NotImplementedError(
++                "bass_flags != 0 (B1on BCAB path) is not ported into this "
++                "linker build yet")
++        if self.amp_cabi_fxid is not None or self.amp_cabi_default is not None:
++            raise NotImplementedError(
++                "amp_cabi_* (G1on AMP CABI descriptor path) is not ported "
++                "into this linker build yet")
++        if self.dll_fields not in (3, 5):
++            raise ValueError(f"dll_fields must be 3 or 5, got {self.dll_fields}")
++        if self.dll_fields == 5:
++            raise NotImplementedError(
++                "5-field Dll stub (G1on AMP, gid=4/5 requirement) is not "
++                "ported into this linker build yet; non-AMP builds must use "
++                "dll_fields=3 (ampneve: set AMPNEVE_DLL_FIELDS=3)")
++
+         # Hardware-confirmed ceiling for the MS-series UI path: 9 user
+         # params, displayed as three pages of three edit-mode controls.
+         # The preview image still only has coordinates for the first three
+@@ -539,6 +573,7 @@ def _build_descriptor(
+     onf_func_va: int,
+     knob_edit_vas: list[int],
+     params: list[Param],
++    self_row_w28: float | None = None,
+ ) -> tuple[bytes, list[tuple[int, int]]]:
+     """Returns (descriptor_bytes, [(offset_in_desc, target_va), ...])."""
+     assert len(knob_edit_vas) == len(params), (
+@@ -571,7 +606,8 @@ def _build_descriptor(
+     # imageInfo declare them. See docs/3-PARAM-LINKER-BUG.md.
+     # 20.0f (0x41a00000) is in the typical range for simple effects
+     # (Exciter=19.51, OptComp=30.76, BitCrush=14.88, AutoPan=13.89).
+-    entry[0x28:0x2C] = struct.pack('<f', 20.0)
++    # self_row_w28 (B1on/G1on shim) overrides the 20.0 default.
++    entry[0x28:0x2C] = struct.pack('<f', 20.0 if self_row_w28 is None else float(self_row_w28))
+     relocs.append((len(desc) + 0x1C, init_func_va))
+     relocs.append((len(desc) + 0x20, audio_func_va))
+     desc.extend(entry)
+@@ -1125,6 +1161,8 @@ def link(cfg: LinkerConfig) -> None:
+         onf_func_va=onf_va,
+         knob_edit_vas=knob_edit_vas,
+         params=cfg.params,
++        self_row_w28=(cfg.self_row_w28 if cfg.self_row_w28 is not None
++                      else cfg.cost_w28),
+     )
+     expected = 0x30 * (2 + len(cfg.params))
+     assert len(desc_bytes) == expected, \

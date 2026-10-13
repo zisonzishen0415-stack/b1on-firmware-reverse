@@ -123,3 +123,34 @@ f_c00a5fa0 = 每块调度:obj=*(0xC003F200+slot*28+4);尾调 *(obj+0x1C)
 
 **2026-10-13 本轮终**:探针硬件步骤(§9)不变;`.audio` 二段式与
 loader 核实列为下一静态目标。
+
+## 6. 构建链重建 + ampneve DLY 产物(2026-10-13 晚,同一轮续)
+
+**问题**:8 月用的扩展版 linker(`repeat98_tmp`,私有)已删;公开仓库
+(repeat98 上游 @4ec75ee 与用户 fork @2dda9600)均无其独有的
+LinkerConfig 参数(bass_flags/dll_fields/amp_cabi_*/self_row_w28/cost_w28),
+ampneve 构建脚本直接报错。
+
+**重建方案与验证**(细节与证据:`patches/README.md`):
+
+1. 上游克隆重链 B1sweepFLT.obj → 与 8 月 fork 产物**逐字节 0 差异**;
+2. 以**用户 fork**(含 G1on 感知的 imageInfo 精化——"广告参数总数会让
+   G1on 单页渲染 9 旋钮→无 UI/冻结")为基准,补 shim:
+   `self_row_w28/cost_w28` 实作;`bass_flags!=0`/`dll_fields=5`/
+   `amp_cabi_*!=None` **大声 NotImplementedError**(不静默产出错误成品);
+3. user-fork 重链探针与 8 月产物差 1 字节(imageInfo h6: 28 vs 32,
+   fork 后期 LineSel 精化;>3 参数构建不受影响,且 fork 的 count=3 为正
+   G1on 要求)→ **构建基准 = user-fork + shim**;
+4. **ampneve DLY 变体重建成功**:
+   - `ampneve/dist_smoke/AmpNeve.ZDL`(音频 NOP,先刷)
+     SHA256 `E5130406…4779`
+   - `ampneve/dist/AmpNeve.ZDL`(真 DSP;gid=8、fxid=422、
+     real_type=8、SONAME `ZDL_DLY_AmpNeve`、manifest_hw4 4 旋钮)
+     SHA256 `3C1D765C…7542`,28,950B
+   构建命令见 `patches/README.md`;
+5. 未移植项(5 字段 Dll=gid4 AMP 用、amp_cabi、B1on BCAB)全部
+   **拒绝构建**;5 字段的原厂真实形状已从 DELUXE_R.ZDL 反汇编取得
+   (ctx[3]/ctx[4] 两条 STW + 角色 VA),移植入口明确。
+6. **遗留差距(实机前最后一项)**:新产物 `.audio` 仍并入 `.text@0`
+   (原厂一律独立段 @0x7800)——修它要动 linker 段布局,列为下一
+   打包修正项。`probes/b1on_probe/out/` 15 个探针保持 8 月原件不动。
