@@ -309,6 +309,12 @@ def main(argv: list[str]) -> int:
         self_row_w28=self_row_w28,
         max_fardata_bytes=64 * 1024,
         allow_large_fardata=fardata_state,
+        # B1on/G1on stock-shape audio segment (2026-10-13 round-5 finding:
+        # every stock G1on ZDL keeps the audio function in its own executable
+        # segment @ VA 0x7800; our merged-into-.text shape is a structural
+        # difference). 0 = legacy merged layout. Set AMPNEVE_AUDIO_VA=0x7800
+        # to emit the stock shape.
+        audio_va=int(os.environ.get("AMPNEVE_AUDIO_VA", "0") or "0", 0),
     )
     link(cfg)
 
