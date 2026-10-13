@@ -157,6 +157,25 @@ loader 核实列为下一静态目标。
 数据通路已无盲区;填充者不在引导 ROM,而在主 OS 的命令处理家族
 (f_c00843xx → f_c0090500 → 注册家族)。
 
+## 8. 实机证据并入(2026-10-13 晚,来源:用户其他项目树)
+
+从 `D:\...\g1oncontrol\zoom-b1on-patches-manager`(2026-08-19/20,
+对用户本人 B1on 1.30 实机做读写并逐次回读验证)与
+`%APPDATA%\ZoomB1onPatchesManager\catalog.json`(250 个真模块目录)
+并入以下**实机级事实**(全部已在检查单 §2 更新):
+
+- **真机文件 172 个**:146 ZDL + 25 raw + `FLST_SEQ.ZDT`(4108B 模块清单);
+  33 条出厂 patch 已抓取并 100% 解码;
+- **patch 编码**:patch fxid = INFO fxid `<< 1`(bit0=on);real_type →
+  patch group 全映射(1→0x0200 … 9→0x1200,11→0x1400 PDL,
+  **5→0x0A20 BASSAMP**,20→0x0280 BASSDRV,22→0x02C0 BASSPRE);
+- **250 模块 × {real_type, w28 成本} 分布**已统计(如 DLY 15.2–127.7、
+  DCAMP 74.8–95.3、BASSAMP 60.9–67.8)——检查单新表;
+- **实机 33 条 patch 里不存在自定义 fxid**(8 月失败后设备未见残留);
+- 附:该项目的 `src/zdlparse/` 是与本项目独立的第二套 ZDL 解析器
+  (可作交叉对照),`docs/protocol/VERIFIED_FACTS.md` 为实机协议存档;
+  其 FLST 直读未完成(块游标不前进),模块清单最终以 ZEM 库交叉核对兜底。
+
 ## 6. 构建链重建 + ampneve DLY 产物(2026-10-13 晚,同一轮续)
 
 **问题**:8 月用的扩展版 linker(`repeat98_tmp`,私有)已删;公开仓库

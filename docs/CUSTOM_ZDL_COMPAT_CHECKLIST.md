@@ -33,6 +33,26 @@
 | 4 | `ZDL_AMP_` / `ZDL_DCAMP_` | 15 | `ZDL_COMMON_` |
 | 6 | `ZDL_MOD_` | | |
 
+**实机级补充(250 个真模块目录 + 33 条真机 patch,2026-08-20 用户 B1on
+1.30 实测,来源:`zoom-b1on-patches-manager/docs/protocol/VERIFIED_FACTS.md`
+与 `%APPDATA%\ZoomB1onPatchesManager\catalog.json`)**:
+
+| real_type | 类别 | patch group | 实测 dsp_cost(w28)范围 | real_type | 类别 | patch group |
+|---|---|---|---|---|---|---|
+| 1 | DYN | 0x0200 | 12.9–45.3 | 8 | DLY | 0x1000 |
+| 2 | FLT | 0x0400 | 11.6–40.7 | 9 | REV | 0x1200 |
+| 3 | DRV | 0x0600 | 30.4–82.7 | 11 | PDL(踏板) | 0x1400 |
+| 4 | AMP/DCAMP | 0x0800 | 74.8–95.3 | 20 | BASSDRV | 0x0280 |
+| 5 | **BASSAMP(B1on 音箱)** | **0x0A20** | 60.9–67.8 | 22 | BASSPRE | 0x02C0 |
+| 6 | MOD | 0x0C00 | 13.7–64.2 | 12/13 | 贝斯类(实测存在) | — |
+| 7 | SFX | 0x0E00 | 13.9–55.9 | | | |
+
+**设备协议事实(同源实测)**:patch 内 fxid = INFO fxid `<< 1`(bit0=on);
+组别由 real_type 经上表得出(互为交叉验证);B1on v1.30 实机文件 = **172 个**
+(146 ZDL + 25 raw + `FLST_SEQ.ZDT` 4108B 模块清单);33 条出厂 patch 已抓取
+解码(0 未知模块);**实机 33 条 patch 中不存在自定义 fxid**(与 8 月失败后
+清理一致)。
+
 **大区结构**(已逐字节挖出):
 
 - 5 个槽缓冲:`0xC01A5800 + k*0xAC440`(k=0..4),每槽 `0xAC440`
