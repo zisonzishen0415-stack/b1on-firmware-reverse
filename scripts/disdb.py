@@ -69,7 +69,9 @@ def targets(db: dict, addr: str) -> list[str]:
 
 
 def is_return(ins: dict) -> bool:
-    return ins["mn"] in ("BNOP", "B") and "B3" in ins["rest"] and "S2X" not in ins["rest"]
+    # parse() 的 mn 带单位后缀(如 "BNOP.S2"),先截断再比较。
+    mn = ins["mn"].split(".")[0]
+    return mn in ("BNOP", "B") and "B3" in ins["rest"] and "S2X" not in ins["rest"]
 
 
 def extract_fn(db: dict, start: str, max_len: int = 4000) -> list[str]:
