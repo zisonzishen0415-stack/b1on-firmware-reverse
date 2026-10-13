@@ -118,3 +118,6 @@ ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。
 3. `dist/AmpNeve.ZDL`(真 DSP);
 4. 若 3 失败 → 依次试 `AmpNeve_stock3` / `AmpNeve_merged5` /
    `AmpNeve_merged`,每次一个变量。
+5. **注册校验(2026-10-13 新增)**：自制 ZDL 经 ZEM 写入后,回读
+   `FLST_SEQ.ZDT` 确认名字出现在对应类别段(见第五轮文档 §9;
+   分类不可见怪癖的先查项)。
