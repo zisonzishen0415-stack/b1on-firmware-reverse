@@ -1,0 +1,268 @@
+===== CRY.ZDL (13504 bytes) =====
+
+[WRAPPER]
+  SIZE payload=8 header_size=56 elf_size=13428
+  version_string='ZOOM EFFECT DLL SYSTEM VER 1.00'
+  real_type=2 unknown1=1 knob_type=0 unknown2=0 sort_index=112 sort_sub=0 bass_flags=0 sort_fx_type=2
+  fx_version=b'1.00\x00\x00\x00\x00'
+  extra_header_payload=0B head=b''
+
+[ELF]
+  type=3 machine=0x8c flags=0x0 entry=0x614
+  PHDR type=1 off=0x40 vaddr=0x0 filesz=0x820 memsz=0x820 flags=5
+  PHDR type=1 off=0x860 vaddr=0x7800 filesz=0x320 memsz=0x320 flags=5
+  PHDR type=1 off=0xb80 vaddr=0x80000000 filesz=0x5f0 memsz=0x5f0 flags=4
+  PHDR type=1 off=0x1170 vaddr=0x800005f0 filesz=0x18 memsz=0x18 flags=6
+  PHDR type=2 off=0x1188 vaddr=0x0 filesz=0xa8 memsz=0x0 flags=6
+  sections:
+    [ 0]                        t=         0 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=0 es=0
+    [ 1] .rela.dyn              t=         4 f=0x0 a=0x00000000 off=0x1230 sz=   360 lk=29 inf=0 al=0 es=12
+    [ 2] .rela.plt              t=         4 f=0x0 a=0x00000000 off=0x1398 sz=     0 lk=29 inf=0 al=0 es=12
+    [ 3] .audio                 t=         1 f=0x6 a=0x00007800 off=0x860 sz=   800 lk=0 inf=0 al=32 es=0
+    [ 4] .text                  t=         1 f=0x6 a=0x00000000 off=0x40 sz=  2080 lk=0 inf=0 al=32 es=0
+    [ 5] .stack                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 6] .args                  t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 7] .neardata              t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 8] .rodata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 9] .bss                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [10] .text                  t=         8 f=0x4 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [11] .cinit                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [12] .cio                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [13] .const                 t=         1 f=0x2 a=0x80000000 off=0xb80 sz=  1520 lk=0 inf=0 al=8 es=0
+    [14] .data                  t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [15] .switch                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [16] .sysmem                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [17] .far                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [18] .fardata               t=         1 f=0x3 a=0x800005f0 off=0x1170 sz=    24 lk=0 inf=0 al=4 es=0
+    [19] .ppinfo                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [20] .ppdata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [21] .debug_info            t=         1 f=0x0 a=0x00000000 off=0x1398 sz=  1173 lk=0 inf=0 al=1 es=0
+    [22] .debug_line            t=         1 f=0x0 a=0x00000000 off=0x182d sz=   344 lk=0 inf=0 al=1 es=0
+    [23] .debug_abbrev          t=         1 f=0x0 a=0x00000000 off=0x1985 sz=   303 lk=0 inf=0 al=1 es=0
+    [24] .debug_pubnames        t=         1 f=0x0 a=0x00000000 off=0x1ab4 sz=   157 lk=0 inf=0 al=1 es=0
+    [25] .debug_aranges         t=         1 f=0x0 a=0x00000000 off=0x1b51 sz=   160 lk=0 inf=0 al=1 es=0
+    [26] .plt                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [27] .c6xabi.attributes     t=1879048195 f=0x0 a=0x00000000 off=0x1bf1 sz=    62 lk=0 inf=0 al=0 es=0
+    [28] .symtab                t=         2 f=0x0 a=0x00000000 off=0x1c30 sz=  2048 lk=34 inf=100 al=0 es=16
+    [29] .dynsym                t=        11 f=0x0 a=0x00000000 off=0x2430 sz=   400 lk=31 inf=24 al=0 es=16
+    [30] .dynamic               t=         6 f=0x1 a=0x00000000 off=0x1188 sz=   168 lk=31 inf=0 al=1 es=8
+    [31] .dynstr                t=         3 f=0x20 a=0x00000000 off=0x25c0 sz=   458 lk=0 inf=0 al=0 es=1
+    [32] .hash                  t=         5 f=0x0 a=0x00000000 off=0x278c sz=   224 lk=29 inf=0 al=0 es=4
+    [33] .TI.section.flags      t=2130706437 f=0x0 a=0x00000000 off=0x286c sz=    26 lk=0 inf=0 al=0 es=0
+    [34] .strtab                t=         3 f=0x20 a=0x00000000 off=0x2886 sz=  1145 lk=0 inf=0 al=0 es=1
+    [35] .shstrtab              t=         3 f=0x20 a=0x00000000 off=0x2cff sz=   309 lk=0 inf=0 al=0 es=1
+  .dynamic:
+    tag=2 val=0
+    tag=4 val=10124
+    tag=5 val=9664
+    tag=6 val=9264
+    tag=7 val=4656
+    tag=8 val=360
+    tag=9 val=12
+    tag=10 val=458
+    tag=11 val=16
+    tag=14 val=442
+    tag=20 val=7
+    tag=22 val=0
+    tag=23 val=5016
+    tag=30 val=4
+    tag=1610612749 val=384
+    tag=1610612751 val=434
+  .rela.dyn (30 entries):
+    off=0x224 info=0x409 add=0x0
+    off=0x228 info=0x40a add=0x0
+    off=0x248 info=0x309 add=0x0
+    off=0x24c info=0x30a add=0x0
+    off=0x294 info=0x209 add=0x0
+    off=0x2a4 info=0x20a add=0x0
+    off=0x3e0 info=0x209 add=0x0
+    off=0x3e4 info=0x20a add=0x0
+    off=0x4ac info=0x109 add=0x0
+    off=0x4b4 info=0x10a add=0x0
+    off=0x5c4 info=0x1309 add=0x0
+    off=0x5cc info=0x130a add=0x0
+    off=0x618 info=0x1209 add=0x0
+    off=0x620 info=0x1109 add=0x0
+    off=0x624 info=0x120a add=0x0
+    off=0x62c info=0x110a add=0x0
+    off=0x800002bc info=0x1001 add=0x0
+    off=0x800002ec info=0xf01 add=0x0
+    off=0x800002f0 info=0xe01 add=0x0
+    off=0x8000031c info=0xd01 add=0x0
+    off=0x80000324 info=0xc01 add=0x0
+    off=0x8000034c info=0xb01 add=0x0
+    off=0x8000037c info=0xa01 add=0x0
+    off=0x80000384 info=0x901 add=0x0
+    off=0x800003ac info=0x801 add=0x0
+    off=0x800003dc info=0x701 add=0x0
+    off=0x80000404 info=0x601 add=0x0
+    off=0x80000420 info=0x501 add=0x0
+    off=0x80000430 info=0x501 add=0x0
+    off=0x80000440 info=0x501 add=0x0
+  symbols (dynsym+symtab):
+    [.dynsym] _Fx_FLT_Cry_Coe                    val=0x80000568 size=108 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_FLT_Cry_onf_aft                 val=0x0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_Mod_Cry_polarity_tbl_2          val=0x800005e8 size=8 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_Mod_Cry_polarity_tbl_1          val=0x800005d8 size=16 info=0x01 other=2 shndx=13
+    [.dynsym] infoEffectTypeKnob_A_2             val=0x800005f0 size=24 info=0x01 other=2 shndx=18
+    [.dynsym] picEffectType_Cry                  val=0x80000000 size=667 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_FLT_Cry_outLv_edit              val=0x310 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry_balance_edit            val=0x408 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] GetString_AwaSens                  val=0x5c0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry_sens_edit               val=0x10c size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry_reso_edit               val=0x2b4 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] GetString_offset_1                 val=0x520 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry_range_edit              val=0x24 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry                         val=0x7800 size=0 info=0x02 other=2 shndx=3
+    [.dynsym] Fx_FLT_Cry_init                    val=0x494 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_Cry_onf                     val=0x360 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] effectTypeImageInfo                val=0x800003f0 size=212 info=0x01 other=2 shndx=13
+    [.dynsym] Cry                                val=0x800002a0 size=336 info=0x01 other=2 shndx=13
+    [.dynsym] disp_prm_sens                      val=0x800004c8 size=160 info=0x01 other=2 shndx=13
+    [.dynsym] __TI_STATIC_BASE                   val=0x0 size=0 info=0x00 other=2 shndx=9
+    [.dynsym] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_size                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_start               val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] Dll_Cry                            val=0x614 size=0 info=0x12 other=3 shndx=4
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=0 shndx=3
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=4
+    [.symtab] .stack                             val=0x0 size=0 info=0x03 other=0 shndx=5
+    [.symtab] .args                              val=0x0 size=0 info=0x03 other=0 shndx=6
+    [.symtab] .neardata                          val=0x0 size=0 info=0x03 other=0 shndx=7
+    [.symtab] .rodata                            val=0x0 size=0 info=0x03 other=0 shndx=8
+    [.symtab] .bss                               val=0x0 size=0 info=0x03 other=0 shndx=9
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=10
+    [.symtab] .cinit                             val=0x0 size=0 info=0x03 other=0 shndx=11
+    [.symtab] .cio                               val=0x0 size=0 info=0x03 other=0 shndx=12
+    [.symtab] .const                             val=0x80000000 size=0 info=0x03 other=0 shndx=13
+    [.symtab] .data                              val=0x0 size=0 info=0x03 other=0 shndx=14
+    [.symtab] .switch                            val=0x0 size=0 info=0x03 other=0 shndx=15
+    [.symtab] .sysmem                            val=0x0 size=0 info=0x03 other=0 shndx=16
+    [.symtab] .far                               val=0x0 size=0 info=0x03 other=0 shndx=17
+    [.symtab] .fardata                           val=0x800005f0 size=0 info=0x03 other=0 shndx=18
+    [.symtab] .ppinfo                            val=0x0 size=0 info=0x03 other=0 shndx=19
+    [.symtab] .ppdata                            val=0x0 size=0 info=0x03 other=0 shndx=20
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=0 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=0 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=0 shndx=24
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=0 shndx=25
+    [.symtab] .plt                               val=0x0 size=0 info=0x03 other=0 shndx=26
+    [.symtab] 0258010                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] disp_prm_sens                      val=0x800004c8 size=160 info=0x01 other=2 shndx=13
+    [.symtab] Cry                                val=0x800002a0 size=336 info=0x01 other=2 shndx=13
+    [.symtab] picEffectType_Cry                  val=0x80000000 size=667 info=0x01 other=2 shndx=13
+    [.symtab] infoEffectTypeKnob_A_2             val=0x800005f0 size=24 info=0x01 other=2 shndx=18
+    [.symtab] $C$L1                              val=0x580 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L2                              val=0x5aa size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L3                              val=0x5b4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L7                              val=0x60e size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x520 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const:disp_prm_sens               val=0x800004c8 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Cry                         val=0x800002a0 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:picEffectType_Cry           val=0x80000000 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .fardata                           val=0x800005f0 size=0 info=0x03 other=2 shndx=18
+    [.symtab] .const                             val=0x800003f0 size=0 info=0x03 other=2 shndx=13
+    [.symtab] 0207210                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] _Fx_FLT_Cry_Coe                    val=0x80000568 size=108 info=0x01 other=2 shndx=13
+    [.symtab] Fx_Mod_Cry_polarity_tbl_1          val=0x800005d8 size=16 info=0x01 other=2 shndx=13
+    [.symtab] Fx_Mod_Cry_polarity_tbl_2          val=0x800005e8 size=8 info=0x01 other=2 shndx=13
+    [.symtab] $C$L1                              val=0x96 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L2                              val=0xe4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L3                              val=0x144 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L4                              val=0x156 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L5                              val=0x216 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L6                              val=0x2a8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL60                            val=0x3b4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L7                              val=0x3b6 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L8                              val=0x3f0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL72                            val=0x490 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const                             val=0x80000568 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_Mod_Cry_polarity_tbl_1   val=0x800005d8 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_Mod_Cry_polarity_tbl_2   val=0x800005e8 size=0 info=0x03 other=2 shndx=13
+    [.symtab] Audio_Fx_FLT_Cry.asm               val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] $C$L1                              val=0x7888 size=0 info=0x02 other=2 shndx=3
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=2 shndx=3
+    [.symtab] call_stub.asm                      val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] __stub_ret                         val=0x7b8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__call_stub                  val=0x7a0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x192 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x8b size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x80 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x40 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x3a size=0 info=0x03 other=2 shndx=24
+    [.symtab] divu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x6c0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__divu                       val=0x640 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=2 shndx=24
+    [.symtab] push.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] .text:__push_rts                   val=0x800 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .text:__pop_rts                    val=0x7e0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x26b size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_info                        val=0x32e size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0xd7 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_line                        val=0x117 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0xc0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_abbrev                      val=0xf0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x60 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_aranges                     val=0x80 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x5c size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_pubnames                    val=0x7d size=0 info=0x03 other=2 shndx=24
+    [.symtab] remu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x764 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__remu                       val=0x700 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0xc9 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x47 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x40 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x20 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x1d size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_abbrev                      val=0x120 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_info                        val=0x3ef size=0 info=0x03 other=0 shndx=21
+    [.symtab] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_start               val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_size                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_STATIC_BASE                   val=0x0 size=0 info=0x10 other=2 shndx=9
+    [.symtab] effectTypeImageInfo                val=0x800003f0 size=212 info=0x11 other=2 shndx=13
+    [.symtab] GetString_offset_1                 val=0x520 size=0 info=0x12 other=2 shndx=4
+    [.symtab] GetString_AwaSens                  val=0x5c0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Dll_Cry                            val=0x614 size=0 info=0x12 other=3 shndx=4
+    [.symtab] Fx_FLT_Cry_EnvIn_edit              val=0x3f8 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_balance_edit            val=0x408 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_init                    val=0x494 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_onf                     val=0x360 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_sens_edit               val=0x10c size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_range_edit              val=0x24 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_outLv_edit              val=0x310 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_reso_edit               val=0x2b4 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry_onf_aft                 val=0x0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_FLT_Cry                         val=0x7800 size=0 info=0x12 other=2 shndx=3
+    [.symtab] __c6xabi_call_stub                 val=0x7a0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __call_stub                        val=0x7a0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_divu                      val=0x640 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __divu                             val=0x640 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_push_rts                  val=0x800 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __pop_rts                          val=0x7e0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_pop_rts                   val=0x7e0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __push_rts                         val=0x800 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __remu                             val=0x700 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_remu                      val=0x700 size=0 info=0x12 other=2 shndx=4
+
+[DESCRIPTOR] at .const+0x2a0 (VA 0x800002a0)
+  row 0 OnOff      max=     1 def=         0 pedal=  0 h=0x00000360 a=0x00000000 w28=    0.00 fl=0x00
+  row 1 Cry        max=4294967295 def=         0 pedal=  1 h=0x00000494 a=0x00007800 w28=   16.87 fl=0x00
+  row 2 Range      max=     9 def=         6 pedal=  9 h=0x00000024 a=0x00000000 w28=    0.00 fl=0x10
+  row 3 Reso       max=    10 def=         8 pedal= 10 h=0x000002b4 a=0x00000000 w28=    0.00 fl=0x10
+  row 4 Sense      max=    19 def=        16 pedal= 19 h=0x0000010c a=0x00000000 w28=    0.00 fl=0x10
+  row 5 Bal        max=   100 def=       100 pedal=100 h=0x00000408 a=0x00000000 w28=    0.00 fl=0x10
+  row 6 Level      max=   150 def=       100 pedal=150 h=0x00000310 a=0x00000000 w28=    0.00 fl=0x14
+
+[IMAGEINFO] VA 0x800003f0
+  hdr=0 1 0 w=128 h=64 pic=0x80000000 h6=28 h7=17 count=3
+    coord0: kid=2 x=28 y=11 va=0x800005f0
+    coord1: kid=3 x=54 y=11 va=0x800005f0
+    coord2: kid=4 x=80 y=11 va=0x800005f0

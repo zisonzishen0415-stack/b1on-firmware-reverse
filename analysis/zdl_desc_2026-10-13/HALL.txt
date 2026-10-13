@@ -1,0 +1,290 @@
+===== HALL.ZDL (16295 bytes) =====
+
+[WRAPPER]
+  SIZE payload=8 header_size=56 elf_size=16219
+  version_string='ZOOM EFFECT DLL SYSTEM VER 1.00'
+  real_type=9 unknown1=1 knob_type=0 unknown2=0 sort_index=16 sort_sub=0 bass_flags=0 sort_fx_type=9
+  fx_version=b'1.00\x00\x00\x00\x00'
+  extra_header_payload=0B head=b''
+
+[ELF]
+  type=3 machine=0x8c flags=0x0 entry=0x754
+  PHDR type=1 off=0x40 vaddr=0x0 filesz=0x960 memsz=0x960 flags=5
+  PHDR type=1 off=0x9a0 vaddr=0x7800 filesz=0x6c0 memsz=0x6c0 flags=5
+  PHDR type=1 off=0x1060 vaddr=0x80000000 filesz=0x962 memsz=0x962 flags=4
+  PHDR type=1 off=0x19c4 vaddr=0x80000964 filesz=0x18 memsz=0x18 flags=6
+  PHDR type=2 off=0x19dc vaddr=0x0 filesz=0xa8 memsz=0x0 flags=6
+  sections:
+    [ 0]                        t=         0 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=0 es=0
+    [ 1] .rela.dyn              t=         4 f=0x0 a=0x00000000 off=0x1a84 sz=   456 lk=29 inf=0 al=0 es=12
+    [ 2] .rela.plt              t=         4 f=0x0 a=0x00000000 off=0x1c4c sz=     0 lk=29 inf=0 al=0 es=12
+    [ 3] .audio                 t=         1 f=0x6 a=0x00007800 off=0x9a0 sz=  1728 lk=0 inf=0 al=32 es=0
+    [ 4] .text                  t=         1 f=0x6 a=0x00000000 off=0x40 sz=  2400 lk=0 inf=0 al=32 es=0
+    [ 5] .stack                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 6] .args                  t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 7] .neardata              t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 8] .rodata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 9] .bss                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [10] .text                  t=         8 f=0x4 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [11] .cinit                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [12] .cio                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [13] .const                 t=         1 f=0x2 a=0x80000000 off=0x1060 sz=  2402 lk=0 inf=0 al=8 es=0
+    [14] .data                  t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [15] .switch                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [16] .sysmem                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [17] .far                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [18] .fardata               t=         1 f=0x3 a=0x80000964 off=0x19c4 sz=    24 lk=0 inf=0 al=4 es=0
+    [19] .ppinfo                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [20] .ppdata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [21] .debug_info            t=         1 f=0x0 a=0x00000000 off=0x1c4c sz=  1158 lk=0 inf=0 al=1 es=0
+    [22] .debug_line            t=         1 f=0x0 a=0x00000000 off=0x20d2 sz=   344 lk=0 inf=0 al=1 es=0
+    [23] .debug_abbrev          t=         1 f=0x0 a=0x00000000 off=0x222a sz=   303 lk=0 inf=0 al=1 es=0
+    [24] .debug_pubnames        t=         1 f=0x0 a=0x00000000 off=0x2359 sz=   157 lk=0 inf=0 al=1 es=0
+    [25] .debug_aranges         t=         1 f=0x0 a=0x00000000 off=0x23f6 sz=   160 lk=0 inf=0 al=1 es=0
+    [26] .plt                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [27] .c6xabi.attributes     t=1879048195 f=0x0 a=0x00000000 off=0x2496 sz=    62 lk=0 inf=0 al=0 es=0
+    [28] .symtab                t=         2 f=0x0 a=0x00000000 off=0x24d4 sz=  2192 lk=34 inf=102 al=0 es=16
+    [29] .dynsym                t=        11 f=0x0 a=0x00000000 off=0x2d64 sz=   464 lk=31 inf=28 al=0 es=16
+    [30] .dynamic               t=         6 f=0x1 a=0x00000000 off=0x19dc sz=   168 lk=31 inf=0 al=1 es=8
+    [31] .dynstr                t=         3 f=0x20 a=0x00000000 off=0x2f34 sz=   568 lk=0 inf=0 al=0 es=1
+    [32] .hash                  t=         5 f=0x0 a=0x00000000 off=0x316c sz=   240 lk=29 inf=0 al=0 es=4
+    [33] .TI.section.flags      t=2130706437 f=0x0 a=0x00000000 off=0x325c sz=    26 lk=0 inf=0 al=0 es=0
+    [34] .strtab                t=         3 f=0x20 a=0x00000000 off=0x3276 sz=  1392 lk=0 inf=0 al=0 es=1
+    [35] .shstrtab              t=         3 f=0x20 a=0x00000000 off=0x37e6 sz=   309 lk=0 inf=0 al=0 es=1
+  .dynamic:
+    tag=2 val=0
+    tag=4 val=12652
+    tag=5 val=12084
+    tag=6 val=11620
+    tag=7 val=6788
+    tag=8 val=456
+    tag=9 val=12
+    tag=10 val=568
+    tag=11 val=16
+    tag=14 val=551
+    tag=20 val=7
+    tag=22 val=0
+    tag=23 val=7244
+    tag=30 val=4
+    tag=1610612749 val=448
+    tag=1610612751 val=542
+  .rela.dyn (38 entries):
+    off=0x68 info=0x709 add=0x0
+    off=0x80 info=0x70a add=0x0
+    off=0x1c8 info=0x609 add=0x0
+    off=0x1cc info=0x60a add=0x0
+    off=0x228 info=0x509 add=0x0
+    off=0x22c info=0x50a add=0x0
+    off=0x4f8 info=0x409 add=0x0
+    off=0x504 info=0x40a add=0x0
+    off=0x594 info=0x309 add=0x0
+    off=0x598 info=0x30a add=0x0
+    off=0x5b8 info=0x209 add=0x0
+    off=0x5c0 info=0x20a add=0x0
+    off=0x5e0 info=0x109 add=0x0
+    off=0x5e4 info=0x10a add=0x0
+    off=0x704 info=0x1709 add=0x0
+    off=0x70c info=0x170a add=0x0
+    off=0x758 info=0x1609 add=0x0
+    off=0x760 info=0x1509 add=0x0
+    off=0x764 info=0x160a add=0x0
+    off=0x76c info=0x150a add=0x0
+    off=0x770 info=0x1409 add=0x0
+    off=0x774 info=0x140a add=0x0
+    off=0x80000534 info=0xb01 add=0x0
+    off=0x80000564 info=0x1301 add=0x0
+    off=0x80000568 info=0x1201 add=0x0
+    off=0x80000594 info=0x1101 add=0x0
+    off=0x8000059c info=0xd01 add=0x0
+    off=0x800005c4 info=0x1001 add=0x0
+    off=0x800005f4 info=0xf01 add=0x0
+    off=0x80000624 info=0xe01 add=0x0
+    off=0x8000062c info=0xd01 add=0x0
+    off=0x80000654 info=0xc01 add=0x0
+    off=0x80000684 info=0xb01 add=0x0
+    off=0x8000068c info=0xa01 add=0x0
+    off=0x800006ac info=0x901 add=0x0
+    off=0x800006c8 info=0x801 add=0x0
+    off=0x800006d8 info=0x801 add=0x0
+    off=0x800006e8 info=0x801 add=0x0
+  symbols (dynsym+symtab):
+    [.dynsym] Fx_REV_Hall_Write_Adr_tbl          val=0x80000938 size=28 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_REV_Hall_init_tbl               val=0x80000880 size=120 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_REV_Hall_Read_Adr_tbl           val=0x800008f8 size=60 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_REV_Hall_onf_aft                val=0x168 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_tone2_tbl              val=0x800007f8 size=132 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_REV_Hall_tone1_tbl              val=0x80000770 size=132 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_REV_Hall_decay_tbl              val=0x80000000 size=720 info=0x01 other=2 shndx=13
+    [.dynsym] infoEffectTypeKnob_A_2_Reverse     val=0x80000964 size=24 info=0x01 other=2 shndx=18
+    [.dynsym] picEffectType_Hall                 val=0x800002d0 size=577 info=0x01 other=2 shndx=13
+    [.dynsym] GetString_Tail                     val=0x700 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_onf                    val=0x410 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_outLv_edit             val=0x3c4 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] GetString_offset_1                 val=0x660 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_predly_edit            val=0x2c4 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_mix_edit               val=0x51c size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_tone_edit              val=0x1b0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_decay_edit             val=0x640 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall                        val=0x7800 size=0 info=0x02 other=2 shndx=3
+    [.dynsym] Fx_REV_Hall_init                   val=0x56c size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_REV_Hall_tapmuteMute            val=0x26c size=0 info=0x02 other=2 shndx=4
+    [.dynsym] effectTypeImageInfo                val=0x80000698 size=212 info=0x01 other=2 shndx=13
+    [.dynsym] Hall                               val=0x80000518 size=384 info=0x01 other=2 shndx=13
+    [.dynsym] disp_prm_Tail                      val=0x80000958 size=10 info=0x01 other=2 shndx=13
+    [.dynsym] __TI_STATIC_BASE                   val=0x0 size=0 info=0x00 other=2 shndx=9
+    [.dynsym] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_size                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_start               val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] Dll_Hall                           val=0x754 size=0 info=0x12 other=3 shndx=4
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=0 shndx=3
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=4
+    [.symtab] .stack                             val=0x0 size=0 info=0x03 other=0 shndx=5
+    [.symtab] .args                              val=0x0 size=0 info=0x03 other=0 shndx=6
+    [.symtab] .neardata                          val=0x0 size=0 info=0x03 other=0 shndx=7
+    [.symtab] .rodata                            val=0x0 size=0 info=0x03 other=0 shndx=8
+    [.symtab] .bss                               val=0x0 size=0 info=0x03 other=0 shndx=9
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=10
+    [.symtab] .cinit                             val=0x0 size=0 info=0x03 other=0 shndx=11
+    [.symtab] .cio                               val=0x0 size=0 info=0x03 other=0 shndx=12
+    [.symtab] .const                             val=0x80000000 size=0 info=0x03 other=0 shndx=13
+    [.symtab] .data                              val=0x0 size=0 info=0x03 other=0 shndx=14
+    [.symtab] .switch                            val=0x0 size=0 info=0x03 other=0 shndx=15
+    [.symtab] .sysmem                            val=0x0 size=0 info=0x03 other=0 shndx=16
+    [.symtab] .far                               val=0x0 size=0 info=0x03 other=0 shndx=17
+    [.symtab] .fardata                           val=0x80000964 size=0 info=0x03 other=0 shndx=18
+    [.symtab] .ppinfo                            val=0x0 size=0 info=0x03 other=0 shndx=19
+    [.symtab] .ppdata                            val=0x0 size=0 info=0x03 other=0 shndx=20
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=0 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=0 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=0 shndx=24
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=0 shndx=25
+    [.symtab] .plt                               val=0x0 size=0 info=0x03 other=0 shndx=26
+    [.symtab] 0755211                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] disp_prm_Tail                      val=0x80000958 size=10 info=0x01 other=2 shndx=13
+    [.symtab] Hall                               val=0x80000518 size=384 info=0x01 other=2 shndx=13
+    [.symtab] picEffectType_Hall                 val=0x800002d0 size=577 info=0x01 other=2 shndx=13
+    [.symtab] infoEffectTypeKnob_A_2_Reverse     val=0x80000964 size=24 info=0x01 other=2 shndx=18
+    [.symtab] $C$L1                              val=0x6c0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L2                              val=0x6ea size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L3                              val=0x6f4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L7                              val=0x74e size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x660 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const:disp_prm_Tail               val=0x80000958 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Hall                        val=0x80000518 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:.string:picEffectType_Hall  val=0x800002d0 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .fardata                           val=0x80000964 size=0 info=0x03 other=2 shndx=18
+    [.symtab] .const                             val=0x80000698 size=0 info=0x03 other=2 shndx=13
+    [.symtab] 0754410                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] $C$L1                              val=0x54 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L2                              val=0x162 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L3                              val=0x340 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L4                              val=0x356 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L5                              val=0x3a0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L6                              val=0x3ba size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL78                            val=0x478 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L7                              val=0x47a size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L8                              val=0x4b8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L9                              val=0x4da size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L10                             val=0x518 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL83                            val=0x518 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const:Fx_REV_Hall_decay_tbl       val=0x80000000 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_REV_Hall_tone1_tbl       val=0x80000770 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_REV_Hall_tone2_tbl       val=0x800007f8 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_REV_Hall_Read_Adr_tbl    val=0x800008f8 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_REV_Hall_Write_Adr_tbl   val=0x80000938 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_REV_Hall_init_tbl        val=0x80000880 size=0 info=0x03 other=2 shndx=13
+    [.symtab] Audio_Fx_REV_Hall.asm              val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] $C$L1                              val=0x78ac size=0 info=0x02 other=2 shndx=3
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=2 shndx=3
+    [.symtab] call_stub.asm                      val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] __stub_ret                         val=0x8f8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__call_stub                  val=0x8e0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x192 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x8b size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x80 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x40 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x3a size=0 info=0x03 other=2 shndx=24
+    [.symtab] divu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x800 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__divu                       val=0x780 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=2 shndx=24
+    [.symtab] push.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] .text:__push_rts                   val=0x940 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .text:__pop_rts                    val=0x920 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x26b size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_info                        val=0x32e size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0xd7 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_line                        val=0x117 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0xc0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_abbrev                      val=0xf0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x60 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_aranges                     val=0x80 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x5c size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_pubnames                    val=0x7d size=0 info=0x03 other=2 shndx=24
+    [.symtab] remu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x8a4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__remu                       val=0x840 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0xc9 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x47 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x40 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x20 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x1d size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_abbrev                      val=0x120 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_info                        val=0x3ef size=0 info=0x03 other=0 shndx=21
+    [.symtab] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_start               val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_size                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_STATIC_BASE                   val=0x0 size=0 info=0x10 other=2 shndx=9
+    [.symtab] GetString_Tail                     val=0x700 size=0 info=0x12 other=2 shndx=4
+    [.symtab] effectTypeImageInfo                val=0x80000698 size=212 info=0x11 other=2 shndx=13
+    [.symtab] Dll_Hall                           val=0x754 size=0 info=0x12 other=3 shndx=4
+    [.symtab] GetString_offset_1                 val=0x660 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_Write_Adr_tbl          val=0x80000938 size=28 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall_onf_aft                val=0x168 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_decay_set              val=0x0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_init                   val=0x56c size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_decay_tbl              val=0x80000000 size=720 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall_tone1_tbl              val=0x80000770 size=132 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall_onf                    val=0x410 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_tapmuteMute            val=0x26c size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_predly_edit            val=0x2c4 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_tone_edit              val=0x1b0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_outLv_edit             val=0x3c4 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_decay_edit             val=0x640 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_tone2_tbl              val=0x800007f8 size=132 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall_init_tbl               val=0x80000880 size=120 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall_mix_edit               val=0x51c size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_REV_Hall_Read_Adr_tbl           val=0x800008f8 size=60 info=0x11 other=2 shndx=13
+    [.symtab] Fx_REV_Hall                        val=0x7800 size=0 info=0x12 other=2 shndx=3
+    [.symtab] __c6xabi_call_stub                 val=0x8e0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __call_stub                        val=0x8e0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_divu                      val=0x780 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __divu                             val=0x780 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_push_rts                  val=0x940 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __pop_rts                          val=0x920 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_pop_rts                   val=0x920 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __push_rts                         val=0x940 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __remu                             val=0x840 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_remu                      val=0x840 size=0 info=0x12 other=2 shndx=4
+
+[DESCRIPTOR] at .const+0x518 (VA 0x80000518)
+  row 0 OnOff      max=     1 def=         0 pedal=  0 h=0x00000410 a=0x00000000 w28=    0.00 fl=0x00
+  row 1 Hall       max=4294967295 def=         0 pedal=  1 h=0x0000056c a=0x00007800 w28=   27.45 fl=0x00
+  row 2 Decay      max=    29 def=         9 pedal= 29 h=0x00000640 a=0x00000000 w28=    0.00 fl=0x10
+  row 3 Tone       max=    10 def=         5 pedal=  0 h=0x000001b0 a=0x00000000 w28=    0.00 fl=0x00
+  row 4 Mix        max=   100 def=        46 pedal=100 h=0x0000051c a=0x00000000 w28=    0.00 fl=0x10
+  row 5 PreD       max=    99 def=        48 pedal=  0 h=0x000002c4 a=0x00000000 w28=    0.00 fl=0x00
+  row 6 Level      max=   150 def=       100 pedal=150 h=0x000003c4 a=0x00000000 w28=    0.00 fl=0x10
+  row 7 Tail       max=     1 def=         0 pedal=  0 h=0x00000410 a=0x00000000 w28=    0.00 fl=0x04
+
+[IMAGEINFO] VA 0x80000698
+  hdr=0 1 0 w=128 h=64 pic=0x800002d0 h6=23 h7=25 count=3
+    coord0: kid=2 x=23 y=38 va=0x80000964
+    coord1: kid=3 x=49 y=38 va=0x80000964
+    coord2: kid=4 x=75 y=38 va=0x80000964

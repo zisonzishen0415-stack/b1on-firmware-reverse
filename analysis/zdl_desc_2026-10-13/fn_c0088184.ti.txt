@@ -1,0 +1,287 @@
+﻿c0088184   107e7c10           CALLP.S1      0xc00c7560,A3
+c0088188   07ffd852           ADDK.S2       -80,B15
+c008818c       7646           MV.L1X        B4,A11
+c008818e       464e ||        MV.S1         A4,A10
+c0088190   00eab828           MVK.S1        0xffffd570,A1
+c0088194   00e006e9           MVKH.S1       0xc00d0000,A1
+c0088198       0506 ||        MV.L1         A10,A0
+c008819a       4402           SHL.S1        A0,0x2,A0
+c008819c   e9000040           .fphead       n, l, W, BU, nobr, nosat, 1001000b
+c00881a0       2040           ADD.L1        A1,A0,A4
+c00881a2       000c           LDW.D1T1      *A4[0],A0
+c00881a4   06802078 ||        ADD.L1        A1,A0,A13
+c00881a8       2506           MV.L1         A10,A1
+c00881aa       4482           SHL.S1        A1,0x2,A1
+c00881ac       84c6           MV.L1         A1,A12
+c00881ae       0c6e           NOP           1
+c00881b0   d018a120    [!A0]  BNOP.S1       0xc00881d0,5
+c00881b4   0097a428           MVK.S1        0x2f48,A1
+c00881b8   00e00269           MVKH.S1       0xc0040000,A1
+c00881bc   e1a00002           .fphead       n, l, W, BU, nobr, nosat, 0001101b
+c00881c0       0606 ||        MV.L1         A12,A0
+c00881c2       2040           ADD.L1        A1,A0,A4
+c00881c4   10514013           CALLP.S2      0xc00b0bc0,B3
+c00881c8       004c ||        LDW.D1T1      *A4[0],A4
+c00881ca       0426           MVK.L1        0,A0
+c00881cc       868e ||        MV.S1         A13,A4
+c00881ce       0004           STW.D1T1      A0,*A4[0]
+c00881d0   002c0fd8           MV.L1         A11,A0
+c00881d4   d110a120    [!A0]  BNOP.S1       0xc00883e0,5
+c00881d8       ed9b           CALLP.S2      0xc0088098,B3
+c00881da       8586 ||        MV.L1         A11,A4
+c00881dc   e9a09020           .fphead       n, l, W, BU, br, nosat, 1001101b
+c00881e0   10464713           CALLP.S2      0xc00ab418,B3
+c00881e4       9247 ||        MV.L2X        A4,B4
+c00881e6       0312 ||        MVK.S1        0,A6
+c00881e8   023c9059 ||        ADD.L1X       4,B15,A4
+c00881ec       1b77 ||        MVK.D2        0,B6
+c00881ee       0246           MV.L1         A4,A0
+c00881f0   c0baa120    [ A0]  BNOP.S1       0xc0088354,5
+c00881f4   05980028           MVK.S1        0x3000,A11
+c00881f8   05e00268           MVKH.S1       0xc0040000,A11
+c00881fc   e140000c           .fphead       n, l, W, BU, nobr, nosat, 0001010b
+c0088200   033d005a           ADD.L2        8,B15,B6
+c0088204   10460613           CALLP.S2      0xc00ab230,B3
+c0088208       ac4d ||        LDW.D2T1      *B15[1],A4
+c008820a       9587 ||        MV.L2X        A11,B4
+c008820c       8726 ||        MVK.L1        4,A6
+c008820e       0246           MV.L1         A4,A0
+c0088210       e9aa    [ A0]  BNOP.S1       0xc008834c,5
+c0088212       dc0d           LDW.D2T2      *B15[2],B0
+c0088214       6c6e           NOP           4
+c0088216       8027           CMPEQ.L2      4,B0,B0
+c0088218   30a6a120    [!B0]  BNOP.S1       0xc008834c,5
+c008821c   e7808030           .fphead       n, l, W, BU, br, nosat, 0111100b
+c0088220   023d805a           ADD.L2        12,B15,B4
+c0088224   10460213           CALLP.S2      0xc00ab230,B3
+c0088228       ac4d ||        LDW.D2T1      *B15[1],A4
+c008822a       1312 ||        MVK.S1        16,A6
+c008822c   033d005a ||        ADD.L2        8,B15,B6
+c0088230       0246           MV.L1         A4,A0
+c0088232       e5aa    [ A0]  BNOP.S1       0xc008834c,5
+c0088234       dc0d           LDW.D2T2      *B15[2],B0
+c0088236       1093           MVK.S2        16,B1
+c0088238       4c6e           NOP           3
+c008823a       04e9           CMPEQ.L2      B0,B1,B0
+c008823c   ee808030           .fphead       n, l, W, BU, br, nosat, 1110100b
+c0088240   3086a120    [!B0]  BNOP.S1       0xc008834c,5
+c0088244   0010a35a           MVK.L2        4,B0
+c0088248   023d805a           ADD.L2        12,B15,B4
+c008824c   0250a028           MVK.S1        0xffffa140,A4
+c0088250   026006e8           MVKH.S1       0xc00d0000,A4
+c0088254       021c           LDBU.D1T1     *A4[0],A1
+c0088256       121d ||        LDBU.D2T2     *B4[0],B1
+c0088258       34e8           CMPEQ.L1X     A1,B1,A0
+c008825a       a5ba    [!A0]  BNOP.S1       0xc008826c,5
+c008825c   ec108400           .fphead       p, l, W, BU, br, nosat, 1100000b
+c0088260   0003e05a           SUB.L2        B0,0x1,B0
+c0088264   2ffa8120    [ B0]  BNOP.S1       0xc0088254,4
+c0088268       2641           ADD.L2        B4,1,B4
+c008826a       2640 ||        ADD.L1        A4,1,A4
+c008826c   00043a7a           CMPEQ.L2X     B1,A1,B0
+c0088270   3076a120    [!B0]  BNOP.S1       0xc008834c,5
+c0088274       9c8d           LDW.D2T2      *B15[4],B0
+c0088276       6c6e           NOP           4
+c0088278   00010a5a           CMPEQ.L2      8,B0,B0
+c008827c   e4800010           .fphead       n, l, W, BU, nobr, nosat, 0100100b
+c0088280   3066a120    [!B0]  BNOP.S1       0xc008834c,5
+c0088284       ac4d           LDW.D2T1      *B15[1],A4
+c0088286       9587 ||        MV.L2X        A11,B4
+c0088288   1045f613           CALLP.S2      0xc00ab230,B3
+c008828c   033d005b ||        ADD.L2        8,B15,B6
+c0088290       aced ||        LDW.D2T1      *B15[5],A6
+c0088292       0246           MV.L1         A4,A0
+c0088294       d9aa    [ A0]  BNOP.S1       0xc008834c,5
+c0088296       bc9d           LDW.D2T2      *B15[5],B1
+c0088298       dc0d           LDW.D2T2      *B15[2],B0
+c008829a       6c6e           NOP           4
+c008829c   ee408004           .fphead       n, l, W, BU, br, nosat, 1110010b
+c00882a0   00040a7a           CMPEQ.L2      B0,B1,B0
+c00882a4   3056a120    [!B0]  BNOP.S1       0xc008834c,5
+c00882a8   10772413           CALLP.S2      0xc00c3bc0,B3
+c00882ac       e636 ||        ADDAW.D1X     B15,0x7,A4
+c00882ae       9587 ||        MV.L2X        A11,B4
+c00882b0       1b32 ||        MVK.S1        56,A6
+c00882b2       ac4d           LDW.D2T1      *B15[1],A4
+c00882b4   033d005a ||        ADD.L2        8,B15,B6
+c00882b8   1045f213           CALLP.S2      0xc00ab230,B3
+c00882bc   e30002c0           .fphead       n, l, W, BU, nobr, nosat, 0011000b
+c00882c0       cced ||        LDW.D2T1      *B15[6],A6
+c00882c2       9587 ||        MV.L2X        A11,B4
+c00882c4       0246           MV.L1         A4,A0
+c00882c6       d1aa    [ A0]  BNOP.S1       0xc008834c,5
+c00882c8       dc9d           LDW.D2T2      *B15[6],B1
+c00882ca       dc0d           LDW.D2T2      *B15[2],B0
+c00882cc       6c6e           NOP           4
+c00882ce       04e9           CMPEQ.L2      B0,B1,B0
+c00882d0   3046a120    [!B0]  BNOP.S1       0xc008834c,5
+c00882d4   10464713           CALLP.S2      0xc00ab4f8,B3
+c00882d8       ac4d ||        LDW.D2T1      *B15[1],A4
+c00882da       e49b           CALLP.S2      0xc0088108,B3
+c00882dc   e9e0a001           .fphead       n, l, W, BU, br, nosat, 1001111b
+c00882e0       dccd ||        LDW.D2T2      *B15[6],B4
+c00882e2       c506 ||        MV.L1         A10,A6
+c00882e4   022c06a0 ||        MV.S1         A11,A4
+c00882e8   0000449c           LDBU.D2T1     *+B15[68],A0
+c00882ec   0079542a           MVK.S2        0xfffff2a8,B0
+c00882f0   006001ea           MVKH.S2       0xc0030000,B0
+c00882f4       2606           MV.L1         A12,A1
+c00882f6       3040           ADD.L1X       A1,B0,A4
+c00882f8       0004           STW.D1T1      A0,*A4[0]
+c00882fa       ce0d           LDW.D2T1      *B15[18],A0
+c00882fc   ec200003           .fphead       n, l, W, BU, nobr, nosat, 1100001b
+c0088300   0079602a           MVK.S2        0xfffff2c0,B0
+c0088304   006001ea           MVKH.S2       0xc0030000,B0
+c0088308       0c6e           NOP           1
+c008830a       3040           ADD.L1X       A1,B0,A4
+c008830c   00100274           STW.D1T1      A0,*+A4[0]
+c0088310   0000459e           LDBU.D2T2     *+B15[69],B0
+c0088314   02796c28           MVK.S1        0xfffff2d8,A4
+c0088318   026001e8           MVKH.S1       0xc0030000,A4
+c008831c   e0800000           .fphead       n, l, W, BU, nobr, nosat, 0000100b
+c0088320       a506           MV.L1         A10,A5
+c0088322       0c6e           NOP           1
+c0088324   00148a36           STB.D1T2      B0,*+A5[A4]
+c0088328   0000469e           LDBU.D2T2     *+B15[70],B0
+c008832c   00f9482a           MVK.S2        0xfffff290,B1
+c0088330   00300fd8           MV.L1         A12,A0
+c0088334   02797028           MVK.S1        0xfffff2e0,A4
+c0088338   026001e9           MVKH.S1       0xc0030000,A4
+c008833c   e0200000           .fphead       n, l, W, BU, nobr, nosat, 0000001b
+c0088340   00e001ea ||        MVKH.S2       0xc0030000,B1
+c0088344       9684           STB.D1T2      B0,*A5[A4]
+c0088346       3041 ||        ADD.L2X       B1,A0,B4
+c0088348   007ca120           BNOP.S1       0xc0088438,5
+c008834c   10463713           CALLP.S2      0xc00ab4f8,B3
+c0088350   023c22e4 ||        LDW.D2T1      *+B15[1],A4
+c0088354   0079542b           MVK.S2        0xfffff2a8,B0
+c0088358   00300fd8 ||        MV.L1         A12,A0
+c008835c   e0400004           .fphead       n, l, W, BU, nobr, nosat, 0000010b
+c0088360   006001ea           MVKH.S2       0xc0030000,B0
+c0088364       1041           ADD.L2X       B0,A0,B4
+c0088366       0013 ||        MVK.S2        0,B0
+c0088368   001002f6           STW.D2T2      B0,*+B4[0]
+c008836c   00f9602a           MVK.S2        0xfffff2c0,B1
+c0088370   00e001ea           MVKH.S2       0xc0030000,B1
+c0088374       3041           ADD.L2X       B1,A0,B4
+c0088376       1005           STW.D2T2      B0,*B4[0]
+c0088378   02796c28           MVK.S1        0xfffff2d8,A4
+c008837c   e4400004           .fphead       n, l, W, BU, nobr, nosat, 0100010b
+c0088380   026001e9           MVKH.S1       0xc0030000,A4
+c0088384       a506 ||        MV.L1         A10,A5
+c0088386       9684           STB.D1T2      B0,*A5[A4]
+c0088388   0003180a ||        EXTU.S2       B0,24,24,B0
+c008838c   02797028           MVK.S1        0xfffff2e0,A4
+c0088390   026001e8           MVKH.S1       0xc0030000,A4
+c0088394   00148a36           STB.D1T2      B0,*+A5[A4]
+c0088398   00f9482a           MVK.S2        0xfffff290,B1
+c008839c   e0400008           .fphead       n, l, W, BU, nobr, nosat, 0000010b
+c00883a0   0034082a           MVK.S2        0x6810,B0
+c00883a4   00e001ea           MVKH.S2       0xc0030000,B1
+c00883a8   0060066b           MVKH.S2       0xc00c0000,B0
+c00883ac       3041 ||        ADD.L2X       B1,A0,B4
+c00883ae       1005           STW.D2T2      B0,*B4[0]
+c00883b0   0079002b           MVK.S2        0xfffff200,B0
+c00883b4       0506 ||        MV.L1         A10,A0
+c00883b6       a402           SHL.S1        A0,0x5,A0
+c00883b8   006001eb ||        MVKH.S2       0xc0030000,B0
+c00883bc   e5000800           .fphead       n, l, W, BU, nobr, nosat, 0101000b
+c00883c0   00a80fd8 ||        MV.L1         A10,A1
+c00883c4   00003cc0           SUBAW.D1      A0,A1,A0
+c00883c8       1040           ADD.L1X       A0,B0,A4
+c00883ca       0012 ||        MVK.S1        0,A0
+c00883cc       6004           STW.D1T1      A0,*A4[3]
+c00883ce       8004           STW.D1T1      A0,*A4[4]
+c00883d0       a004           STW.D1T1      A0,*A4[5]
+c00883d2       c004           STW.D1T1      A0,*A4[6]
+c00883d4   107c8a12           CALLP.S2      0xc00c6810,B3
+c00883d8   0054a120           BNOP.S1       0xc0088468,5
+c00883dc   e3800010           .fphead       n, l, W, BU, nobr, nosat, 0011100b
+c00883e0   0079542a           MVK.S2        0xfffff2a8,B0
+c00883e4   006001ea           MVKH.S2       0xc0030000,B0
+c00883e8       0606           MV.L1         A12,A0
+c00883ea       0426           MVK.L1        0,A0
+c00883ec       104a ||        ADD.S1X       A0,B0,A4
+c00883ee       0004           STW.D1T1      A0,*A4[0]
+c00883f0   01796028           MVK.S1        0xfffff2c0,A2
+c00883f4   016001e9           MVKH.S1       0xc0030000,A2
+c00883f8       2606 ||        MV.L1         A12,A1
+c00883fa       40c0           ADD.L1        A2,A1,A4
+c00883fc   e9800020           .fphead       n, l, W, BU, nobr, nosat, 1001100b
+c0088400   00100274           STW.D1T1      A0,*+A4[0]
+c0088404   02796c28           MVK.S1        0xfffff2d8,A4
+c0088408   026001e9           MVKH.S1       0xc0030000,A4
+c008840c       a506 ||        MV.L1         A10,A5
+c008840e       1862           EXTU.S1       A0,24,24,A0
+c0088410   00148a34 ||        STB.D1T1      A0,*+A5[A4]
+c0088414   02797028           MVK.S1        0xfffff2e0,A4
+c0088418   026001e8           MVKH.S1       0xc0030000,A4
+c008841c   e1000080           .fphead       n, l, W, BU, nobr, nosat, 0001000b
+c0088420   00148a34           STB.D1T1      A0,*+A5[A4]
+c0088424   0079482a           MVK.S2        0xfffff290,B0
+c0088428   006001eb           MVKH.S2       0xc0030000,B0
+c008842c   00340828 ||        MVK.S1        0x6810,A0
+c0088430   00600669           MVKH.S1       0xc00c0000,A0
+c0088434       10c1 ||        ADD.L2X       B0,A1,B4
+c0088436       0005           STW.D2T1      A0,*B4[0]
+c0088438   00280fd9           MV.L1         A10,A0
+c008843c   e4000000           .fphead       n, l, W, BU, nobr, nosat, 0100000b
+c0088440   0079002a ||        MVK.S2        0xfffff200,B0
+c0088444       a402           SHL.S1        A0,0x5,A0
+c0088446       2506 ||        MV.L1         A10,A1
+c0088448   006001ea ||        MVKH.S2       0xc0030000,B0
+c008844c   00003cc0           SUBAW.D1      A0,A1,A0
+c0088450       1040           ADD.L1X       A0,B0,A4
+c0088452       0012 ||        MVK.S1        0,A0
+c0088454       6004           STW.D1T1      A0,*A4[3]
+c0088456       8004           STW.D1T1      A0,*A4[4]
+c0088458       a004           STW.D1T1      A0,*A4[5]
+c008845a       c004           STW.D1T1      A0,*A4[6]
+c008845c   ee40010c           .fphead       n, l, W, BU, nobr, nosat, 1110010b
+c0088460       100d           LDW.D2T2      *B4[0],B0
+c0088462       006f           BNOP.S2       B0,0
+c0088464   01828162           ADDKPC.S2     0xc0088468,B3,4
+c0088468   07802852           ADDK.S2       80,B15
+c008846c   107e1c10           CALLP.S1      0xc00c7540,A3
+c0088470       ee40           ADD.L1        A4,-1,A4
+c0088472       3247 ||        MV.L2X        A4,B1
+c0088474       2526           MVK.L1        1,A2
+c0088476       fc27 ||        MVK.L2        -1,B0
+c0088478   a283e000    [ A2]  SPLOOPW       6
+c008847c   e6300500           .fphead       p, l, W, BU, nobr, nosat, 0110001b
+c0088480   00002000           NOP           2
+c0088484   a1903224    [ A2]  LDB.D1T1      *++A4[1],A3
+c0088488       6c6e           NOP           4
+c008848a       41c6           MV.L1         A3,A2
+c008848c       2c6e           NOP           2
+c008848e       0c6e           NOP           1
+c0088490   00034001           SPKERNEL      0,0
+c0088494       2401 ||        ADD.L2        B0,1,B0
+c0088496       0081           ADD.L2        B0,B1,B0
+c0088498       8c41           ADD.L2        B0,-4,B4
+c008849a       120d           LDB.D2T2      *B4[0],B0
+c008849c   ed810000           .fphead       n, l, W, B, nobr, nosat, 1101100b
+c00884a0       c8b3           MVK.S2        46,B1
+c00884a2       4c6e           NOP           3
+c00884a4   00040a7a           CMPEQ.L2      B0,B1,B0
+c00884a8   301ca120    [!B0]  BNOP.S1       0xc00884d8,5
+c00884ac       320d           LDB.D2T2      *B4[1],B0
+c00884ae       58d3           MVK.S2        90,B1
+c00884b0       4c6e           NOP           3
+c00884b2       04e9           CMPEQ.L2      B0,B1,B0
+c00884b4   301ca120    [!B0]  BNOP.S1       0xc00884d8,5
+c00884b8       520d           LDB.D2T2      *B4[2],B0
+c00884ba       80d3           MVK.S2        68,B1
+c00884bc   eb210000           .fphead       n, l, W, B, nobr, nosat, 1011001b
+c00884c0       4c6e           NOP           3
+c00884c2       04e9           CMPEQ.L2      B0,B1,B0
+c00884c4   300ca120    [!B0]  BNOP.S1       0xc00884d8,5
+c00884c8       720d           LDB.D2T2      *B4[3],B0
+c00884ca       88d3           MVK.S2        76,B1
+c00884cc       4c6e           NOP           3
+c00884ce       04e9           CMPEQ.L2      B0,B1,B0
+c00884d0   300ca120    [!B0]  BNOP.S1       0xc00884d8,5
+c00884d4       834a           BNOP.S1       0xc00884da,4
+c00884d6       2626           MVK.L1        1,A4
+c00884d8       0626           MVK.L1        0,A4
+c00884da       a1ef           BNOP.S2       B3,5

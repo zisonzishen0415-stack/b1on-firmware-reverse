@@ -1,0 +1,85 @@
+===== B1sweepDLY.ZDL (5074 bytes) =====
+
+[WRAPPER]
+  SIZE payload=8 header_size=56 elf_size=4998
+  version_string='ZOOM EFFECT DLL SYSTEM VER 1.00'
+  real_type=8 unknown1=1 knob_type=0 unknown2=0 sort_index=162 sort_sub=1 bass_flags=0 sort_fx_type=8
+  fx_version=b'1.00\x00\x00\x00\x00'
+  extra_header_payload=0B head=b''
+
+[ELF]
+  type=3 machine=0x8c flags=0x0 entry=0x740
+  PHDR type=1 off=0x40 vaddr=0x0 filesz=0x820 memsz=0x820 flags=5
+  PHDR type=1 off=0x860 vaddr=0x80000000 filesz=0x408 memsz=0x408 flags=4
+  PHDR type=1 off=0xc68 vaddr=0x80000408 filesz=0x18 memsz=0x18 flags=6
+  PHDR type=2 off=0xcf8 vaddr=0x0 filesz=0xa8 memsz=0x0 flags=6
+  sections:
+    [ 0]                        t=         0 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=0 es=0
+    [ 1] .rela.dyn              t=         4 f=0x0 a=0x00000000 off=0xc80 sz=   120 lk=8 inf=0 al=0 es=12
+    [ 2] .rela.plt              t=         4 f=0x0 a=0x00000000 off=0xcf8 sz=     0 lk=8 inf=0 al=0 es=12
+    [ 3] .audio                 t=         1 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 4] .text                  t=         1 f=0x6 a=0x00000000 off=0x40 sz=  2080 lk=0 inf=0 al=32 es=0
+    [ 5] .const                 t=         1 f=0x2 a=0x80000000 off=0x860 sz=  1032 lk=0 inf=0 al=8 es=0
+    [ 6] .fardata               t=         1 f=0x3 a=0x80000408 off=0xc68 sz=    24 lk=0 inf=0 al=4 es=0
+    [ 7] .dynamic               t=         6 f=0x0 a=0x00000000 off=0xcf8 sz=   168 lk=9 inf=0 al=0 es=8
+    [ 8] .dynsym                t=        11 f=0x0 a=0x00000000 off=0xda0 sz=   240 lk=9 inf=14 al=0 es=16
+    [ 9] .dynstr                t=         3 f=0x0 a=0x00000000 off=0xe90 sz=   310 lk=0 inf=0 al=0 es=0
+    [10] .hash                  t=         5 f=0x0 a=0x00000000 off=0xfc8 sz=   136 lk=8 inf=0 al=0 es=0
+    [11] .c6xabi.attributes     t=1879048195 f=0x0 a=0x00000000 off=0x1050 sz=    62 lk=0 inf=0 al=0 es=0
+    [12] .shstrtab              t=         3 f=0x0 a=0x00000000 off=0x1090 sz=   110 lk=0 inf=0 al=0 es=0
+  .dynamic:
+    tag=2 val=0
+    tag=4 val=4040
+    tag=5 val=3728
+    tag=6 val=3488
+    tag=7 val=3200
+    tag=8 val=120
+    tag=9 val=12
+    tag=10 val=310
+    tag=11 val=16
+    tag=14 val=287
+    tag=20 val=7
+    tag=22 val=0
+    tag=23 val=3320
+    tag=30 val=4
+    tag=1610612749 val=224
+    tag=1610612751 val=272
+  .rela.dyn (10 entries):
+    off=0x744 info=0x909 add=0x0
+    off=0x748 info=0x809 add=0x0
+    off=0x74c info=0x90a add=0x0
+    off=0x754 info=0x80a add=0x0
+    off=0x80000248 info=0x701 add=0x0
+    off=0x80000278 info=0x601 add=0x0
+    off=0x8000027c info=0x501 add=0x0
+    off=0x800002a8 info=0x401 add=0x0
+    off=0x800002d0 info=0x301 add=0x0
+    off=0x800002ec info=0x201 add=0x0
+  symbols (dynsym+symtab):
+    [.dynsym] _Fx_FLT_B1sweepDLY_Coe             val=0x80000390 size=68 info=0x01 other=2 shndx=5
+    [.dynsym] _infoEffectTypeKnob_A_2            val=0x80000408 size=24 info=0x01 other=2 shndx=6
+    [.dynsym] picEffectType_B1sweepDLY           val=0x80000000 size=556 info=0x01 other=2 shndx=5
+    [.dynsym] Fx_FLT_B1sweepDLY_Arm_edit         val=0x320 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_B1sweepDLY                  val=0x0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_B1sweepDLY_init             val=0x720 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_FLT_B1sweepDLY_onf              val=0x2c0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] effectTypeImageInfo                val=0x800002bc size=212 info=0x01 other=2 shndx=5
+    [.dynsym] SonicStomp                         val=0x8000022c size=144 info=0x01 other=2 shndx=5
+    [.dynsym] __TI_STATIC_BASE                   val=0x0 size=0 info=0x00 other=2 shndx=0
+    [.dynsym] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_size                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_start               val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] Dll_B1sweepDLY                     val=0x740 size=0 info=0x12 other=3 shndx=4
+
+[DESCRIPTOR] at .const+0x22c (VA 0x8000022c)
+  row 0 OnOff      max=     1 def=         0 pedal=  0 h=0x000002c0 a=0x00000000 w28=    0.00 fl=0x00
+  row 1 B1sweepDLY max=4294967295 def=         0 pedal=  1 h=0x00000720 a=0x00000000 w28=   20.00 fl=0x00
+  row 2 Arm        max=     1 def=         0 pedal=  0 h=0x00000320 a=0x00000000 w28=    0.00 fl=0x04
+
+[IMAGEINFO] VA 0x800002bc
+  hdr=0 1 0 w=128 h=64 pic=0x80000000 h6=32 h7=17 count=3
+    coord0: kid=2 x=54 y=36 va=0x80000408
+    coord1: kid=0 x=0 y=0 va=0x0
+    coord2: kid=0 x=0 y=0 va=0x0
+
+[PICTURE] VA 0x80000000 size=556 head=b'\x00\xf0\x10\x108\xf0\x00\x00\x00\xfc\x00\x00\x00\xf0\xf0\x00'

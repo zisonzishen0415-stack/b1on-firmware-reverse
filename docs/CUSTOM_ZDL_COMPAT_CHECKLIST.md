@@ -19,6 +19,7 @@
 | 无 `sinf/cosf/tanf/logf`(固件 RTS 里没有);`__c6xabi_divf` 可用(随构建链附带 rts blob) | 链接失败或运行崩 |
 | 音频块 8 样本/声道 `LLLLLLLL RRRRRRRR`;float32;**Output 是累加**不是覆盖 | 声学损坏/吞掉下游尾音 |
 | `ctx[3]` = `{base, end, span}` 大区描述符;`ctx[1]` 参数表,`params[0..4]` 为宿主保留 | 越界写/参数错位 |
+| **`.audio` 段 = 音频回调代码段,原厂一律链到 VA 0x7800**(描述符 48B 行 word8=a=音频函数 VA);自制链目前音频在 `.text@0`、`.audio` 空 | 第五轮结构差异项,是否致命待 loader 静态核实+实机(见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1) |
 
 ## 2. B1on/G1on 特有(本项目静态证据,101 个原厂 ZDL 实测)
 
@@ -36,8 +37,11 @@
 
 - 5 个槽缓冲:`0xC01A5800 + k*0xAC440`(k=0..4),每槽 `0xAC440`
   = 0xA0000(640KB 可用) + 0xC440(保护带);描述表 `0xC00DF948`
-  存 5×{基址, 0xAC440};运行期数组 `0xC00DD558[k]`(基址)/
-  `0xC00DD540[k]`(长度),访问器 `c00bd260/c00bd26c`。
+  存 5×{基址, 0xAC440};运行期数组 **`0xC00DD540[k]`(基址)/
+  `0xC00DD558[k]`(长度)**(第五轮修正:旧文两数组标注相反),
+  访问器 `c00bd260/c00bd26c`。挂载链(第五轮):f_c0088184(yield 任务)
+  → f_c0088108(bind,读 D540/D558)→ f_c00b0e04;**全程无 real_type
+  判定**——大区绑定是描述符数据 + 缓冲池数据流。
 - **平台差异(重点)**:MS-70CDR 给自定义效果的 ctx[3] 默认就是
   ~705,536B(硬件探针,与 0xAC440 同量级);而 **B1on/G1on 非 DLY/REV
   类自定义效果实测只拿到 1KB 槽区**(2026-08 实机,写超即死机)。
@@ -76,7 +80,12 @@ python scripts/check_probes.py probes\b1on_probe\out
 即大区成立)→ 之后把 ampneve 按 DLY 身份重打:
 
 ```powershell
+$env:AMPNEVE_TI_ROOT = "D:\ti\ti-cgt-c6000_8.3.15\ti-cgt-c6000_8.3.15"
 $env:AMPNEVE_GID = "8"
 $env:AMPNEVE_AUDIO_FUNC = "Fx_DLY_AmpNeve"
-python build.py   # 在 ampneve/zdl 下;需 TI C6000 CGT(cl6x)
+python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 ```
+
+**2026-10-13 第五轮待办(实机前)**:静态核实 G1on loader 对音频
+`.audio`@0x7800 段的处理(决定是否给自制 ZDL 扩 linker 输出二段式
+ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。

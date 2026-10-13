@@ -1,0 +1,329 @@
+===== DELAY.ZDL (16517 bytes) =====
+
+[WRAPPER]
+  SIZE payload=8 header_size=56 elf_size=16441
+  version_string='ZOOM EFFECT DLL SYSTEM VER 1.00'
+  real_type=8 unknown1=1 knob_type=0 unknown2=0 sort_index=8 sort_sub=0 bass_flags=0 sort_fx_type=8
+  fx_version=b'1.00\x00\x00\x00\x00'
+  extra_header_payload=0B head=b''
+
+[ELF]
+  type=3 machine=0x8c flags=0x0 entry=0x808
+  PHDR type=1 off=0x40 vaddr=0x0 filesz=0xb00 memsz=0xb00 flags=5
+  PHDR type=1 off=0xb40 vaddr=0x7800 filesz=0x440 memsz=0x440 flags=5
+  PHDR type=1 off=0xf80 vaddr=0x80000000 filesz=0x71a memsz=0x71a flags=4
+  PHDR type=1 off=0x169c vaddr=0x8000071c filesz=0x18 memsz=0x18 flags=6
+  PHDR type=2 off=0x16b4 vaddr=0x0 filesz=0xa8 memsz=0x0 flags=6
+  sections:
+    [ 0]                        t=         0 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=0 es=0
+    [ 1] .rela.dyn              t=         4 f=0x0 a=0x00000000 off=0x175c sz=   564 lk=29 inf=0 al=0 es=12
+    [ 2] .rela.plt              t=         4 f=0x0 a=0x00000000 off=0x1990 sz=     0 lk=29 inf=0 al=0 es=12
+    [ 3] .audio                 t=         1 f=0x6 a=0x00007800 off=0xb40 sz=  1088 lk=0 inf=0 al=32 es=0
+    [ 4] .text                  t=         1 f=0x6 a=0x00000000 off=0x40 sz=  2816 lk=0 inf=0 al=32 es=0
+    [ 5] .stack                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 6] .args                  t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 7] .neardata              t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 8] .rodata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [ 9] .bss                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [10] .text                  t=         8 f=0x4 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [11] .cinit                 t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [12] .cio                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [13] .const                 t=         1 f=0x2 a=0x80000000 off=0xf80 sz=  1818 lk=0 inf=0 al=8 es=0
+    [14] .data                  t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [15] .switch                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [16] .sysmem                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [17] .far                   t=         8 f=0x1 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [18] .fardata               t=         1 f=0x3 a=0x8000071c off=0x169c sz=    24 lk=0 inf=0 al=4 es=0
+    [19] .ppinfo                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=1 es=0
+    [20] .ppdata                t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [21] .debug_info            t=         1 f=0x0 a=0x00000000 off=0x1990 sz=  1360 lk=0 inf=0 al=1 es=0
+    [22] .debug_line            t=         1 f=0x0 a=0x00000000 off=0x1ee0 sz=   416 lk=0 inf=0 al=1 es=0
+    [23] .debug_abbrev          t=         1 f=0x0 a=0x00000000 off=0x2080 sz=   367 lk=0 inf=0 al=1 es=0
+    [24] .debug_pubnames        t=         1 f=0x0 a=0x00000000 off=0x21ef sz=   186 lk=0 inf=0 al=1 es=0
+    [25] .debug_aranges         t=         1 f=0x0 a=0x00000000 off=0x22a9 sz=   192 lk=0 inf=0 al=1 es=0
+    [26] .plt                   t=         8 f=0x0 a=0x00000000 off=0x0 sz=     0 lk=0 inf=0 al=32 es=0
+    [27] .c6xabi.attributes     t=1879048195 f=0x0 a=0x00000000 off=0x2369 sz=    62 lk=0 inf=0 al=0 es=0
+    [28] .symtab                t=         2 f=0x0 a=0x00000000 off=0x23a8 sz=  2624 lk=34 inf=130 al=0 es=16
+    [29] .dynsym                t=        11 f=0x0 a=0x00000000 off=0x2de8 sz=   480 lk=31 inf=29 al=0 es=16
+    [30] .dynamic               t=         6 f=0x1 a=0x00000000 off=0x16b4 sz=   168 lk=31 inf=0 al=1 es=8
+    [31] .dynstr                t=         3 f=0x20 a=0x00000000 off=0x2fc8 sz=   583 lk=0 inf=0 al=0 es=1
+    [32] .hash                  t=         5 f=0x0 a=0x00000000 off=0x3210 sz=   252 lk=29 inf=0 al=0 es=4
+    [33] .TI.section.flags      t=2130706437 f=0x0 a=0x00000000 off=0x330c sz=    26 lk=0 inf=0 al=0 es=0
+    [34] .strtab                t=         3 f=0x20 a=0x00000000 off=0x3326 sz=  1438 lk=0 inf=0 al=0 es=1
+    [35] .shstrtab              t=         3 f=0x20 a=0x00000000 off=0x38c4 sz=   309 lk=0 inf=0 al=0 es=1
+  .dynamic:
+    tag=2 val=0
+    tag=4 val=12816
+    tag=5 val=12232
+    tag=6 val=11752
+    tag=7 val=5980
+    tag=8 val=564
+    tag=9 val=12
+    tag=10 val=583
+    tag=11 val=16
+    tag=14 val=565
+    tag=20 val=7
+    tag=22 val=0
+    tag=23 val=6544
+    tag=30 val=4
+    tag=1610612749 val=464
+    tag=1610612751 val=555
+  .rela.dyn (47 entries):
+    off=0x78 info=0x309 add=0x78
+    off=0x84 info=0x30a add=0x78
+    off=0xf4 info=0x509 add=0x0
+    off=0xf8 info=0x50a add=0x0
+    off=0x110 info=0x509 add=0x0
+    off=0x114 info=0x50a add=0x0
+    off=0x134 info=0x409 add=0x0
+    off=0x144 info=0x40a add=0x0
+    off=0x18c info=0x309 add=0x78
+    off=0x190 info=0x30a add=0x78
+    off=0x1a4 info=0x309 add=0x78
+    off=0x1a8 info=0x30a add=0x78
+    off=0x4f8 info=0x209 add=0x0
+    off=0x508 info=0x20a add=0x0
+    off=0x598 info=0x109 add=0x0
+    off=0x5a4 info=0x10a add=0x0
+    off=0x624 info=0x1809 add=0x0
+    off=0x62c info=0x180a add=0x0
+    off=0x678 info=0x1709 add=0x0
+    off=0x684 info=0x170a add=0x0
+    off=0x7e4 info=0x1609 add=0x0
+    off=0x7e8 info=0x160a add=0x0
+    off=0x808 info=0x309 add=0x0
+    off=0x810 info=0x1509 add=0x0
+    off=0x814 info=0x30a add=0x0
+    off=0x820 info=0x150a add=0x0
+    off=0x824 info=0x1109 add=0x0
+    off=0x828 info=0x1409 add=0x0
+    off=0x82c info=0x110a add=0x0
+    off=0x834 info=0x140a add=0x0
+    off=0x800002ac info=0x901 add=0x0
+    off=0x800002dc info=0x1301 add=0x0
+    off=0x800002e0 info=0x1201 add=0x0
+    off=0x8000030c info=0x1101 add=0x0
+    off=0x80000314 info=0x1001 add=0x0
+    off=0x8000033c info=0xf01 add=0x0
+    off=0x8000036c info=0xe01 add=0x0
+    off=0x8000039c info=0xd01 add=0x0
+    off=0x800003cc info=0xc01 add=0x0
+    off=0x800003d4 info=0xb01 add=0x0
+    off=0x800003fc info=0xa01 add=0x0
+    off=0x8000042c info=0x901 add=0x0
+    off=0x80000434 info=0x801 add=0x0
+    off=0x80000530 info=0x701 add=0x0
+    off=0x8000054c info=0x601 add=0x0
+    off=0x8000055c info=0x601 add=0x0
+    off=0x8000056c info=0x601 add=0x0
+  symbols (dynsym+symtab):
+    [.dynsym] _Fx_DLY_Delay_Coe                  val=0x8000067c size=128 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_Dly_Dly_hidump_tbl              val=0x80000440 size=220 info=0x01 other=2 shndx=13
+    [.dynsym] Delay                              val=0x80000290 size=432 info=0x01 other=2 shndx=13
+    [.dynsym] Fx_DLY_Delay_ppTapOpen             val=0x20 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_TapOpen               val=0x0 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] infoEffectTypeKnob_A_2_Reverse     val=0x8000071c size=24 info=0x01 other=2 shndx=18
+    [.dynsym] picEffectType_delay                val=0x80000000 size=653 info=0x01 other=2 shndx=13
+    [.dynsym] GetString_Tail                     val=0x620 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_onf                   val=0x364 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_outLv_edit            val=0x314 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] GetString_PingPong                 val=0x674 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_pp_edit               val=0x2cc size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_hidamp_edit           val=0x4e8 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_mix_edit              val=0x464 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_fb_edit               val=0x530 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] GetString_1_5000_Sync              val=0x6cc size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_time_edit             val=0x154 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay                       val=0x7800 size=0 info=0x02 other=2 shndx=3
+    [.dynsym] Fx_DLY_Delay_init                  val=0x584 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] Fx_DLY_Delay_tapmuteMute           val=0x40 size=0 info=0x02 other=2 shndx=4
+    [.dynsym] effectTypeImageInfo                val=0x8000051c size=212 info=0x01 other=2 shndx=13
+    [.dynsym] disp_prm_BPM_sync                  val=0x800005f0 size=140 info=0x01 other=2 shndx=13
+    [.dynsym] disp_prm_PingPong                  val=0x80000700 size=10 info=0x01 other=2 shndx=13
+    [.dynsym] disp_prm_Tail                      val=0x80000710 size=10 info=0x01 other=2 shndx=13
+    [.dynsym] __TI_STATIC_BASE                   val=0x0 size=0 info=0x00 other=2 shndx=9
+    [.dynsym] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_size                val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] __TI_prof_data_start               val=0xffffffff size=0 info=0x00 other=2 shndx=65521
+    [.dynsym] Dll_Delay                          val=0x808 size=0 info=0x12 other=3 shndx=4
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=0 shndx=3
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=4
+    [.symtab] .stack                             val=0x0 size=0 info=0x03 other=0 shndx=5
+    [.symtab] .args                              val=0x0 size=0 info=0x03 other=0 shndx=6
+    [.symtab] .neardata                          val=0x0 size=0 info=0x03 other=0 shndx=7
+    [.symtab] .rodata                            val=0x0 size=0 info=0x03 other=0 shndx=8
+    [.symtab] .bss                               val=0x0 size=0 info=0x03 other=0 shndx=9
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=0 shndx=10
+    [.symtab] .cinit                             val=0x0 size=0 info=0x03 other=0 shndx=11
+    [.symtab] .cio                               val=0x0 size=0 info=0x03 other=0 shndx=12
+    [.symtab] .const                             val=0x80000000 size=0 info=0x03 other=0 shndx=13
+    [.symtab] .data                              val=0x0 size=0 info=0x03 other=0 shndx=14
+    [.symtab] .switch                            val=0x0 size=0 info=0x03 other=0 shndx=15
+    [.symtab] .sysmem                            val=0x0 size=0 info=0x03 other=0 shndx=16
+    [.symtab] .far                               val=0x0 size=0 info=0x03 other=0 shndx=17
+    [.symtab] .fardata                           val=0x8000071c size=0 info=0x03 other=0 shndx=18
+    [.symtab] .ppinfo                            val=0x0 size=0 info=0x03 other=0 shndx=19
+    [.symtab] .ppdata                            val=0x0 size=0 info=0x03 other=0 shndx=20
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=0 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=0 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=0 shndx=24
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=0 shndx=25
+    [.symtab] .plt                               val=0x0 size=0 info=0x03 other=0 shndx=26
+    [.symtab] 0440010                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] disp_prm_BPM_sync                  val=0x800005f0 size=140 info=0x01 other=2 shndx=13
+    [.symtab] disp_prm_PingPong                  val=0x80000700 size=10 info=0x01 other=2 shndx=13
+    [.symtab] disp_prm_Tail                      val=0x80000710 size=10 info=0x01 other=2 shndx=13
+    [.symtab] picEffectType_delay                val=0x80000000 size=653 info=0x01 other=2 shndx=13
+    [.symtab] infoEffectTypeKnob_A_2_Reverse     val=0x8000071c size=24 info=0x01 other=2 shndx=18
+    [.symtab] effectTypeImageInfo                val=0x8000051c size=212 info=0x01 other=2 shndx=13
+    [.symtab] $C$L4                              val=0x66e size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L8                              val=0x6c6 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L9                              val=0x754 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L10                             val=0x75a size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L11                             val=0x7a0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L12                             val=0x7c4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L13                             val=0x7cc size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L14                             val=0x7d8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L15                             val=0x7ee size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L16                             val=0x800 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x620 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const:disp_prm_BPM_sync           val=0x800005f0 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:disp_prm_PingPong           val=0x80000700 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:disp_prm_Tail               val=0x80000710 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Delay                       val=0x80000290 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:.string:picEffectType_delay val=0x80000000 size=0 info=0x03 other=2 shndx=13
+    [.symtab] .fardata                           val=0x8000071c size=0 info=0x03 other=2 shndx=18
+    [.symtab] .const                             val=0x8000051c size=0 info=0x03 other=2 shndx=13
+    [.symtab] 0144010                            val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] _Fx_DLY_Delay_Coe                  val=0x8000067c size=128 info=0x01 other=2 shndx=13
+    [.symtab] Fx_Dly_Dly_hidump_tbl              val=0x80000440 size=220 info=0x01 other=2 shndx=13
+    [.symtab] $C$L1                              val=0xca size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L2                              val=0xd6 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL11                            val=0x10c size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L3                              val=0x110 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L4                              val=0x14c size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L5                              val=0x1a0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L6                              val=0x1e4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L7                              val=0x1e8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L8                              val=0x236 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L9                              val=0x248 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L10                             val=0x268 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L11                             val=0x288 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L12                             val=0x28c size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L13                             val=0x2c4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L14                             val=0x2c8 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L15                             val=0x2ec size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L16                             val=0x2f0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$RL62                            val=0x3d0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L17                             val=0x3d2 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L18                             val=0x410 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L19                             val=0x432 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L20                             val=0x460 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L21                             val=0x4a4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] $C$L22                             val=0x4c4 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text                              val=0x0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .const                             val=0x8000067c size=0 info=0x03 other=2 shndx=13
+    [.symtab] .const:Fx_Dly_Dly_hidump_tbl       val=0x80000440 size=0 info=0x03 other=2 shndx=13
+    [.symtab] Audio_Fx_DLY_Delay.asm             val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] $C$L5                              val=0x79bc size=0 info=0x02 other=2 shndx=3
+    [.symtab] .audio                             val=0x7800 size=0 info=0x03 other=2 shndx=3
+    [.symtab] call_stub.asm                      val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] __stub_ret                         val=0xa98 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__call_stub                  val=0xa80 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x192 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x8b size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x80 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x40 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x3a size=0 info=0x03 other=2 shndx=24
+    [.symtab] divi.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x8cc size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__divi                       val=0x840 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x32e size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x117 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0xf0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x80 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x7d size=0 info=0x03 other=2 shndx=24
+    [.symtab] divu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0x9a0 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__divu                       val=0x920 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x0 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x0 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x0 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x0 size=0 info=0x03 other=2 shndx=24
+    [.symtab] push.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] .text:__push_rts                   val=0xae0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .text:__pop_rts                    val=0xac0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0x26b size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_info                        val=0x3f7 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0xd7 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_line                        val=0x15f size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0xc0 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_abbrev                      val=0x130 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x60 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_aranges                     val=0xa0 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x5c size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_pubnames                    val=0x9a size=0 info=0x03 other=2 shndx=24
+    [.symtab] remu.asm                           val=0x0 size=0 info=0x04 other=2 shndx=65521
+    [.symtab] LOOP                               val=0xa44 size=0 info=0x02 other=2 shndx=4
+    [.symtab] .text:__remu                       val=0x9e0 size=0 info=0x03 other=2 shndx=4
+    [.symtab] .debug_info                        val=0xc9 size=0 info=0x03 other=2 shndx=21
+    [.symtab] .debug_line                        val=0x47 size=0 info=0x03 other=2 shndx=22
+    [.symtab] .debug_abbrev                      val=0x40 size=0 info=0x03 other=2 shndx=23
+    [.symtab] .debug_aranges                     val=0x20 size=0 info=0x03 other=2 shndx=25
+    [.symtab] .debug_pubnames                    val=0x1d size=0 info=0x03 other=2 shndx=24
+    [.symtab] .debug_abbrev                      val=0x160 size=0 info=0x03 other=0 shndx=23
+    [.symtab] .debug_info                        val=0x4b8 size=0 info=0x03 other=0 shndx=21
+    [.symtab] __TI_pprof_out_hndl                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_start               val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_prof_data_size                val=0xffffffff size=0 info=0x10 other=2 shndx=65521
+    [.symtab] __TI_STATIC_BASE                   val=0x0 size=0 info=0x10 other=2 shndx=9
+    [.symtab] GetString_PingPong                 val=0x674 size=0 info=0x12 other=2 shndx=4
+    [.symtab] GetString_Tail                     val=0x620 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Delay                              val=0x80000290 size=432 info=0x11 other=2 shndx=13
+    [.symtab] Dll_Delay                          val=0x808 size=0 info=0x12 other=3 shndx=4
+    [.symtab] GetString_1_5000_Sync              val=0x6cc size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_ppTapOpen             val=0x20 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_onf                   val=0x364 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_fb_edit               val=0x530 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_TapOpen               val=0x0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_tapmuteMute           val=0x40 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_hidamp_edit           val=0x4e8 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_time_edit             val=0x154 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_outLv_edit            val=0x314 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_pp_edit               val=0x2cc size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_init                  val=0x584 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_tapmuteOpen           val=0x74 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay_mix_edit              val=0x464 size=0 info=0x12 other=2 shndx=4
+    [.symtab] Fx_DLY_Delay                       val=0x7800 size=0 info=0x12 other=2 shndx=3
+    [.symtab] __c6xabi_call_stub                 val=0xa80 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __call_stub                        val=0xa80 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_divi                      val=0x840 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __divi                             val=0x840 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_divu                      val=0x920 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __divu                             val=0x920 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_push_rts                  val=0xae0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __pop_rts                          val=0xac0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_pop_rts                   val=0xac0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __push_rts                         val=0xae0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __remu                             val=0x9e0 size=0 info=0x12 other=2 shndx=4
+    [.symtab] __c6xabi_remu                      val=0x9e0 size=0 info=0x12 other=2 shndx=4
+
+[DESCRIPTOR] at .const+0x290 (VA 0x80000290)
+  row 0 OnOff      max=     1 def=         0 pedal=  0 h=0x00000364 a=0x00000000 w28=    0.00 fl=0x00
+  row 1 Delay      max=4294967295 def=         0 pedal=  1 h=0x00000584 a=0x00007800 w28=   15.55 fl=0x00
+  row 2 Time       max=  4022 def=       559 pedal=  0 h=0x00000154 a=0x00000000 w28=    0.00 fl=0x28
+  row 3 F.B        max=   100 def=        30 pedal=100 h=0x00000530 a=0x00000000 w28=    0.00 fl=0x10
+  row 4 Mix        max=   100 def=        70 pedal=100 h=0x00000464 a=0x00000000 w28=    0.00 fl=0x10
+  row 5 HiDMP      max=    10 def=        10 pedal=  0 h=0x000004e8 a=0x00000000 w28=    0.00 fl=0x00
+  row 6 P-P        max=     1 def=         0 pedal=  0 h=0x000002cc a=0x00000000 w28=    0.00 fl=0x00
+  row 7 Level      max=   150 def=       100 pedal=150 h=0x00000314 a=0x00000000 w28=    0.00 fl=0x10
+  row 8 Tail       max=     1 def=         0 pedal=  0 h=0x00000364 a=0x00000000 w28=    0.00 fl=0x04
+  row 9 y[<y[<   max=1064766024 def=         0 pedal=1024257879 h=0x00000000 a=0x3f6e6215 w28=    0.07 fl=0x3d88689d
+
+[IMAGEINFO] VA 0x8000051c
+  hdr=0 1 0 w=128 h=64 pic=0x80000000 h6=30 h7=22 count=3
+    coord0: kid=2 x=30 y=16 va=0x8000071c
+    coord1: kid=3 x=54 y=16 va=0x8000071c
+    coord2: kid=4 x=78 y=16 va=0x8000071c
