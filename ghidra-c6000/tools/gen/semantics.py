@@ -89,15 +89,21 @@ def _cond(insn: Insn) -> str:
     return f"{r} == 0" if insn.pred_neg else f"{r} != 0"
 
 
-def _mem_addr(m: Mem) -> tuple[str, list[str]]:
-    """Return (address expression, prelude p-code for writeback)."""
+def _mem_addr(m: Mem, scale: int) -> tuple[str, list[str]]:
+    """Return (address expression, prelude p-code for writeback).
+
+    scale = 每次访问的字节宽度。C6000 D 单元寻址的偏移量以"访问单位"计:
+    `*+DP[105]` 是 105 个 word(×4), `*A5[A4]` 的寄存器偏移同样按访问宽度
+    缩放, `*A4++[1]` 每次步进 1 个单位。此处不做缩放会让反编译器的
+    数组访问、栈帧、指针表全部错位(项目早前大量读不动的根因)。
+    """
     base = _reg(m.base)
     off = m.offset
     off_s = "0"
     if isinstance(off, Reg):
-        off_s = _reg(off)
+        off_s = _reg(off) if scale == 1 else f"{_reg(off)} * {scale}"
     elif isinstance(off, Imm):
-        off_s = str(off.value)
+        off_s = str(off.value * scale)
     prelude: list[str] = []
     if m.mode == "pre_off":
         if off_s == "0":
@@ -121,11 +127,11 @@ def _mem_addr(m: Mem) -> tuple[str, list[str]]:
 
 
 def _load(insn: Insn, mem: Mem, dst: str) -> list[str]:
-    addr, pre = _mem_addr(mem)
     size = {
         "LDB": 1, "LDBU": 1, "LDH": 2, "LDHU": 2,
         "LDW": 4, "LDNW": 4, "LDDW": 8, "LDNDW": 8,
     }[insn.mnem]
+    addr, pre = _mem_addr(mem, min(size, 4))
     if size == 8:
         lo, hi = _pair_lo_hi(dst)
         return pre + [f"{lo} = *[ram]{addr};", f"{hi} = *[ram]({addr} + 4);"]
@@ -136,11 +142,11 @@ def _load(insn: Insn, mem: Mem, dst: str) -> list[str]:
 
 
 def _store(insn: Insn, mem: Mem, src: str) -> list[str]:
-    addr, pre = _mem_addr(mem)
     size = {
         "STB": 1, "STH": 2, "STW": 4, "STNW": 4,
         "STDW": 8, "STNDW": 8,
     }[insn.mnem]
+    addr, pre = _mem_addr(mem, min(size, 4))
     if size == 8:
         lo, hi = _pair_lo_hi(src)
         return pre + [f"*[ram]{addr} = {lo};", f"*[ram]({addr} + 4) = {hi};"]
