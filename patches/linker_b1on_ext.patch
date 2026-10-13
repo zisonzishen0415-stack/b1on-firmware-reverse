@@ -1,8 +1,8 @@
 ﻿diff --git a/build/linker.py b/build/linker.py
-index dda9ce7..3cb47c2 100644
+index dda9ce7..7041823 100644
 --- a/build/linker.py
 +++ b/build/linker.py
-@@ -216,6 +216,21 @@ class LinkerConfig:
+@@ -216,6 +216,25 @@ class LinkerConfig:
      fxid_version: bytes = b"1.00"         # 4 bytes
      flags_byte: int = 0x01                # ZDL header byte 0x3D; 0x01 matches majority
  
@@ -20,11 +20,15 @@ index dda9ce7..3cb47c2 100644
 +                                          # variant — NOT PORTED YET (raises)
 +    amp_cabi_fxid: int | None = None      # G1on AMP CABI descriptor patch —
 +    amp_cabi_default: int | None = None   # NOT PORTED YET (non-None raises)
++    # 0 = legacy merged layout (audio at head of .text@0). 0x7800 = stock
++    # B1on/G1on shape: .audio becomes its own executable PT_LOAD at that VA,
++    # .text shrinks accordingly (every stock G1on ZDL sample has this shape).
++    audio_va: int = 0
 +
      # Optional pre-rendered 128×64 RLE screen image. None → auto-generate
      # a text-only screen showing the effect name.
      screen_image: Optional[bytes] = None
-@@ -325,6 +340,25 @@ class LinkerConfig:
+@@ -325,6 +344,27 @@ class LinkerConfig:
          if self.gid not in GID_PREFIX:
              raise ValueError(f"unknown gid {self.gid:#x}; add to GID_PREFIX table")
  
@@ -46,11 +50,13 @@ index dda9ce7..3cb47c2 100644
 +                "5-field Dll stub (G1on AMP, gid=4/5 requirement) is not "
 +                "ported into this linker build yet; non-AMP builds must use "
 +                "dll_fields=3 (ampneve: set AMPNEVE_DLL_FIELDS=3)")
++        if self.audio_va not in (0, 0x7800):
++            raise ValueError(f"audio_va must be 0 or 0x7800, got {self.audio_va:#x}")
 +
          # Hardware-confirmed ceiling for the MS-series UI path: 9 user
          # params, displayed as three pages of three edit-mode controls.
          # The preview image still only has coordinates for the first three
-@@ -539,6 +573,7 @@ def _build_descriptor(
+@@ -539,6 +579,7 @@ def _build_descriptor(
      onf_func_va: int,
      knob_edit_vas: list[int],
      params: list[Param],
@@ -58,7 +64,7 @@ index dda9ce7..3cb47c2 100644
  ) -> tuple[bytes, list[tuple[int, int]]]:
      """Returns (descriptor_bytes, [(offset_in_desc, target_va), ...])."""
      assert len(knob_edit_vas) == len(params), (
-@@ -571,7 +606,8 @@ def _build_descriptor(
+@@ -571,7 +612,8 @@ def _build_descriptor(
      # imageInfo declare them. See docs/3-PARAM-LINKER-BUG.md.
      # 20.0f (0x41a00000) is in the typical range for simple effects
      # (Exciter=19.51, OptComp=30.76, BitCrush=14.88, AutoPan=13.89).
@@ -68,7 +74,60 @@ index dda9ce7..3cb47c2 100644
      relocs.append((len(desc) + 0x1C, init_func_va))
      relocs.append((len(desc) + 0x20, audio_func_va))
      desc.extend(entry)
-@@ -1125,6 +1161,8 @@ def link(cfg: LinkerConfig) -> None:
+@@ -937,8 +979,12 @@ def link(cfg: LinkerConfig) -> None:
+     CONST_VA = 0x80000000
+ 
+     AUDIO_OFF       = 0x0000
+-    AUDIO_PAD       = _align_up(audio_sec['size'], 32)
+-    TEXT_ORIG_OFF   = AUDIO_PAD
++    # B1on/G1on shim: audio_va != 0 moves the audio function into its own
++    # executable PT_LOAD at that VA (stock shape); it then contributes 0
++    # bytes to the .text blob. Text obj code starts at 0x20 so no function
++    # ever lands at VA 0 (descriptor h/a fields may treat 0 as "absent").
++    AUDIO_PAD       = 0 if cfg.audio_va else _align_up(audio_sec['size'], 32)
++    TEXT_ORIG_OFF   = AUDIO_PAD if not cfg.audio_va else 0x20
+     TEXT_ORIG_SIZE  = text_sec['size'] if text_sec else 0
+     HANDLER_OFF     = _align_up(TEXT_ORIG_OFF + TEXT_ORIG_SIZE, 32)
+     HANDLER_SIZE    = len(handler_blob)
+@@ -992,6 +1038,9 @@ def link(cfg: LinkerConfig) -> None:
+     DLL_OFF           = NOP_RET_OFF + NOP_RET_SIZE
+     DLL_SIZE          = 200
+     TEXT_TOTAL        = _align_up(DLL_OFF + DLL_SIZE, 32)
++    # Canonical audio-function VA (legacy merged: head of .text = 0;
++    # separate segment: its own PT_LOAD base).
++    AUDIO_BASE        = cfg.audio_va if cfg.audio_va else TEXT_VA + AUDIO_OFF
+ 
+     print(f"\n  .text layout:")
+     print(f"    audio    @ 0x{AUDIO_OFF:04X}  ({audio_sec['size']} → padded {AUDIO_PAD})")
+@@ -1009,7 +1058,11 @@ def link(cfg: LinkerConfig) -> None:
+ 
+     # ----- Build .text -----
+     out_text = bytearray(TEXT_TOTAL)
+-    out_text[AUDIO_OFF:AUDIO_OFF + audio_sec['size']] = audio_sec['data']
++    out_audio = bytearray(audio_sec['size']) if cfg.audio_va else None
++    if cfg.audio_va:
++        out_audio[:] = audio_sec['data']                  # own segment
++    else:
++        out_text[AUDIO_OFF:AUDIO_OFF + audio_sec['size']] = audio_sec['data']
+     if text_sec and TEXT_ORIG_SIZE:
+         out_text[TEXT_ORIG_OFF:TEXT_ORIG_OFF + TEXT_ORIG_SIZE] = text_sec['data']
+     if HANDLER_SIZE:
+@@ -1041,7 +1094,7 @@ def link(cfg: LinkerConfig) -> None:
+ 
+     # ----- Map .obj sections to VAs -----
+     section_va: dict[int, int] = {
+-        audio_sec['idx']: TEXT_VA + AUDIO_OFF,
++        audio_sec['idx']: AUDIO_BASE,
+     }
+     if text_sec:
+         section_va[text_sec['idx']] = TEXT_VA + TEXT_ORIG_OFF
+@@ -1120,11 +1173,13 @@ def link(cfg: LinkerConfig) -> None:
+ 
+     desc_bytes, desc_relocs = _build_descriptor(
+         effect_name=cfg.effect_name,
+-        audio_func_va=TEXT_VA + AUDIO_OFF,
++        audio_func_va=AUDIO_BASE,
+         init_func_va=init_va,
          onf_func_va=onf_va,
          knob_edit_vas=knob_edit_vas,
          params=cfg.params,
@@ -77,3 +136,125 @@ index dda9ce7..3cb47c2 100644
      )
      expected = 0x30 * (2 + len(cfg.params))
      assert len(desc_bytes) == expected, \
+@@ -1282,7 +1337,9 @@ def link(cfg: LinkerConfig) -> None:
+     # =====================================================================
+     dyn_relocs: list[tuple[int, int, int]] = []   # (va, type, target_va)
+ 
+-    def _apply_relocs(sec, base_off):
++    def _apply_relocs(sec, base_off, buf=None, va_base=None):
++        target_buf = out_text if buf is None else buf
++        base_va = (TEXT_VA + base_off) if va_base is None else va_base
+         n_ok = 0
+         for rel in obj.relocs.get(sec['idx'], []):
+             sym = obj.symbols[rel['sym_idx']]
+@@ -1309,18 +1366,19 @@ def link(cfg: LinkerConfig) -> None:
+             target = sym_addr[rel['sym_idx']] + addend
+             file_off = base_off + offset
+             if rtype == RT_ABS_L16:
+-                _patch_abs_l16(out_text, file_off, target)
++                _patch_abs_l16(target_buf, file_off, target)
+             elif rtype == RT_ABS_H16:
+-                _patch_abs_h16(out_text, file_off, target)
++                _patch_abs_h16(target_buf, file_off, target)
+             elif rtype == RT_PCR_S21:
+-                _patch_pcr_s21(out_text, file_off, target, TEXT_VA + file_off)
++                _patch_pcr_s21(target_buf, file_off, target, base_va + offset)
+             else:
+                 print(f"  SKIP unknown reloc type {rtype} at {sec['name']}+0x{offset:X}")
+                 continue
+             n_ok += 1
+         return n_ok
+ 
+-    n_relocs = _apply_relocs(audio_sec, AUDIO_OFF)
++    n_relocs = _apply_relocs(audio_sec, 0 if cfg.audio_va else AUDIO_OFF,
++                             out_audio, AUDIO_BASE)
+     if text_sec and text_sec.get('size'):
+         n_relocs += _apply_relocs(text_sec, TEXT_ORIG_OFF)
+     print(f"\n  Applied {n_relocs} .obj relocations")
+@@ -1398,7 +1456,7 @@ def link(cfg: LinkerConfig) -> None:
+         return idx
+ 
+     # 1. Start with relocation targets (unnamed locals)
+-    abi_vas = {TEXT_VA + AUDIO_OFF, DESC_TABLE_VA, INFO_VA, PIC_VA, KNOB_INFO_VA, TEXT_VA + NOP_RET_OFF, onf_va, init_va}
++    abi_vas = {AUDIO_BASE, DESC_TABLE_VA, INFO_VA, PIC_VA, KNOB_INFO_VA, TEXT_VA + NOP_RET_OFF, onf_va, init_va}
+     abi_vas.update(knob_edit_vas)
+ 
+     for tgt in sorted(dynsym_targets.keys()):
+@@ -1417,7 +1475,7 @@ def link(cfg: LinkerConfig) -> None:
+     for i in reversed(range(len(knob_edit_vas))):
+         p_name = cfg.params[i].name.replace(' ', '')
+         _add_sym(f"{cfg.audio_func_name}_{p_name}_edit", knob_edit_vas[i], 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
+-    _add_sym(cfg.audio_func_name, TEXT_VA + AUDIO_OFF, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
++    _add_sym(cfg.audio_func_name, AUDIO_BASE, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
+     _add_sym(f"{cfg.audio_func_name}_init", init_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
+     _add_sym(f"{cfg.audio_func_name}_onf", onf_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
+     _add_sym('effectTypeImageInfo', INFO_VA, len(info_bytes), STT_OBJECT, STB_LOCAL, STV_HIDDEN)
+@@ -1483,7 +1541,7 @@ def link(cfg: LinkerConfig) -> None:
+     # =====================================================================
+     ELF_HDR_SIZE = 0x34
+     PHDR_SIZE    = 0x20
+-    NUM_PHDRS    = 4
++    NUM_PHDRS    = 5 if cfg.audio_va else 4
+     PHDR_TABLE   = NUM_PHDRS * PHDR_SIZE
+ 
+     # .c6xabi.attributes — required per SPRAB89B Ch.17. Stock effects
+@@ -1501,6 +1559,9 @@ def link(cfg: LinkerConfig) -> None:
+     # assumptions.
+     cur = ELF_HDR_SIZE
+     text_file_off = _align_up(cur, 32);                cur = text_file_off + TEXT_TOTAL
++    audio_file_off = None
++    if cfg.audio_va:
++        audio_file_off = _align_up(cur, 32);           cur = audio_file_off + len(out_audio)
+     const_file_off = _align_up(cur, 8);                cur = const_file_off + CONST_SIZE
+     # .fardata includes the common 24-byte knob bitmap followed by any
+     # plugin .fardata/.far state. Keep filesz == memsz: stock effects store
+@@ -1598,6 +1659,13 @@ def link(cfg: LinkerConfig) -> None:
+     _p32(elf, p+0x10, TEXT_TOTAL); _p32(elf, p+0x14, TEXT_TOTAL)
+     _p32(elf, p+0x18, 5); _p32(elf, p+0x1C, 32)
+     p += PHDR_SIZE
++    if cfg.audio_va:
++        # PT_LOAD .audio r-x @ stock VA (B1on/G1on stock shape)
++        _p32(elf, p+0x00, PT_LOAD); _p32(elf, p+0x04, audio_file_off)
++        _p32(elf, p+0x08, cfg.audio_va); _p32(elf, p+0x0C, cfg.audio_va)
++        _p32(elf, p+0x10, len(out_audio)); _p32(elf, p+0x14, len(out_audio))
++        _p32(elf, p+0x18, 5); _p32(elf, p+0x1C, 32)
++        p += PHDR_SIZE
+     # PT_LOAD .const r--
+     _p32(elf, p+0x00, PT_LOAD); _p32(elf, p+0x04, const_file_off)
+     _p32(elf, p+0x08, CONST_VA); _p32(elf, p+0x0C, CONST_VA)
+@@ -1618,6 +1686,8 @@ def link(cfg: LinkerConfig) -> None:
+ 
+     # ----- Section data -----
+     elf[text_file_off:text_file_off + TEXT_TOTAL]              = out_text
++    if cfg.audio_va:
++        elf[audio_file_off:audio_file_off + len(out_audio)]    = out_audio
+     elf[const_file_off:const_file_off + CONST_SIZE]            = const_data
+     elf[fardata_file_off:fardata_file_off + len(fardata_data)] = fardata_data
+     elf[rela_dyn_file_off:rela_dyn_file_off + len(rela_dyn_data)] = rela_dyn_data
+@@ -1648,7 +1718,11 @@ def link(cfg: LinkerConfig) -> None:
+         link=8, info=0, entsize=12)
+     _sh(2, '.rela.plt', SHT_RELA, 0, 0, rela_plt_file_off, 0,
+         link=8, info=0, entsize=12)
+-    _sh(3, '.audio', SHT_PROGBITS, 0, 0, 0, 0, align=1)
++    if cfg.audio_va:
++        _sh(3, '.audio', SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR,
++            cfg.audio_va, audio_file_off, len(out_audio), align=32)
++    else:
++        _sh(3, '.audio', SHT_PROGBITS, 0, 0, 0, 0, align=1)
+     _sh(4, '.text',  SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR,
+         TEXT_VA, text_file_off, TEXT_TOTAL, align=32)
+     _sh(5, '.const', SHT_PROGBITS, SHF_ALLOC,
+@@ -1678,8 +1752,11 @@ def link(cfg: LinkerConfig) -> None:
+     output = bytearray(zdl_hdr) + elf
+ 
+     if cfg.audio_nop:
+-        audio_file_off = len(zdl_hdr) + text_file_off + AUDIO_OFF
+-        output[audio_file_off:audio_file_off + len(_NOP_RETURN)] = _NOP_RETURN
++        if cfg.audio_va and audio_file_off is not None:
++            aoff = len(zdl_hdr) + audio_file_off
++        else:
++            aoff = len(zdl_hdr) + text_file_off + AUDIO_OFF
++        output[aoff:aoff + len(_NOP_RETURN)] = _NOP_RETURN
+ 
+     Path(cfg.output_path).write_bytes(output)
+     print(f"\n  → {cfg.output_path}  ({len(output)} bytes; ELF {elf_size})")

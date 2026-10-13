@@ -91,5 +91,6 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。
 
 **DLY 变体已重建就绪(2026-10-13 晚)**:`ampneve/dist/AmpNeve.ZDL`
-(gid=8、真 DSP;烟测版在 `dist_smoke/`;SHA256 与构建命令见
+(**原厂分段形态** `.audio@0x7800`,gid=8、真 DSP;烟测版在 `dist_smoke/`;
+旧合并形态保底在 `*_merged.ZDL`;SHA256 与构建命令见
 `patches/README.md`)。刷它之前,**必须先刷 B1sweepDLY 探针确认大区**。

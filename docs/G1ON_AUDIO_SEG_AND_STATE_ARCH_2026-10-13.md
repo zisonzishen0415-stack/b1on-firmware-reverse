@@ -151,6 +151,13 @@ ampneve 构建脚本直接报错。
 5. 未移植项(5 字段 Dll=gid4 AMP 用、amp_cabi、B1on BCAB)全部
    **拒绝构建**;5 字段的原厂真实形状已从 DELUXE_R.ZDL 反汇编取得
    (ctx[3]/ctx[4] 两条 STW + 角色 VA),移植入口明确。
-6. **遗留差距(实机前最后一项)**:新产物 `.audio` 仍并入 `.text@0`
-   (原厂一律独立段 @0x7800)——修它要动 linker 段布局,列为下一
-   打包修正项。`probes/b1on_probe/out/` 15 个探针保持 8 月原件不动。
+6. **`.audio`@0x7800 打包修正已实现(同日续)**:shim 新增 `audio_va`
+   参数(0=旧合并形态;0x7800=原厂分段形态:音频函数独立可执行
+   PT_LOAD,text 从 0x20 起避免函数落 VA 0)。静态对照原厂 ZDL 验证:
+   PHDR 五段结构与 DELAY.ZDL 同构、`.audio` 节 a=0x7800 f=0x6、
+   描述符 row1 a=0x7800、h 非零。**ampneve 两形态各留档**:
+   原厂分段 `dist/AmpNeve.ZDL`(76ED18ED…4459)+ 烟测版
+   `dist_smoke/AmpNeve.ZDL`(9B87BB7E…FA81);旧合并形状保留为
+   `*_merged.ZDL`(3C1D765C…7542 / E5130406…4779)。刷机顺序不变
+   (先探针,再烟测,再真 DSP)。`probes/b1on_probe/out/` 15 个探针
+   保持 8 月原件不动。
