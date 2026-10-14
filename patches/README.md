@@ -63,6 +63,17 @@
 | **`AmpNeve_norm.ZDL`(2026-10-14 新首选)** | 合并 + 3 字段 + **materialize init**(2026-10 树) | `B024D12E19DAC7F6640BCCA0ACCE70C2F262764BA3A23DB8E5C6D18CB601A999` | `19EC3CF5C2835B595E7F87BC4C2E3DEFB50677EE6ADBC5785DB4F56FE8FAB596` |
 | `AmpNeve_norm5.ZDL`(备选:AMP 形状) | 合并 + **5 字段 Dll** + materialize init | `A769597DAF7B547E9CBB74BD057EAE55E5135C3AE482AA5B0E706CCAAF72A7CE` | `258B296595D5CB0067BB842CC62393527E2EAB61E10EBF3C7A8D6D633CDBF659` |
 
+**2026-10-14 晚:上表 norm/norm5(r1)已被发现带跨段重定位 bug——
+文件已改名 `*_r1_bug.*` 留档(勿刷)。修复版:**
+
+| 文件 | 形态 | 真 DSP SHA256 | 烟测 SHA256 |
+|---|---|---|---|
+| **`AmpNeve_norm_r2.ZDL`(修复后首选上机候选)** | 合并 + 3 字段 + materialize + **reloc fix** | `68E351C1B301480922A43F3426898E6612228B76368D0BBD888BCBD93505DB78` | `8717A569E1F2A505226264F1B8B6AB4C6B801B0B3CF2A1305637DF0AC896D14B` |
+| `AmpNeve_norm5_r2.ZDL` | 合并 + 5 字段 + materialize + reloc fix | `12C916C3D843881186228216D371F9DCBD33DA8B7638E1083C375B93056E0EF0` | `1943D382E9424D097CEB35CE804B513FA7DBD2D968DB4185529B6BF817D5E02D` |
+
+(修复前矩阵 stock5/stock3/merged5/merged/them10 全部同病,留档不删,勿刷;
+详见 `docs/RELOC_BUG_ROOT_CAUSE_2026-10-14.md`)
+
 配置:gid=8(DLY)、fxid=422、manifest_hw4(4 旋钮 Gain/Master/Level/Treble)。
 构建环境:`AMPNEVE_TI_ROOT=D:\ti\ti-cgt-c6000_8.3.15\ti-cgt-c6000_8.3.15`,
 `AMPNEVE_ZDL_ROOT=...\zoomreverse\ZoomMultistompZDL`,env:
@@ -71,7 +82,17 @@ AMPNEVE_AUDIO_FUNC=Fx_DLY_AmpNeve AMPNEVE_FXID=422
 AMPNEVE_USE_OBJECT_INIT=1` + `AMPNEVE_DLL_FIELDS={3|5}` +
 `AMPNEVE_AUDIO_VA={0x7800|未设}`。
 
-## 2026-10-14 增补:Ziddle 离线验证 + 物化 init(重要)
+## 2026-10-14 增补 2:跨段 PCR 重定位 bug 修复(根因级)
+
+- `_apply_relocs` 的"段起点补偿"(`rel['addend']=该指令文件偏移`)误用于
+  **跨段** PCR 重定位:`.audio` 内对 `.text` 核心函数的每次调用都飞到
+  "目标+调用点偏移"。两棵树同源代码,同日各自修复(只对同段补偿)。
+- 完整证据链与验证:`docs/RELOC_BUG_ROOT_CAUSE_2026-10-14.md`。
+- **探针不受影响**(对象无 .text/无跨段 PCR 重定位,已用 obj_syms.py 验证)
+  ——8 月原件与 _seg 保险版**保持不动、可直刷**。
+- 修复后工作树差异已重生成:本目录两个 patch 文件均已含修复。
+
+## 2026-10-14 增补 1:Ziddle 离线验证 + 物化 init(重要)
 
 - **首轮 A/B(Ziddle matcheck)**:themanro 自产 Gyre.ZDL after-init PASS;
   我们全部旧产物 after-init **FAIL**(init 后 params 停在旋钮尺度默认

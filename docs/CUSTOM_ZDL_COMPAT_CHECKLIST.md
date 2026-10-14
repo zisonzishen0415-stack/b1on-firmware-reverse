@@ -163,16 +163,21 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 `.audio@0x7800` 形态问题已由全语料修正(两种皆原厂合法),
 不再是阻塞项;`norm`/`norm5` 均为合并形态。
 
+**2026-10-14 晚·根因级修复(reloc bug)**:构建链的跨段 PCR 重定位补偿
+错误(详见 `docs/RELOC_BUG_ROOT_CAUSE_2026-10-14.md`)——**所有历史
+ampneve 产物(含 norm r1)在实机上音频回调都会跳入随机地址**。已修复
+(两棵树),修复版 = `AmpNeve_norm_r2.ZDL`(`68E351C1…`)/
+`norm5_r2.ZDL`(`12C916C3…`),旧文件改名 `*_r1_bug.*` 留档勿刷。
+**8 月探针与 `_seg` 保险版不受影响(对象无跨段调用,已验证),原样可刷。**
+
 刷机顺序(2026-10-14 版):
 1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);保险版
    `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL` 同目录——探针保持
    8 月原件不动(判读表冻结;其 readout 不依赖 init 约定)。
-2. **`dist_smoke/AmpNeve_norm.ZDL`**(烟测,UI/加载);
-3. **`dist/AmpNeve_norm.ZDL`**(真 DSP);
-4. 备选变体(同批产出,换变量用):**`dist/AmpNeve_norm5.ZDL`**
-   (5 字段 Dll 版,其余同 norm;烟测同名在 dist_smoke/);
-5. 若 2/3 失败 → 回退组逐个换变量:`AmpNeve_stock5`(旧主候选,
-   分段+5 字段)→ `stock3` → `merged5` → `merged`;注意回退组带着
-   已知 after-init 缺陷,判读时把"参数不生效"归到此因。
+2. **`dist_smoke/AmpNeve_norm_r2.ZDL`**(烟测,UI/加载);
+3. **`dist/AmpNeve_norm_r2.ZDL`**(真 DSP);
+4. 备选变体:norm5_r2(5 字段 Dll 版);
+5. 若 2/3 失败 → 回退组逐个换变量:`stock5`/`stock3`/`merged5`/
+   `merged`(**全部带 reloc bug 的 pre-fix 产物,仅作对照,勿期待音频正常**);
 6. **注册校验**:自制 ZDL 经 ZEM 写入后,回读 `FLST_SEQ.ZDT` 确认名字
    出现在对应类别段(见第五轮文档 §9;分类不可见怪癖的先查项)。

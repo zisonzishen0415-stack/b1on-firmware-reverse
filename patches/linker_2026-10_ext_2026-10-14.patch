@@ -1,5 +1,5 @@
 diff --git a/refs/themanro-ZoomMultistompZDL/build/linker.py b/zoomreverse/ZoomMultistompZDL-2026-10/build/linker.py
-index b2c28ce..eeb2eac 100644
+index b2c28ce..1283422 100644
 --- a/refs/themanro-ZoomMultistompZDL/build/linker.py
 +++ b/zoomreverse/ZoomMultistompZDL-2026-10/build/linker.py
 @@ -333,7 +333,42 @@ class LinkerConfig:
@@ -135,7 +135,25 @@ index b2c28ce..eeb2eac 100644
  
      # Resolve handler VAs (one per logical name)
      if use_real_handlers:
-@@ -1483,7 +1574,8 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1445,7 +1536,16 @@ def link(cfg: LinkerConfig) -> None:
+             # compensation is needed — applying it lands the call past the
+             # real target by exactly the instruction's section offset, which
+             # froze the pedal on InitProbe stage 2.
+-            addend = rel['addend'] if sym['shndx'] != 0 else 0
++            #
++            # 2026-10-14 B1on fix: the section-start compensation only holds
++            # for SAME-SECTION PCR relocs. Cross-section PCR relocs
++            # (.audio -> .text) resolve straight to the symbol VA; adding
++            # the offset there lands the call past the target by exactly
++            # the call site's file offset — verified in Ziddle: the .audio
++            # call at 0x728 jumped to 0x1F40 instead of Ampsim_init @
++            # 0x1820 (delta = +0x728 over target).
++            same_sec = sym['shndx'] != 0 and sym['shndx'] == sec['idx']
++            addend = rel['addend'] if same_sec else 0
+             target = sym_addr[rel['sym_idx']] + addend
+             file_off = base_off + offset
+             if rtype == RT_ABS_L16:
+@@ -1483,7 +1583,8 @@ def link(cfg: LinkerConfig) -> None:
          coe_relocs.append((TEXT_VA + coe_reloc_off + 0x0C, RT_ABS_H16, COE_VA))
  
      DESC_TABLE_VA = DESC_VA
