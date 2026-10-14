@@ -33,9 +33,11 @@
 ②其 `LOADER-SAFETY.md` 给出装载器 8 阶段结构 + 冻结成因目录(与我们清单
 互补);③其 `G1on_*` 101 件与我们的 FS dump **零差集**(抽取互证);
 ④**Ziddle(C674x 模拟器,CC0)可离线执行 ZDL**(跑 `_init`/音频块/读模拟
-内存)——正在落地,将用于上机前的软件级预验证。本地参考克隆:
-`refs/themanro-ZoomMultistompZDL`(只读)与 `zoomreverse/ZoomMultistompZDL-2026-10`(工作副本,
-已带 B1on 兼容 shim)。
+内存)——包已下载(`D:\tools\ziddle\`),测试台与构建脚本就绪
+(`work/setup_ziddle.sh`),**执行外部代码需用户授权**(自动权限门已拦,
+等待用户点头或用户自行双击 `win\...\ziddle.exe` 用 GUI 路线)。
+本地参考克隆:`refs/themanro-ZoomMultistompZDL`(只读)与
+`zoomreverse/ZoomMultistompZDL-2026-10`(工作副本,已带 B1on 兼容 shim)。
 
 ## 1. 通用规则(MS 平台硬件验证,构建链内建部分检查)
 
