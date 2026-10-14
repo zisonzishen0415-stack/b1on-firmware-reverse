@@ -33,15 +33,17 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-# ZoomMultistompZDL linker (sibling checkout of the reverson repo)
+# ZoomMultistompZDL linker trees live under the g1oncontrol umbrella
+# (<g1oncontrol>/zoomreverse/...). 2026-10-14: the old Documents\ChatGPT\
+# zoomreverse copy was archived; defaults point at the fixed working tree
+# first, then the frozen fork+shim tree, then the bundled upstream clone.
+G1ON = HERE.parents[2]  # zdl -> ampneve -> b1on-firmware-reverse -> g1oncontrol
 ZDL_ROOT = Path(os.environ.get("AMPNEVE_ZDL_ROOT",
-    r"C:\Users\34723\Documents\ChatGPT\zoomreverse\ZoomMultistompZDL"))
+    str(G1ON / "zoomreverse" / "ZoomMultistompZDL-2026-10")))
 if not ZDL_ROOT.exists():
-    ZDL_ROOT = HERE.parent.parent / "zoomreverse" / "ZoomMultistompZDL"
+    ZDL_ROOT = G1ON / "zoomreverse" / "ZoomMultistompZDL"
 if not ZDL_ROOT.exists():
-    ZDL_ROOT = HERE.parent.parent / "third_party" / "ZoomMultistompZDL"
-if not ZDL_ROOT.exists():
-    ZDL_ROOT = HERE.parent.parent / "work" / "zoomreverse" / "ZoomMultistompZDL"
+    ZDL_ROOT = ROOT / "third_party" / "ZoomMultistompZDL"
 sys.path.insert(0, str(ZDL_ROOT / "build"))
 sys.path.insert(0, str(ZDL_ROOT / "src" / "airwindows" / "common"))
 

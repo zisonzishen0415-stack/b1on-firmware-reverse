@@ -43,16 +43,17 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
-# Same discovery as zdl/build.py: the reverson ZoomMultistompZDL checkout.
+# Same discovery as zdl/build.py: a ZoomMultistompZDL checkout under the
+# g1oncontrol umbrella (the old Documents\ChatGPT copy was archived
+# 2026-10-14).
+G1ON = HERE.parents[2]  # tools -> ampneve -> b1on-firmware-reverse -> g1oncontrol
 ZDL_ROOT = Path(os.environ.get(
     "AMPNEVE_ZDL_ROOT",
-    r"C:\Users\34723\Documents\ChatGPT\zoomreverse\ZoomMultistompZDL"))
+    str(G1ON / "zoomreverse" / "ZoomMultistompZDL-2026-10")))
 if not ZDL_ROOT.exists():
-    ZDL_ROOT = ROOT.parent / "zoomreverse" / "ZoomMultistompZDL"
+    ZDL_ROOT = G1ON / "zoomreverse" / "ZoomMultistompZDL"
 if not ZDL_ROOT.exists():
     ZDL_ROOT = ROOT.parent / "third_party" / "ZoomMultistompZDL"
-if not ZDL_ROOT.exists():
-    ZDL_ROOT = ROOT.parent / "work" / "zoomreverse" / "ZoomMultistompZDL"
 sys.path.insert(0, str(ZDL_ROOT / "build"))
 
 # noqa: E402 - sys.path setup must precede these imports
