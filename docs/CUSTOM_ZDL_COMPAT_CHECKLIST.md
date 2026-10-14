@@ -163,21 +163,35 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 `.audio@0x7800` 形态问题已由全语料修正(两种皆原厂合法),
 不再是阻塞项;`norm`/`norm5` 均为合并形态。
 
-**2026-10-14 晚·根因级修复(reloc bug)**:构建链的跨段 PCR 重定位补偿
-错误(详见 `docs/RELOC_BUG_ROOT_CAUSE_2026-10-14.md`)——**所有历史
-ampneve 产物(含 norm r1)在实机上音频回调都会跳入随机地址**。已修复
-(两棵树),修复版 = `AmpNeve_norm_r2.ZDL`(`68E351C1…`)/
-`norm5_r2.ZDL`(`12C916C3…`),旧文件改名 `*_r1_bug.*` 留档勿刷。
-**8 月探针与 `_seg` 保险版不受影响(对象无跨段调用,已验证),原样可刷。**
+**2026-10-14 深夜·最终修复 + 全量重建(重要)**:在 reloc 双根因
+(跨段 addend + **PCR 取指包基准**)与 denormal/ZDL_STATIC 问题全部修复后,
+**整个 AmpNeve(9 参数)与 Reverson(9 参数)已完成离线全验证**——
+契约双 PASS + 真实音频渲染(与 x86 离线渲染器同型)。全部制作规则与
+验证流程见权威指南 **`docs/HOW_TO_MAKE_ZDL_PLUGINS.md`**。
+(历史产物 norm/norm5/`*_r1_bug`/`*_r2`/stock5/merged/them10 全部为
+修复前留档,**勿刷**。)
 
-刷机顺序(2026-10-14 版):
-1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);保险版
-   `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL` 同目录——探针保持
-   8 月原件不动(判读表冻结;其 readout 不依赖 init 约定)。
-2. **`dist_smoke/AmpNeve_norm_r2.ZDL`**(烟测,UI/加载);
-3. **`dist/AmpNeve_norm_r2.ZDL`**(真 DSP);
-4. 备选变体:norm5_r2(5 字段 Dll 版);
-5. 若 2/3 失败 → 回退组逐个换变量:`stock5`/`stock3`/`merged5`/
-   `merged`(**全部带 reloc bug 的 pre-fix 产物,仅作对照,勿期待音频正常**);
-6. **注册校验**:自制 ZDL 经 ZEM 写入后,回读 `FLST_SEQ.ZDT` 确认名字
-   出现在对应类别段(见第五轮文档 §9;分类不可见怪癖的先查项)。
+**最终上机集(2026-10-14 深夜)**:
+
+| 文件 | 说明 | SHA256 |
+|---|---|---|
+| `ampneve/dist/AmpNeve_full.ZDL` | **整个 AmpNeve**,9 参数(gid4 AMP+CABI) | `744F786E492266BCFD41E834849463534A269265194DE9ED0FB278756144857B` |
+| `ampneve/dist_smoke/AmpNeve_full.ZDL` | 同上,烟测(pass-through) | `8B84EBCF789AA7389774628E761117DDAB51D64B6DE2F1F39B91735EB26762C1` |
+| `ampneve/dist/AmpNeve_dly_final.ZDL` | DLY 身份保险版(gid8,4 参数) | `6A4CA84480FA97EE110F71A66361D356554147AFC5EF366EF1B3640D622EF78A` |
+| `ampneve/dist_smoke/AmpNeve_dly_final.ZDL` | 同上,烟测 | `35BA935B94BA8C45E84CD9BDE8E6A5A0972757D2738CCE1E86DD7F827D0B9F72` |
+| `zoomreverse/ZoomMultistompZDL-2026-10/dist/Reverson.ZDL` | **Reverson**(gid9 REV,9 参数) | `AF077DC5F64E0D28023EBBFAA6CC2EA96AA43B43C0C4EB7BC27C7F9A2D88EF9A` |
+
+试听(zdlrun 模拟器渲染,44100Hz 16bit WAV):
+`work/desc/AmpNeve_full_audition.wav`、`work/desc/Reverson_audition.wav`
+(输入干信号 `audition_gtr.wav`;x86 参照 `an_x86.wav`)。
+
+刷机顺序(2026-10-14 深夜版):
+1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸;读 Reverson 前必须
+   先知道大区尺寸);保险版 `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL`
+   同目录——探针未中 bug,保持原样不动。
+2. **`dist_smoke/AmpNeve_full.ZDL`**(烟测:出现/翻页/无冻结);
+3. **`dist/AmpNeve_full.ZDL`**(真 DSP);
+4. **`Reverson.ZDL`**(真 DSP;若分类不显示,先装一个原厂 Reverb);
+5. 备选:`AmpNeve_dly_final.ZDL`(若 AMP 分类被拒时换 DLY 身份);
+6. **注册校验**:经 ZEM 写入后回读 `FLST_SEQ.ZDT` 确认名字出现在
+   对应类别段(第五轮文档 §9)。

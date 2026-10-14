@@ -1,5 +1,5 @@
 diff --git a/build/linker.py b/build/linker.py
-index dda9ce7..fe41c73 100644
+index dda9ce7..8e703ef 100644
 --- a/build/linker.py
 +++ b/build/linker.py
 @@ -216,6 +216,25 @@ class LinkerConfig:
@@ -51,7 +51,23 @@ index dda9ce7..fe41c73 100644
          # Hardware-confirmed ceiling for the MS-series UI path: 9 user
          # params, displayed as three pages of three edit-mode controls.
          # The preview image still only has coordinates for the first three
-@@ -539,6 +574,7 @@ def _build_descriptor(
+@@ -488,7 +523,14 @@ def _patch_abs_h16(code: bytearray, offset: int, value: int) -> None:
+ 
+ 
+ def _patch_pcr_s21(code: bytearray, offset: int, target_addr: int, instr_addr: int) -> None:
+-    delta = (target_addr - instr_addr) >> 2          # PC-relative, in instruction words
++    # The C674x evaluates PCR branch displacements against the FETCH-PACKET
++    # base (pc & ~31), NOT the instruction address. Using the exact
++    # instruction address lands the call (instr_addr & 31) bytes PAST the
++    # target -- verified in Ziddle 2026-10-14: the .audio call at 0xD4C
++    # (0xD4C & 31 = 12) jumped 12 bytes past Ampsim_process's entry into
++    # the previous function's BNOP-return tail.
++    packet_base = instr_addr & ~0x1F
++    delta = (target_addr - packet_base) >> 2
+     if delta < -(1 << 20) or delta >= (1 << 20):
+         raise ValueError(f"PCR_S21 displacement {delta:#x} out of range")
+     instr = struct.unpack_from('<I', code, offset)[0]
+@@ -539,6 +581,7 @@ def _build_descriptor(
      onf_func_va: int,
      knob_edit_vas: list[int],
      params: list[Param],
@@ -59,7 +75,7 @@ index dda9ce7..fe41c73 100644
  ) -> tuple[bytes, list[tuple[int, int]]]:
      """Returns (descriptor_bytes, [(offset_in_desc, target_va), ...])."""
      assert len(knob_edit_vas) == len(params), (
-@@ -571,7 +607,8 @@ def _build_descriptor(
+@@ -571,7 +614,8 @@ def _build_descriptor(
      # imageInfo declare them. See docs/3-PARAM-LINKER-BUG.md.
      # 20.0f (0x41a00000) is in the typical range for simple effects
      # (Exciter=19.51, OptComp=30.76, BitCrush=14.88, AutoPan=13.89).
@@ -69,7 +85,7 @@ index dda9ce7..fe41c73 100644
      relocs.append((len(desc) + 0x1C, init_func_va))
      relocs.append((len(desc) + 0x20, audio_func_va))
      desc.extend(entry)
-@@ -814,6 +851,45 @@ _DLL_RELA_OFFSETS = [
+@@ -814,6 +858,45 @@ _DLL_RELA_OFFSETS = [
      (0x14, RT_ABS_H16, 'info'),
  ]
  
@@ -115,7 +131,7 @@ index dda9ce7..fe41c73 100644
  
  def _encode_compact_mvk_l1_a0(value: int) -> int:
      """Return compact `MVK.L1 value,A0` encoding for small non-negative ints."""
-@@ -827,7 +903,20 @@ def _encode_compact_mvk_l1_a0(value: int) -> int:
+@@ -827,7 +910,20 @@ def _encode_compact_mvk_l1_a0(value: int) -> int:
      return (hi << 8) | 0x26
  
  
@@ -137,7 +153,7 @@ index dda9ce7..fe41c73 100644
      code = bytearray()
      words = list(_DLL_WORDS)
      words[0] = (words[0] & 0x0000FFFF) | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16)
-@@ -937,8 +1026,12 @@ def link(cfg: LinkerConfig) -> None:
+@@ -937,8 +1033,12 @@ def link(cfg: LinkerConfig) -> None:
      CONST_VA = 0x80000000
  
      AUDIO_OFF       = 0x0000
@@ -152,7 +168,7 @@ index dda9ce7..fe41c73 100644
      TEXT_ORIG_SIZE  = text_sec['size'] if text_sec else 0
      HANDLER_OFF     = _align_up(TEXT_ORIG_OFF + TEXT_ORIG_SIZE, 32)
      HANDLER_SIZE    = len(handler_blob)
-@@ -990,8 +1083,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -990,8 +1090,11 @@ def link(cfg: LinkerConfig) -> None:
      NOP_RET_STUB_SIZE = 32
      NOP_RET_SIZE      = NOP_RET_STUB_SIZE * NOP_RETURN_COUNT
      DLL_OFF           = NOP_RET_OFF + NOP_RET_SIZE
@@ -165,7 +181,7 @@ index dda9ce7..fe41c73 100644
  
      print(f"\n  .text layout:")
      print(f"    audio    @ 0x{AUDIO_OFF:04X}  ({audio_sec['size']} → padded {AUDIO_PAD})")
-@@ -1009,7 +1105,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1009,7 +1112,11 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Build .text -----
      out_text = bytearray(TEXT_TOTAL)
@@ -178,7 +194,7 @@ index dda9ce7..fe41c73 100644
      if text_sec and TEXT_ORIG_SIZE:
          out_text[TEXT_ORIG_OFF:TEXT_ORIG_OFF + TEXT_ORIG_SIZE] = text_sec['data']
      if HANDLER_SIZE:
-@@ -1025,7 +1125,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1025,7 +1132,11 @@ def link(cfg: LinkerConfig) -> None:
      for k in range(NOP_RETURN_COUNT):
          stub_off = NOP_RET_OFF + k * NOP_RET_STUB_SIZE
          out_text[stub_off:stub_off + NOP_RET_STUB_SIZE] = _NOP_RETURN
@@ -191,7 +207,7 @@ index dda9ce7..fe41c73 100644
  
      # Resolve handler VAs (one per logical name)
      if use_real_handlers:
-@@ -1041,7 +1145,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1041,7 +1152,7 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Map .obj sections to VAs -----
      section_va: dict[int, int] = {
@@ -200,7 +216,7 @@ index dda9ce7..fe41c73 100644
      }
      if text_sec:
          section_va[text_sec['idx']] = TEXT_VA + TEXT_ORIG_OFF
-@@ -1120,11 +1224,13 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1120,11 +1231,13 @@ def link(cfg: LinkerConfig) -> None:
  
      desc_bytes, desc_relocs = _build_descriptor(
          effect_name=cfg.effect_name,
@@ -215,7 +231,7 @@ index dda9ce7..fe41c73 100644
      )
      expected = 0x30 * (2 + len(cfg.params))
      assert len(desc_bytes) == expected, \
-@@ -1282,7 +1388,9 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1282,7 +1395,9 @@ def link(cfg: LinkerConfig) -> None:
      # =====================================================================
      dyn_relocs: list[tuple[int, int, int]] = []   # (va, type, target_va)
  
@@ -226,7 +242,7 @@ index dda9ce7..fe41c73 100644
          n_ok = 0
          for rel in obj.relocs.get(sec['idx'], []):
              sym = obj.symbols[rel['sym_idx']]
-@@ -1305,22 +1413,32 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1305,22 +1420,32 @@ def link(cfg: LinkerConfig) -> None:
              # compensation is needed — applying it lands the call past the
              # real target by exactly the instruction's section offset, which
              # froze the pedal on InitProbe stage 2.
@@ -264,7 +280,7 @@ index dda9ce7..fe41c73 100644
      if text_sec and text_sec.get('size'):
          n_relocs += _apply_relocs(text_sec, TEXT_ORIG_OFF)
      print(f"\n  Applied {n_relocs} .obj relocations")
-@@ -1342,7 +1460,8 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1342,7 +1467,8 @@ def link(cfg: LinkerConfig) -> None:
          coe_relocs.append((TEXT_VA + coe_reloc_off + 0x0C, RT_ABS_H16, COE_VA))
  
      DESC_TABLE_VA = DESC_VA
@@ -274,7 +290,7 @@ index dda9ce7..fe41c73 100644
          file_off = DLL_OFF + off_in_dll
          target = DESC_TABLE_VA if purpose == 'desc' else INFO_VA
          if rtype == RT_ABS_L16:
-@@ -1398,7 +1517,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1398,7 +1524,7 @@ def link(cfg: LinkerConfig) -> None:
          return idx
  
      # 1. Start with relocation targets (unnamed locals)
@@ -283,7 +299,7 @@ index dda9ce7..fe41c73 100644
      abi_vas.update(knob_edit_vas)
  
      for tgt in sorted(dynsym_targets.keys()):
-@@ -1417,7 +1536,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1417,7 +1543,7 @@ def link(cfg: LinkerConfig) -> None:
      for i in reversed(range(len(knob_edit_vas))):
          p_name = cfg.params[i].name.replace(' ', '')
          _add_sym(f"{cfg.audio_func_name}_{p_name}_edit", knob_edit_vas[i], 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
@@ -292,7 +308,7 @@ index dda9ce7..fe41c73 100644
      _add_sym(f"{cfg.audio_func_name}_init", init_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
      _add_sym(f"{cfg.audio_func_name}_onf", onf_va, 0, STT_FUNC, STB_LOCAL, STV_HIDDEN)
      _add_sym('effectTypeImageInfo', INFO_VA, len(info_bytes), STT_OBJECT, STB_LOCAL, STV_HIDDEN)
-@@ -1483,7 +1602,7 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1483,7 +1609,7 @@ def link(cfg: LinkerConfig) -> None:
      # =====================================================================
      ELF_HDR_SIZE = 0x34
      PHDR_SIZE    = 0x20
@@ -301,7 +317,7 @@ index dda9ce7..fe41c73 100644
      PHDR_TABLE   = NUM_PHDRS * PHDR_SIZE
  
      # .c6xabi.attributes — required per SPRAB89B Ch.17. Stock effects
-@@ -1501,6 +1620,9 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1501,6 +1627,9 @@ def link(cfg: LinkerConfig) -> None:
      # assumptions.
      cur = ELF_HDR_SIZE
      text_file_off = _align_up(cur, 32);                cur = text_file_off + TEXT_TOTAL
@@ -311,7 +327,7 @@ index dda9ce7..fe41c73 100644
      const_file_off = _align_up(cur, 8);                cur = const_file_off + CONST_SIZE
      # .fardata includes the common 24-byte knob bitmap followed by any
      # plugin .fardata/.far state. Keep filesz == memsz: stock effects store
-@@ -1598,6 +1720,13 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1598,6 +1727,13 @@ def link(cfg: LinkerConfig) -> None:
      _p32(elf, p+0x10, TEXT_TOTAL); _p32(elf, p+0x14, TEXT_TOTAL)
      _p32(elf, p+0x18, 5); _p32(elf, p+0x1C, 32)
      p += PHDR_SIZE
@@ -325,7 +341,7 @@ index dda9ce7..fe41c73 100644
      # PT_LOAD .const r--
      _p32(elf, p+0x00, PT_LOAD); _p32(elf, p+0x04, const_file_off)
      _p32(elf, p+0x08, CONST_VA); _p32(elf, p+0x0C, CONST_VA)
-@@ -1618,6 +1747,8 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1618,6 +1754,8 @@ def link(cfg: LinkerConfig) -> None:
  
      # ----- Section data -----
      elf[text_file_off:text_file_off + TEXT_TOTAL]              = out_text
@@ -334,7 +350,7 @@ index dda9ce7..fe41c73 100644
      elf[const_file_off:const_file_off + CONST_SIZE]            = const_data
      elf[fardata_file_off:fardata_file_off + len(fardata_data)] = fardata_data
      elf[rela_dyn_file_off:rela_dyn_file_off + len(rela_dyn_data)] = rela_dyn_data
-@@ -1648,7 +1779,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1648,7 +1786,11 @@ def link(cfg: LinkerConfig) -> None:
          link=8, info=0, entsize=12)
      _sh(2, '.rela.plt', SHT_RELA, 0, 0, rela_plt_file_off, 0,
          link=8, info=0, entsize=12)
@@ -347,7 +363,7 @@ index dda9ce7..fe41c73 100644
      _sh(4, '.text',  SHT_PROGBITS, SHF_ALLOC | SHF_EXECINSTR,
          TEXT_VA, text_file_off, TEXT_TOTAL, align=32)
      _sh(5, '.const', SHT_PROGBITS, SHF_ALLOC,
-@@ -1678,8 +1813,11 @@ def link(cfg: LinkerConfig) -> None:
+@@ -1678,8 +1820,11 @@ def link(cfg: LinkerConfig) -> None:
      output = bytearray(zdl_hdr) + elf
  
      if cfg.audio_nop:

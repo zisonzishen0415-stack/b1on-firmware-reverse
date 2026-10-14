@@ -22,6 +22,9 @@
 #include <stdint.h>
 
 /* inline the ZDL-safe core (single-obj build: the Zoom linker takes one .obj) */
+#define AMPNEVE_ZDL_STATIC 1   /* API -> static + denormal flush (core header
+                                  documents this as the ZDL-build requirement;
+                                  it was missing here until 2026-10-14) */
 #include "../core/ampsim.c"
 
 #include "ampsim_zdl_params.h"

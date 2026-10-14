@@ -229,8 +229,13 @@ def main(argv: list[str]) -> int:
     # effect that skips audio and freezes on re-entry (see zdl/README.md).
     # B1on BassAmp (gid=5) keeps the 3-field stub.
     dll_fields = 3 if gid == 5 else int(os.environ.get("AMPNEVE_DLL_FIELDS", "5"))
-    amp_cabi_default = 0 if gid == 5 else None
-    amp_cabi_fxid = fxid if is_amp else None
+    # amp_cabi_* fed the lost repeat98 linker's CABI descriptor path; the
+    # surviving trees raise on it (loud). The loader-visible CABI content
+    # (fxid/gid word, prefix, model name) is written post-link by add_cabi()/
+    # add_bcab() instead -- verified against the 22/22 stock G1on amp layout --
+    # so passing None here is lossless for these builds.
+    amp_cabi_default = None
+    amp_cabi_fxid = None
 
     if smoke:
         print("[ampneve] *** SMOKE BUILD: audio function is NOPed (pass-through). ***")

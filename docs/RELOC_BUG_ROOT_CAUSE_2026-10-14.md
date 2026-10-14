@@ -24,12 +24,20 @@
    两棵树的这段代码逐字相同(用户 fork 与 2026-10 lineage 同源),
    而 themanro 已发布效果(Gyre 等)不受影响的原因待查
    (推测其成品对象在该路径上的占位约定不同;不影响本结论)。
-5. **修复**(两棵树各自一行,已应用):
+5. **修复(第一半,两棵树各自一行,已应用)**:
    `same_sec = sym['shndx'] != 0 and sym['shndx'] == sec['idx']`
    `addend = rel['addend'] if same_sec else 0` —— 只对**同段**补偿。
-6. **验证**:修复后 `AmpNeve_norm_r2.ZDL`(SHA256 68E351C1…)音频块
-   0 = 4588 cycles 返回(修复前 >200,000,000);600 块全过、
-   non_finite=0;matcheck 契约双 PASS 保持。
+6. **修复(第二半,同日续,最终块)**:`_patch_pcr_s21` 用**精确指令地址**
+   计算位移,但 C674x 以**取指包基准 (pc & ~31)** 加位移——所有非 32 对齐
+   调用点都偏 `(addr & 31)` 字节。实例:`.audio` 里 0xD4C 处的调用
+   (`0xD4C & 31 = 12`)落到 `Ampsim_process` 入口 **前 12 字节** = 前一个
+   函数的 BNOP 返回桩 → 静默无处理(短路径/零输出);更早的构建里则
+   表现为随机执行/NaN。修复:`delta = (target - (instr_addr & ~31)) >> 2`。
+7. **验证**:修复后 `AmpNeve_full.ZDL`(SHA256 744F786E…)音频块
+   0 = 4.5k 周期、稳态 86k 周期(真实 DSP 负载),全曲 41343 块
+   **NaN=0、peak 0.96/rms 0.20**,与 x86 离线渲染器(peak 0.86/rms 0.25)
+   同型;matcheck 9 参数双 PASS。Reverson(AF077DC5…)同样双 PASS +
+   真实音频(14k 周期/块)。
 
 ## 配套产物
 
