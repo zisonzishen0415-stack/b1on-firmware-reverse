@@ -58,6 +58,8 @@
 | `AmpNeve_stock3.ZDL` | 原厂分段 + 3 字段 Dll | `76ED18ED46C7761AEE9B14E677AD6BCABE2E67A4F61D0D12F68749CCD0D34459` | `9B87BB7EE07F8AEE7922C1C936542293ED3DD58B06BDCFCA7652752DF404FA81` |
 | `AmpNeve_merged5.ZDL` | 旧合并 + 5 字段 Dll | `14155A8B3A13F2C8736B399A8D73B24B518775E66A313D1620A7A17A82028663` | `75F5F298E64640380B0E5038959A4D249E9738672D10C3DB5946F6A034EDB4CD` |
 | `AmpNeve_merged.ZDL` | 旧合并 + 3 字段 Dll(8 月世系形态) | `3C1D765CEFE0C67DA16A59A9E9C6AD3EFDEA858641185C45E6D970D0DD707542` | `E51304061AE6F4BCA758063A7EEC3C4B72287E5DF45578BBF3A0EEE34D244779` |
+| `AmpNeve_them10.ZDL` | 合并 + 3 字段(2026-10 树,无物化) | `3592BF6815642DF2E7E85CDA1ED620D000900ECD753777282FACE2CCC3DED397` | `449A9196D79EF24E4B61AE621AAD66B1CC87677E02FFBBBDFD765D8B02E71B41` |
+| **`AmpNeve_norm.ZDL`(2026-10-14 新首选)** | 合并 + 3 字段 + **materialize init**(2026-10 树) | `B024D12E19DAC7F6640BCCA0ACCE70C2F262764BA3A23DB8E5C6D18CB601A999` | `19EC3CF5C2835B595E7F87BC4C2E3DEFB50677EE6ADBC5785DB4F56FE8FAB596` |
 
 配置:gid=8(DLY)、fxid=422、manifest_hw4(4 旋钮 Gain/Master/Level/Treble)。
 构建环境:`AMPNEVE_TI_ROOT=D:\ti\ti-cgt-c6000_8.3.15\ti-cgt-c6000_8.3.15`,
@@ -66,6 +68,28 @@
 AMPNEVE_AUDIO_FUNC=Fx_DLY_AmpNeve AMPNEVE_FXID=422
 AMPNEVE_USE_OBJECT_INIT=1` + `AMPNEVE_DLL_FIELDS={3|5}` +
 `AMPNEVE_AUDIO_VA={0x7800|未设}`。
+
+## 2026-10-14 增补:Ziddle 离线验证 + 物化 init(重要)
+
+- **首轮 A/B(Ziddle matcheck)**:themanro 自产 Gyre.ZDL after-init PASS;
+  我们全部旧产物 after-init **FAIL**(init 后 params 停在旋钮尺度默认
+  值/原始旋钮值,handler 才归一化)。根因 = init 未物化参数——
+  详见 `docs/CUSTOM_ZDL_COMPAT_CHECKLIST.md` §1 末行/§5。
+- **原厂 dis6x 复核**(`work/stock_init_materialize_evidence_2026-10-14.txt`):
+  B1Xon_LIMITER init 直呼 4/4 个 `*_edit` handler、G1on_DELUXE_R init
+  7/8 → **materialize=原厂约定**,修复方向即 2026-10 谱系 linker 的
+  `materialize_init`(env `ZDL_MATERIALIZE_INIT=1`)。
+- **norm 构建环境**:`AMPNEVE_ZDL_ROOT=...\zoomreverse\ZoomMultistompZDL-2026-10`,
+  `ZDL_MATERIALIZE_INIT=1`,**不设** `AMPNEVE_USE_OBJECT_INIT`,
+  `AMPNEVE_DLL_FIELDS=3`,不设 `AMPNEVE_AUDIO_VA`。构建行输出
+  `init: materializing 4 param(s) at load (_init @ 0x2340, 384B)`;
+  确定性已验证(重建逐字节复现)。构建日志 `work/norm_build_2026-10-14.log`。
+- **能力图(下一步移植项)**:fork 树 = dll5 ✓ / materialize ✗;
+  2026-10 树 = materialize ✓ / dll5 = 响亮 NotImplemented ✗ →
+  `norm5`(分段+5 字段+物化)待 **dll5 移植进 2026-10 树**。
+- **澄清(无数据丢失)**:10-14 一次 dll5-in-2026-10 尝试失败时,有两个
+  文件被误命名为 `AmpNeve_norm5.ZDL`——经哈希核对它们 = stock5 的
+  逐字节副本(非新产物),已删除;stock5 原件与全部矩阵文件未动。
 
 **5 字段 Dll 验证(反汇编)**:ctx[0]=行数、ctx[1]=描述符 VA、ctx[2]=imageInfo VA、
 **ctx[3]=ctx[4]=NOP_RETURN stub VA(0x1B60,安全返回)** — 与 8 月 fork 的

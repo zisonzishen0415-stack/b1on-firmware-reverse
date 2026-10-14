@@ -32,10 +32,13 @@
 布局均真机可用"(§5.1,硬件确认 StereoChorus/OTT/TapeEcho4/SyncProbe);
 ②其 `LOADER-SAFETY.md` 给出装载器 8 阶段结构 + 冻结成因目录(与我们清单
 互补);③其 `G1on_*` 101 件与我们的 FS dump **零差集**(抽取互证);
-④**Ziddle(C674x 模拟器,CC0)可离线执行 ZDL**(跑 `_init`/音频块/读模拟
-内存)——包已下载(`D:\tools\ziddle\`),测试台与构建脚本就绪
-(`work/setup_ziddle.sh`),**执行外部代码需用户授权**(自动权限门已拦,
-等待用户点头或用户自行双击 `win\...\ziddle.exe` 用 GUI 路线)。
+④**Ziddle(C674x 模拟器,CC0)已授权并跑通(2026-10-14)**:WSL 内构建
+matcheck rig(`work/setup_ziddle.sh`),首轮 A/B 发现**谱系级 init 约定差**
+——他们 22 个发版效果 init 后参数已归一化(PASS),我们全部旧产物
+init 后停在旋钮尺度默认值(FAIL,handler 才归一化);原厂 dis6x 复核证实
+**B1on/G1on stock init 自身就逐个调 `*_edit` handler 物化**(§1 末行)。
+已按 `materialize_init` 重建 **`AmpNeve_norm`(双 PASS,见 §5)**;
+日志 `work/matcheck_2026-10-14{,_norm}.log`。
 本地参考克隆:`refs/themanro-ZoomMultistompZDL`(只读)与
 `zoomreverse/ZoomMultistompZDL-2026-10`(工作副本,已带 B1on 兼容 shim)。
 
@@ -53,6 +56,7 @@
 | `ctx[3]` = `{base, end, span}` 大区描述符;`ctx[1]` 参数表,`params[0..4]` 为宿主保留 | 越界写/参数错位 |
 | **`.audio` 段形态(0x7800 独立段 vs 合并 .text@0)** | **2026-10-14 全语料修正:两种皆为原厂合法形态**(285 件有 0x7800 段 / 540 件合并;G1on 在役的 160_COMP.ZDL 即合并形态)。**不是**加载器要求,矩阵两形态皆可上机 |
 | Dll 字段数 | **实况(830 件扫描)**:5 字段(含 ctx[3]/ctx[4] 两条 STW)= 52 件,全部为 G1on_ 前缀**音箱族**;其余 734 件为 3 字段 → **5 字段 = G1on AMP 场景要求(gid4)**;非 AMP 构建 3 字段为原厂常态(矩阵两版皆合法) |
+| **`_init` 必须物化参数**:逐个调用每个用户旋钮的 `*_edit` handler(2026-10-14:matcheck 契约 + 原厂 dis6x 双向证实——B1Xon_LIMITER init 4/4、G1on_DELUXE_R init 7/8) | 加载/换 patch 后参数不生效(实机=须动旋钮才活);旧"NOP init/等宿主扫 handler"约定已证与原厂不符。正确形态 = `materialize_init`(2026-10 谱系 linker,`ZDL_MATERIALIZE_INIT=1`) |
 
 ## 2. B1on/G1on 特有(本项目静态证据,101 个原厂 ZDL 实测)
 
@@ -127,6 +131,13 @@ python scripts/check_probes.py probes\b1on_probe\out
 
 2026-10-13 复核:15 个探针(含 B1sweepFLT/DLY)全部 **OK**。
 
+```bash
+# 归一化契约(init 物化 + handler 归一化)离线验证 —— Ziddle matcheck(WSL)
+/root/ziddle/ziddle-source-1787802520/target/release/matcheck --params 4 --bypass 1 <zdl>
+# 合格 = after init PASS + after handlers PASS
+# 2026-10-14 实况:AmpNeve_norm 双 PASS;旧矩阵 11 件 after-init FAIL(已知缺陷)
+```
+
 ## 5. 待实机裁决
 
 `B1sweepFLT.ZDL`(对照组,预期 N=2)/ `B1sweepDLY.ZDL`(关键组,N≥11
@@ -139,22 +150,24 @@ $env:AMPNEVE_AUDIO_FUNC = "Fx_DLY_AmpNeve"
 python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 ```
 
-**2026-10-13 第五轮待办(实机前)**:静态核实 G1on loader 对音频
-`.audio`@0x7800 段的处理(决定是否给自制 ZDL 扩 linker 输出二段式
-ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。
+**2026-10-14 首选候选更新(重要)**:Ziddle matcheck 修正后,首选上机
+候选 = **`ampneve/dist/AmpNeve_norm.ZDL`**(merged + 3 字段 Dll +
+2026-10 谱系 + **materialize init**;SHA256 `B024D12E…`,烟测
+`19EC3CF5…`;构建确定性已验证)——init 后参数即归一化,与原厂 stock
+行为一致(matcheck after-init + after-handlers 双 PASS)。**旧的"原厂
+分段+5 字段"矩阵(stock5 等)降为回退组**:其 init 属旧约定(参数不
+物化),实机预期"加载后须动旋钮参数才生效"。`AmpNeve_norm5`(分段+
+5 字段+物化)待 dll5 移植进 2026-10 树后生成。`.audio@0x7800` 形态
+问题已由全语料修正(两种皆原厂合法),不再是阻塞项。
 
-**DLY 变体已重建就绪(2026-10-13 晚)**:四形态矩阵 ×{真 DSP,烟测}全留档
-(见 `patches/README.md` 哈希表);首选上机候选 = `ampneve/dist/AmpNeve.ZDL`
-(**原厂分段 `.audio@0x7800` + 5 字段 Dll**)。刷机顺序:
-1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);
-   **保险版(2026-10-14 新增)**:若 8 月原件(旧合并形态)在真机上
-   不加载/异常,改刷同目录 `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL`
-   ——**原厂分段形态 + 5 字段 Dll**(SHA256 `0273BF1C…938D` /
-   `5ED22A4A…54C6`),判读表与原件完全相同;
-2. `dist_smoke/AmpNeve.ZDL`(烟测,UI/加载);
-3. `dist/AmpNeve.ZDL`(真 DSP);
-4. 若 3 失败 → 依次试 `AmpNeve_stock3` / `AmpNeve_merged5` /
-   `AmpNeve_merged`,每次一个变量。
-5. **注册校验(2026-10-13 新增)**：自制 ZDL 经 ZEM 写入后,回读
-   `FLST_SEQ.ZDT` 确认名字出现在对应类别段(见第五轮文档 §9;
-   分类不可见怪癖的先查项)。
+刷机顺序(2026-10-14 版):
+1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);保险版
+   `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL` 同目录——探针保持
+   8 月原件不动(判读表冻结;其 readout 不依赖 init 约定)。
+2. **`dist_smoke/AmpNeve_norm.ZDL`**(烟测,UI/加载);
+3. **`dist/AmpNeve_norm.ZDL`**(真 DSP);
+4. 若 2/3 失败 → 回退组逐个换变量:`AmpNeve_stock5`(旧主候选,
+   分段+5 字段)→ `stock3` → `merged5` → `merged`;注意回退组带着
+   已知 after-init 缺陷,判读时把"参数不生效"归到此因。
+5. **注册校验**:自制 ZDL 经 ZEM 写入后,回读 `FLST_SEQ.ZDT` 确认名字
+   出现在对应类别段(见第五轮文档 §9;分类不可见怪癖的先查项)。
