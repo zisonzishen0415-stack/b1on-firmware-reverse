@@ -1,7 +1,14 @@
-> **项目状态（2026-08-16 修订）：失败。**
-> 经 G1on 实机多次验证，自制 ZDL **无法在 G1on 上稳定工作**（表现为：无 UI、bypass、或切换死机）。
-> 此前文档中的“已验证 / 可用 / 可运行 / 已对齐 / 可收口”等表述，均不代表 G1on 实机可用。
-> 本项目的 ZDL 目标当前**未达成**，现状为失败；任何后续结论不得以“G1on 可用”为前提。
+> **项目状态（2026-10-14 修订）：离线全验证通过；实机仍待终审（设备未到）。**
+> 2026-08 实机失败已定位为构建链的根因级 bug（跨段重定位补偿 + PCR 分支的
+> 取指包基准 + init 未物化参数；见 `docs/RELOC_BUG_ROOT_CAUSE_2026-10-14.md`），
+> 均已修复。自制效果（AmpNeve 9 参数 / Reverson 9 参数）已通过 C674x 模拟器
+> （Ziddle）的契约与音频双验证，含离线试听渲染；制作方法与证据见
+> `docs/HOW_TO_MAKE_ZDL_PLUGINS.md`。
+> **G1on/B1on 实机上尚未复验——"实机可用"的结论在实机验证前不成立。**
+>
+> 历史记录（2026-08-16 原文）：经 G1on 实机多次验证，自制 ZDL 无法在 G1on 上
+> 稳定工作（表现为：无 UI、bypass、或切换死机）；此前文档中的"已验证 / 可用"
+> 等表述，均不代表 G1on 实机可用。
 
 # Zoom B1on/G1on 固件逆向与 ZDL 自定义效果模块
 
@@ -101,6 +108,38 @@ analyzeHeadless <proj> <name> -process fw_b1on_all.out `
 - `ghidra-c6000/findings/B1ON_G1ON_RE.md` — 反编译交叉验证的发现
 - `ghidra-c6000/findings/ZDL_FORMAT.md` — ZDL 封装/INFO/导出符号
 - `ghidra-c6000/findings/KNOWN_LIMITATIONS.md` — 已知限制与修复方向
+
+## 致谢与参考数据
+
+本项目的推进高度依赖以下社区项目与数据，谨致谢：
+
+- **[themanro/ZoomMultistompZDL](https://github.com/themanro/ZoomMultistompZDL)**
+  ——本项目最重要的参考与数据来源：
+  - **830 件原厂 ZDL 语料**（`stock_zdls/`，含 B1Xon_/G1on_ 全集）：本项目全部
+    "原厂实况"结论（5 字段 Dll、`.audio` 形态、类别前缀等）的统计基础；
+  - **2026-09/10 谱系构建链**（`materialize_init` 参数物化、修正版 PCR init 体、
+    stock `_init` 配方）：本仓库以此作为构建主树（2026-10-14 起）；
+  - **matcheck 测试台**（`tools/emulator`）与文档（ABI.md、STATE-ABI-PROGRESS、
+    LOADER-SAFETY、EMULATOR-TESTING、INIT-MATERIALIZATION、PARAM-INIT-INVESTIGATION）。
+- **[Ziddle](https://berbasoft.com/ziddle/)（CC0）**——C674x 指令级模拟器；本项目
+  "离线执行 ZDL、在桌面上抓冻结/NaN"的能力全部来自它。
+- **[repeat98/ZoomMultistompZDL](https://github.com/repeat98/ZoomMultistompZDL)**
+  ——社区上游原始项目；本项目的构建链血统经
+  [zisonzishen0415-stack/ZoomMultistompZDL](https://github.com/zisonzishen0415-stack/ZoomMultistompZDL)
+  fork 承接（airwindows 通用层、LineSel handler blob、原厂 `.audio`/Dll 抄录等
+  均源自该谱系）。
+- **[Leemuzhko/ZOOM_development](https://github.com/Leemuzhko/ZOOM_development)**
+  ——DSP 成本预算（230 假说）与 SDK 边界（9 参数上限等）的社区来源。
+- **SysEx/MIDI 工具集**：[SysExTones/g1on](https://github.com/SysExTones/g1on)、
+  [PhilDaThrill/MultistompMidi](https://github.com/PhilDaThrill/MultistompMidi)、
+  [cbix/mvave-chocolate-sysex](https://github.com/cbix/mvave-chocolate-sysex)。
+- **分析工具**：Ghidra（NSA, Apache-2.0）；TI C6000 Code Generation Tools
+  （cl6x/dis6x，对照反汇编）。
+- **刷机工具**：[Zoom Effect Manager](https://zoomeffectmanager.com/)。
+- **原厂数据来源**：G1on v1.21 / B1on v1.30 官方 Updater 固件（Zoom 发行）；
+  B1on 1.30 实机抓取的 172 文件清单（见 `zoom-b1on-patches-manager` 项目）。
+
+以上第三方数据均按各自许可使用；厂商固件与原厂 ZDL **不再分发**（见下节）。
 
 ## 许可与分发边界
 
