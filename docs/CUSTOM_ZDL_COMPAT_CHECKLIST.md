@@ -134,6 +134,10 @@ ELF)——见 `G1ON_AUDIO_SEG_AND_STATE_ARCH_2026-10-13.md` §1/§4。
 (见 `patches/README.md` 哈希表);首选上机候选 = `ampneve/dist/AmpNeve.ZDL`
 (**原厂分段 `.audio@0x7800` + 5 字段 Dll**)。刷机顺序:
 1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);
+   **保险版(2026-10-14 新增)**:若 8 月原件(旧合并形态)在真机上
+   不加载/异常,改刷同目录 `B1sweepFLT_seg.ZDL` / `B1sweepDLY_seg.ZDL`
+   ——**原厂分段形态 + 5 字段 Dll**(SHA256 `0273BF1C…938D` /
+   `5ED22A4A…54C6`),判读表与原件完全相同;
 2. `dist_smoke/AmpNeve.ZDL`(烟测,UI/加载);
 3. `dist/AmpNeve.ZDL`(真 DSP);
 4. 若 3 失败 → 依次试 `AmpNeve_stock3` / `AmpNeve_merged5` /
