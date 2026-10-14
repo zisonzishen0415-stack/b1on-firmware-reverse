@@ -37,7 +37,7 @@ matcheck rig(`work/setup_ziddle.sh`),首轮 A/B 发现**谱系级 init 约定差
 ——他们 22 个发版效果 init 后参数已归一化(PASS),我们全部旧产物
 init 后停在旋钮尺度默认值(FAIL,handler 才归一化);原厂 dis6x 复核证实
 **B1on/G1on stock init 自身就逐个调 `*_edit` handler 物化**(§1 末行)。
-已按 `materialize_init` 重建 **`AmpNeve_norm`(双 PASS,见 §5)**;
+已按 `materialize_init` 重建 **`AmpNeve_norm`/`norm5`(双 PASS,见 §5)**;
 日志 `work/matcheck_2026-10-14{,_norm}.log`。
 本地参考克隆:`refs/themanro-ZoomMultistompZDL`(只读)与
 `zoomreverse/ZoomMultistompZDL-2026-10`(工作副本,已带 B1on 兼容 shim)。
@@ -154,11 +154,14 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
 候选 = **`ampneve/dist/AmpNeve_norm.ZDL`**(merged + 3 字段 Dll +
 2026-10 谱系 + **materialize init**;SHA256 `B024D12E…`,烟测
 `19EC3CF5…`;构建确定性已验证)——init 后参数即归一化,与原厂 stock
-行为一致(matcheck after-init + after-handlers 双 PASS)。**旧的"原厂
-分段+5 字段"矩阵(stock5 等)降为回退组**:其 init 属旧约定(参数不
-物化),实机预期"加载后须动旋钮参数才生效"。`AmpNeve_norm5`(分段+
-5 字段+物化)待 dll5 移植进 2026-10 树后生成。`.audio@0x7800` 形态
-问题已由全语料修正(两种皆原厂合法),不再是阻塞项。
+行为一致(matcheck after-init + after-handlers 双 PASS)。**旧矩阵
+(stock5 等)降为回退组**:其 init 属旧约定(参数不
+物化),实机预期"加载后须动旋钮参数才生效"。**`AmpNeve_norm5`**
+(合并 + **5 字段 Dll** + 物化,`A769597D…`;烟测 `258B2965…`)
+**已生成**、双 PASS,与 norm 同树(2026-10);两者差异仅 Dll 字段数
+(norm=3 字段,原厂常态;norm5=5 字段,G1on AMP 场景形状)。
+`.audio@0x7800` 形态问题已由全语料修正(两种皆原厂合法),
+不再是阻塞项;`norm`/`norm5` 均为合并形态。
 
 刷机顺序(2026-10-14 版):
 1. **B1sweepFLT/DLY 探针**(8 月原件,判读 ctx[3] 尺寸);保险版
@@ -166,8 +169,10 @@ python build.py   # 在 ampneve/zdl 下;cl6x 已于 2026-10-13 恢复
    8 月原件不动(判读表冻结;其 readout 不依赖 init 约定)。
 2. **`dist_smoke/AmpNeve_norm.ZDL`**(烟测,UI/加载);
 3. **`dist/AmpNeve_norm.ZDL`**(真 DSP);
-4. 若 2/3 失败 → 回退组逐个换变量:`AmpNeve_stock5`(旧主候选,
+4. 备选变体(同批产出,换变量用):**`dist/AmpNeve_norm5.ZDL`**
+   (5 字段 Dll 版,其余同 norm;烟测同名在 dist_smoke/);
+5. 若 2/3 失败 → 回退组逐个换变量:`AmpNeve_stock5`(旧主候选,
    分段+5 字段)→ `stock3` → `merged5` → `merged`;注意回退组带着
    已知 after-init 缺陷,判读时把"参数不生效"归到此因。
-5. **注册校验**:自制 ZDL 经 ZEM 写入后,回读 `FLST_SEQ.ZDT` 确认名字
+6. **注册校验**:自制 ZDL 经 ZEM 写入后,回读 `FLST_SEQ.ZDT` 确认名字
    出现在对应类别段(见第五轮文档 §9;分类不可见怪癖的先查项)。

@@ -1,0 +1,147 @@
+diff --git a/refs/themanro-ZoomMultistompZDL/build/linker.py b/zoomreverse/ZoomMultistompZDL-2026-10/build/linker.py
+index b2c28ce..eeb2eac 100644
+--- a/refs/themanro-ZoomMultistompZDL/build/linker.py
++++ b/zoomreverse/ZoomMultistompZDL-2026-10/build/linker.py
+@@ -333,7 +333,42 @@ class LinkerConfig:
+     # so the pedal refuses an overloaded chain instead of letting it crackle.
+     dsp_cost: float = 20.0
+ 
++    # ---- B1on/G1on compat shim (2026-10-14, LOCAL PATCH) ------------------
++    # Names accepted for the August-lineage build scripts (ampneve, probe
++    # builders). Implemented here: self_row_w28/cost_w28 alias onto dsp_cost.
++    # G1on-specific shapes (audio_va / dll_fields=5 / bass_flags!=0 /
++    # amp_cabi_*) live in the fork-patched tree
++    # (zoomreverse/ZoomMultistompZDL, patches/linker_b1on_ext.patch) and
++    # raise loudly here rather than silently building the wrong shape.
++    bass_flags: int = 0
++    self_row_w28: float | None = None
++    cost_w28: float | None = None
++    dll_fields: int = 3
++    amp_cabi_fxid: int | None = None
++    amp_cabi_default: int | None = None
++    audio_va: int = 0
++
+     def __post_init__(self) -> None:
++        for legacy in (self.self_row_w28, self.cost_w28):
++            if legacy is not None:
++                self.dsp_cost = float(legacy)
++        if self.bass_flags != 0:
++            raise NotImplementedError(
++                "bass_flags != 0 not implemented in the themanro-lineage "
++                "tree; use the fork-patched linker (patches/linker_b1on_ext.patch)")
++        if self.amp_cabi_fxid is not None or self.amp_cabi_default is not None:
++            raise NotImplementedError(
++                "amp_cabi_* not implemented in the themanro-lineage tree; "
++                "use the fork-patched linker")
++        if self.dll_fields not in (3, 5):
++            raise ValueError(f"dll_fields must be 3 or 5, got {self.dll_fields}")
++        # dll_fields=5 ported 2026-10-14 from the fork-patched linker
++        # (patches/linker_b1on_ext.patch): 64-byte stock DELUXE_R Dll
++        # transcription, role VAs -> NOP_RETURN stub. See _DLL_WORDS5 below.
++        if self.audio_va != 0:
++            raise NotImplementedError(
++                "audio_va (stock .audio segment) not implemented in the "
++                "themanro-lineage tree; use the fork-patched linker")
+         # ZDL_MATERIALIZE_INIT=1 flips this on for EVERY effect in one build, so a
+         # candidate _init can be run through the emulator (matcheck) across the
+         # whole pack without editing 22 build.py files. Off by default: this is an
+@@ -887,6 +922,45 @@ _DLL_RELA_OFFSETS = [
+     (0x14, RT_ABS_H16, 'info'),
+ ]
+ 
++# ---------------------------------------------------------------------------
++# 5-field Dll stub (dll_fields=5) — ported 2026-10-14 from the fork-patched
++# linker (patches/linker_b1on_ext.patch); transcribed verbatim from stock
++# DELUXE_R.ZDL's Dll_ function (G1on AMP category), 64 bytes. Writes
++# ctx[0..4]: {count, desc VA, imageInfo VA, role1 VA, role2 VA}. Stock's role
++# VAs (preFilter_edit/tapmute_mute) are replaced by the NOP_RETURN stub VA so
++# any firmware call into them returns safely.
++# Word +0x04 high half carries the compact MVK.L1 <count>,A0 (patched like
++# the 3-field blob's word[0]).
++# ---------------------------------------------------------------------------
++_DLL_WORDS5 = [
++    0x00031C2A,  # +0x00: MVK.S2  lo(desc), B0   <- ABS_L16 reloc
++    0x6C2601EF,  # +0x04: BNOP.S2 B3 + MVK.L1 count,A0 (high half patched)
++    0x00842429,  # +0x08: MVK.S1  lo(info), A1   <- ABS_L16 reloc
++    0x0040006B,  # +0x0C: MVKH.S2 hi(desc), B0   <- ABS_H16 reloc
++    0x30040204,  # +0x10: STB count->ctx[0] | STW B0->ctx[4]
++    0x00C00069,  # +0x14: MVKH.S1 hi(info), A1   <- ABS_H16 reloc
++    0x0081822A,  # +0x18: MVK.S2  lo(role1), B1  (patched: NOP_RET VA)
++    0xE2400204,  # +0x1C: fphead
++    0x00904275,  # +0x20: STW A1->ctx[8]
++    0x0080006B,  # +0x24: MVKH.S2 0, B1         (role1 hi - patch 0 always)
++    0x01012628,  # +0x28: MVK.S1  lo(role2), A2  (patched: NOP_RET VA)
++    0x00906277,  # +0x2C: STW B1->ctx[12]
++    0x01000068,  # +0x30: MVKH.S1 0, A2         (role2 hi - patch 0 always)
++    0x01108274,  # +0x34: STW A2->ctx[16]
++    0x00000000,
++    0x00000000,
++]
++_DLL_RELA_OFFSETS5 = [
++    (0x00, RT_ABS_L16, 'desc'),
++    (0x08, RT_ABS_L16, 'info'),
++    (0x0C, RT_ABS_H16, 'desc'),
++    (0x14, RT_ABS_H16, 'info'),
++]
++# Offsets of the role-VA low-half immediates inside the 5-field blob; the
++# patcher writes (role_va & 0xFFFF) with the matching hi word fixed at 0
++# (role VAs live in .text < 0x10000, same as stock).
++_DLL5_ROLE_LOWS = (0x18, 0x28)
++
+ 
+ def _encode_compact_mvk_l1_a0(value: int) -> int:
+     """Return compact `MVK.L1 value,A0` encoding for small non-negative ints."""
+@@ -900,7 +974,20 @@ def _encode_compact_mvk_l1_a0(value: int) -> int:
+     return (hi << 8) | 0x26
+ 
+ 
+-def _build_dll(desc_entry_count: int) -> bytes:
++def _build_dll(desc_entry_count: int, five: bool = False, role_va: int = 0) -> bytes:
++    if five:
++        if role_va <= 0 or role_va > 0xFFFF:
++            raise ValueError(f"5-field Dll role VA {role_va:#x} out of range")
++        code = bytearray()
++        words = list(_DLL_WORDS5)
++        words[1] = ((words[1] & 0x0000FFFF)
++                    | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16))
++        for off in _DLL5_ROLE_LOWS:
++            words[off // 4] = (words[off // 4] & 0xFFFF0000) | (role_va & 0xFFFF)
++        for w in words:
++            code.extend(struct.pack('<I', w))
++        assert len(code) == 64
++        return bytes(code)
+     code = bytearray()
+     words = list(_DLL_WORDS)
+     words[0] = (words[0] & 0x0000FFFF) | (_encode_compact_mvk_l1_a0(desc_entry_count) << 16)
+@@ -1081,7 +1168,7 @@ def link(cfg: LinkerConfig) -> None:
+                          + len(_INIT_MAT_EPILOGUE)
+                          if cfg.materialize_init else 0)
+     DLL_OFF           = INIT_MAT_OFF + INIT_MAT_SIZE
+-    DLL_SIZE          = 200
++    DLL_SIZE          = 64 if cfg.dll_fields == 5 else 200
+     TEXT_TOTAL        = _align_up(DLL_OFF + DLL_SIZE, 32)
+ 
+     print(f"\n  .text layout:")
+@@ -1118,7 +1205,11 @@ def link(cfg: LinkerConfig) -> None:
+     for k in range(NOP_RETURN_COUNT):
+         stub_off = NOP_RET_OFF + k * NOP_RET_STUB_SIZE
+         out_text[stub_off:stub_off + NOP_RET_STUB_SIZE] = _NOP_RETURN
+-    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(2 + len(cfg.params))
++    out_text[DLL_OFF:DLL_OFF + DLL_SIZE] = _build_dll(
++        2 + len(cfg.params),
++        five=cfg.dll_fields == 5,
++        role_va=TEXT_VA + NOP_RET_OFF,
++    )
+ 
+     # Resolve handler VAs (one per logical name)
+     if use_real_handlers:
+@@ -1483,7 +1574,8 @@ def link(cfg: LinkerConfig) -> None:
+         coe_relocs.append((TEXT_VA + coe_reloc_off + 0x0C, RT_ABS_H16, COE_VA))
+ 
+     DESC_TABLE_VA = DESC_VA
+-    for off_in_dll, rtype, purpose in _DLL_RELA_OFFSETS:
++    _rela_list = _DLL_RELA_OFFSETS5 if cfg.dll_fields == 5 else _DLL_RELA_OFFSETS
++    for off_in_dll, rtype, purpose in _rela_list:
+         file_off = DLL_OFF + off_in_dll
+         target = DESC_TABLE_VA if purpose == 'desc' else INFO_VA
+         if rtype == RT_ABS_L16:

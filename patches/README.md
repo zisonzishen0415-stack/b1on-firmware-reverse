@@ -20,7 +20,8 @@
 | 文件 | 说明 |
 |---|---|
 | `linker_b1on_ext.patch` | 对 fork 仓库(commit 2dda9600)`build/linker.py` 的 git diff(仅 shim) |
-| `linker_b1on_ext_2026-10-13.py` | 打完补丁的 `linker.py` 全文(权威副本,直接覆盖即可) |
+| `linker_b1on_ext_2026-10-13.py` | 打完补丁的 `linker.py` 全文(权威副本,直接覆盖即可)——**注意:2026-10-14 发现该文件与实际工作树已漂移,以 diff 为准** |
+| `linker_2026-10_ext_2026-10-14.patch` | **2026-10 工作树**(`zoomreverse/ZoomMultistompZDL-2026-10`)相对上游快照(`refs/themanro-ZoomMultistompZDL`)的**完整差异**(147 行):B1on 兼容 shim + **dll_fields=5 移植**(2026-10-14)+ materialize 之上的本地改动。重建 = 对上游 2026-10 的 `build/linker.py` 应用本 diff(按目标路径调整 -p 层级后 `git apply`) |
 
 ## shim 语义(逐条)
 
@@ -60,6 +61,7 @@
 | `AmpNeve_merged.ZDL` | 旧合并 + 3 字段 Dll(8 月世系形态) | `3C1D765CEFE0C67DA16A59A9E9C6AD3EFDEA858641185C45E6D970D0DD707542` | `E51304061AE6F4BCA758063A7EEC3C4B72287E5DF45578BBF3A0EEE34D244779` |
 | `AmpNeve_them10.ZDL` | 合并 + 3 字段(2026-10 树,无物化) | `3592BF6815642DF2E7E85CDA1ED620D000900ECD753777282FACE2CCC3DED397` | `449A9196D79EF24E4B61AE621AAD66B1CC87677E02FFBBBDFD765D8B02E71B41` |
 | **`AmpNeve_norm.ZDL`(2026-10-14 新首选)** | 合并 + 3 字段 + **materialize init**(2026-10 树) | `B024D12E19DAC7F6640BCCA0ACCE70C2F262764BA3A23DB8E5C6D18CB601A999` | `19EC3CF5C2835B595E7F87BC4C2E3DEFB50677EE6ADBC5785DB4F56FE8FAB596` |
+| `AmpNeve_norm5.ZDL`(备选:AMP 形状) | 合并 + **5 字段 Dll** + materialize init | `A769597DAF7B547E9CBB74BD057EAE55E5135C3AE482AA5B0E706CCAAF72A7CE` | `258B296595D5CB0067BB842CC62393527E2EAB61E10EBF3C7A8D6D633CDBF659` |
 
 配置:gid=8(DLY)、fxid=422、manifest_hw4(4 旋钮 Gain/Master/Level/Treble)。
 构建环境:`AMPNEVE_TI_ROOT=D:\ti\ti-cgt-c6000_8.3.15\ti-cgt-c6000_8.3.15`,
@@ -81,12 +83,15 @@ AMPNEVE_USE_OBJECT_INIT=1` + `AMPNEVE_DLL_FIELDS={3|5}` +
   `materialize_init`(env `ZDL_MATERIALIZE_INIT=1`)。
 - **norm 构建环境**:`AMPNEVE_ZDL_ROOT=...\zoomreverse\ZoomMultistompZDL-2026-10`,
   `ZDL_MATERIALIZE_INIT=1`,**不设** `AMPNEVE_USE_OBJECT_INIT`,
-  `AMPNEVE_DLL_FIELDS=3`,不设 `AMPNEVE_AUDIO_VA`。构建行输出
+  `AMPNEVE_DLL_FIELDS=3`,不设 `AMPNEVE_AUDIO_VA`(`AmpNeve_norm5` 同环境,
+  `AMPNEVE_DLL_FIELDS=5`)。构建行输出
   `init: materializing 4 param(s) at load (_init @ 0x2340, 384B)`;
   确定性已验证(重建逐字节复现)。构建日志 `work/norm_build_2026-10-14.log`。
-- **能力图(下一步移植项)**:fork 树 = dll5 ✓ / materialize ✗;
-  2026-10 树 = materialize ✓ / dll5 = 响亮 NotImplemented ✗ →
-  `norm5`(分段+5 字段+物化)待 **dll5 移植进 2026-10 树**。
+- **能力图(2026-10-14 更新)**:fork 树 = dll5 ✓ / materialize ✗;
+  **2026-10 树 = materialize ✓ + dll5 ✓**(当日移植;Dll 字节与 fork
+  产物逐字核对,全同仅 2 个 role-VA 立即数差 = 各自 NOP_RET 地址);
+  `audio_va` 在 2026-10 树仍为响亮 NotImplemented(全语料修正后已降级为
+  可选轴向,未移植)。`norm5`(合并+5 字段+物化)**已生成**,matcheck 双 PASS。
 - **澄清(无数据丢失)**:10-14 一次 dll5-in-2026-10 尝试失败时,有两个
   文件被误命名为 `AmpNeve_norm5.ZDL`——经哈希核对它们 = stock5 的
   逐字节副本(非新产物),已删除;stock5 原件与全部矩阵文件未动。
